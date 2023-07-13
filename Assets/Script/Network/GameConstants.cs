@@ -31,6 +31,32 @@ namespace GameConstants
             { 2, "Char3"},
             { 3, "Char4"}
         };
+
+        [SerializeField]
+        public static List<Color32> PLAYER_PRIMARY_COLORS = new List<Color32>(){
+            new Color32(172, 55, 98, 255),
+            new Color32(171, 129, 34, 255),
+            new Color32(64, 171, 42, 255),
+            new Color32(139, 100, 171, 255),
+            new Color32(31, 164, 171, 255)
+        };
+
+        [SerializeField]
+        public static List<Color32> PLAYER_SECONDARY_COLORS = new List<Color32>(){
+            new Color32(254, 44, 135, 255),
+            new Color32(255, 176, 6, 255),
+            new Color32(70, 255, 20, 255),
+            new Color32(193, 127, 255, 255),
+            new Color32(0, 255, 255, 255)
+        };
+
+        [SerializeField]
+        public static List<Color32> PLAYER_ACCENT_COLORS = new List<Color32>(){
+            new Color32(205, 105, 142, 255),
+            new Color32(208, 171, 87, 255),
+            new Color32(112, 208, 94, 255),
+            new Color32(180, 146, 208, 255),
+            new Color32(84, 201, 208, 255)
+        };
     }
 }
-
