@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using UnityEditor;
 using UnityEngine;
+using util.GridRepresentation;
 
 public class DrawGrid : MonoBehaviour
 {
     public GridTheme gridTheme;
     public LevelConfig levelConfig;
 
-    public void CreateGraphicalBoard(int rowCount, int columnCount)
+    public void CreateGraphicalBoard(int rowCount, int columnCount, int layerCount)
     {
         while (transform.childCount > 0)
         {
@@ -31,7 +32,7 @@ public class DrawGrid : MonoBehaviour
                 gridMat.color = color;
                 nQuad.GetComponent<MeshRenderer>().material = gridMat;
                 nQuad.parent = transform;
-                nQuad.localPosition = GridRepresentation.PositionFromGridCoord(j, i);
+                nQuad.localPosition = GridRepresentation.PositionFromGridCoord(j, i, 0);
                 nQuad.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
             }
         }
@@ -52,7 +53,7 @@ public class DrawGridEditor : Editor
 
         if (EditorGUI.EndChangeCheck() || GUILayout.Button("Recreate"))
         {
-            drawGrid.CreateGraphicalBoard(drawGrid.levelConfig.height, drawGrid.levelConfig.width);
+            drawGrid.CreateGraphicalBoard(drawGrid.levelConfig.height, drawGrid.levelConfig.width, 1);
         }
     }
 }
