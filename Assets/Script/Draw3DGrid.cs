@@ -31,6 +31,15 @@ public class Draw3DGrid : MonoBehaviour
                     nTile.localPosition = GridRepresentation.PositionFromGridCoord(i, j, layer);
                     nTile.localRotation = Quaternion.Euler(new Vector3(-90.0f, 90.0f * Random.Range(0, 4), 0.0f));
                     nTile.localScale = new Vector3(grid3DTheme.scaleBias, grid3DTheme.scaleBias, grid3DTheme.scaleBias);
+                    
+                    // Add collider & layer for mouse position to world ray cast
+                    GameObject nObj = nTile.gameObject;
+                    nObj.AddComponent<BoxCollider>();
+                    nObj.layer = GridRepresentation.gridLayer;
+                    // Add GridInfo MonoBehavior for grids to store their own states
+                    GirdInfo nGirdInfo = nObj.AddComponent<GirdInfo>();
+                    nGirdInfo.coordinate = new Vector2(i, j);
+                    nGirdInfo.layer = layer;
                 }
             }
         }

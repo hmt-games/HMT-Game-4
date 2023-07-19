@@ -4,9 +4,16 @@ using UnityEngine;
 
 namespace util.GridRepresentation
 {
+    public enum GridState
+    {
+        Empty,
+        Planted
+    }
+    
     public class GridRepresentation
     {
         public static int layerSpacing = 10;
+        public static int gridLayer = 3;
 
         public static Vector3 PositionFromGridCoord(int row, int col, int layer)
         {

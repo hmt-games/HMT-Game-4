@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8cbbe79158bc4cc89f9f49d685aeab9, type: 3}
   m_Name: LevelTest
   m_EditorClassIdentifier: 
-  width: 10
-  height: 10
+  width: 5
+  height: 5
   layerCount: 5
