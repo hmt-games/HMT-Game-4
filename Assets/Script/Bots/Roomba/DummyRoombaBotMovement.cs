@@ -13,9 +13,9 @@ public class DummyRoombaBotMovement : RoombaBotMovement
         //transform.position = Vector3.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
     }
 
-    public override void Moveto(Vector3 gridNodePositionInWorldSpace)
+    public override void Moveto(KeyValuePair<int, int> gridNodeCoordinates)
     {
-        destination = gridNodePositionInWorldSpace;
+        //destination = gridNodePositionInWorldSpace;
     }
 
 }

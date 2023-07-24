@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         _cameraManager = CameraManager.S;
-        
+
         _layer1.performed += context => { _cameraManager.ChangeCameraToLayer(1); };
         _layer2.performed += context => { _cameraManager.ChangeCameraToLayer(2); };
         _layer3.performed += context => { _cameraManager.ChangeCameraToLayer(3); };

@@ -7,13 +7,16 @@ public class RoombaBotPathFinder
 {
     List<GridNode> finalPath;
 
+
+    List<GridNode> checkedNodesList;
+    List<GridNode> nodesToCheckList;
     public List<GridNode> FindPath(GridNode startNode, GridNode endNode)
     {
         startNode.G = 0;
         startNode.H = GetManhattanDistance(startNode, endNode);
 
-        List<GridNode> nodesToCheckList = new List<GridNode>();
-        List<GridNode> checkedNodesList = new List<GridNode>();
+        nodesToCheckList = new List<GridNode>();
+        checkedNodesList = new List<GridNode>();
 
         nodesToCheckList.Add(startNode);
 
@@ -55,7 +58,7 @@ public class RoombaBotPathFinder
                 foreach (var neighborNode in neighbors)
                 {
                     //If node is unavailable
-                    if(neighborNode.gridNodeState == util.GridRepresentation.GridState.Planted || checkedNodesList.Contains(neighborNode))
+                    if(!IsNodeAvailable(neighborNode))
                     {
                         continue;
                     }
@@ -80,6 +83,16 @@ public class RoombaBotPathFinder
         //If no valid path
         return null;
     }
+
+    //All conditions validating a node's availability should come here
+    bool IsNodeAvailable(GridNode gridNode)
+    {
+        if (gridNode.gridNodeState == util.GridRepresentation.GridState.Planted || checkedNodesList.Contains(gridNode))
+            return false;
+
+        return true;
+    }
+
 
 
 
