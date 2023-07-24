@@ -4,10 +4,16 @@ using UnityEditor;
 using UnityEngine;
 using util.GridRepresentation;
 
+
+
+
 public class Draw3DGrid : MonoBehaviour
 {
     [SerializeField] private Grid3DTheme grid3DTheme;
     public LevelConfig levelConfig;
+
+
+    GridLayer gridLayer;
 
     public void Create3DGrid()
     {
@@ -17,9 +23,13 @@ public class Draw3DGrid : MonoBehaviour
         {
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
+        
 
         for (int layer = 0; layer < levelConfig.layerCount; layer++)
         {
+            gridLayer = new GridLayer(levelConfig.width,levelConfig.height);
+            
+
             for (int i = 0; i < levelConfig.width; i++)
             {
                 for (int j = 0; j < levelConfig.height; j++)
@@ -37,14 +47,23 @@ public class Draw3DGrid : MonoBehaviour
                     nObj.AddComponent<BoxCollider>();
                     nObj.layer = GridRepresentation.gridLayer;
                     // Add GridInfo MonoBehavior for grids to store their own states
-                    GirdInfo nGirdInfo = nObj.AddComponent<GirdInfo>();
-                    nGirdInfo.coordinate = new Vector2(i, j);
-                    nGirdInfo.layer = layer;
+                    GridNode nGirdNodeInfo = nObj.AddComponent<GridNode>();
+                    nGirdNodeInfo.coordinate = new Vector2Int(i, j);
+                    nGirdNodeInfo.layer = layer;
+
+                    gridLayer.nodesOnThisGridLayer[i, j] = nGirdNodeInfo;
                 }
             }
+
+            //Store all layers to create a world map
+            GameConstants.GameMap.allGridLayers.Add(gridLayer);
         }
     }
 }
+
+
+
+
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(Draw3DGrid))]

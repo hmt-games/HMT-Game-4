@@ -20,8 +20,8 @@ public class MouseControl : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, layerMask))
         {
             GameObject gridObj = raycastHit.transform.gameObject;
-            GirdInfo girdInfo = gridObj.GetComponent<GirdInfo>();
-            Debug.Log($"{girdInfo.coordinate} at layer {girdInfo.layer}");
+            GridNode girdNodeInfo = gridObj.GetComponent<GridNode>();
+            Debug.Log($"{girdNodeInfo.coordinate} at layer {girdNodeInfo.layer}");
         }
         else
         {
