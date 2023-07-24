@@ -59,4 +59,12 @@ namespace GameConstants
             new Color32(84, 201, 208, 255)
         };
     }
+
+
+    public static class GameMap
+    {
+        //Global Map. List of all the grid layers
+        public static List<util.GridRepresentation.GridLayer> allGridLayers = new List<util.GridRepresentation.GridLayer>();
+    }
+
 }
