@@ -7,9 +7,9 @@ public class RoombaBotPathFinder
 {
     List<GridNode> finalPath;
 
-
     List<GridNode> checkedNodesList;
     List<GridNode> nodesToCheckList;
+
     public List<GridNode> FindPath(GridNode startNode, GridNode endNode)
     {
         startNode.G = 0;

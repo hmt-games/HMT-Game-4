@@ -24,7 +24,7 @@ public class DummyBotMovementInput : MonoBehaviour
             //Set the Current node
             if (Physics.Raycast(roombaBot.gameObject.transform.position, Vector3.down, out startNodehitinfo, 20f))
             {
-                currentNode = startNodehitinfo.collider.gameObject.GetComponent<GridNode>();
+                currentNode = startNodehitinfo.collider.gameObject.GetComponent<GridNode>();                
             }
             else
                 return;

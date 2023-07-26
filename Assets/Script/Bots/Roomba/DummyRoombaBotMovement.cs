@@ -6,6 +6,8 @@ public class DummyRoombaBotMovement : RoombaBotMovement
 {
     Vector3 destination;
 
+    List<GridNode> currentRoombaBotPath;
+
 
     // Update is called once per frame
     void Update()
@@ -13,9 +15,12 @@ public class DummyRoombaBotMovement : RoombaBotMovement
         //transform.position = Vector3.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
     }
 
-    public override void Moveto(KeyValuePair<int, int> gridNodeCoordinates)
+    public override void Moveto(Vector2 gridNodeCoordinates)
     {
+        currentRoombaBotPath = pathFinder.FindPath(GridNodeUnderBot(), currentLayerForRoombaBot.GetGridNodeByCoordinate(gridNodeCoordinates));
+        
         //destination = gridNodePositionInWorldSpace;
     }
+    
 
 }
