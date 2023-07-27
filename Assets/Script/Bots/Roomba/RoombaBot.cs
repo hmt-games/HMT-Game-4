@@ -10,34 +10,32 @@ using UnityEngine;
 public abstract class RoombaBot : MonoBehaviour
 {
     public RoombaBotMovement botMovement;
+    
+    IPrimitiveRoombaBotActions.RoombaBotMode currentMode;
 
     public virtual void Start()
     {
         botMovement = GetComponent<RoombaBotMovement>();
     }
 
-<<<<<<< Updated upstream
-=======
-
-
 
     //========== PRIMITIVE ACTIONS ==========
 
-    public virtual void Water(GridNode gridNode, Action<IPrimitiveRoombaBotActions.ActionStatus> actionStatus)
+    public virtual void Water(GridNode gridNode)
     {
         Debug.Log($"Watering {gridNode.gameObject.name}");
     }
 
 
 
-    public virtual void Fertilize(GridNode gridNode, Action<IPrimitiveRoombaBotActions.ActionStatus> actionStatus)
+    public virtual void Fertilize(GridNode gridNode)
     {
         Debug.Log($"Fertilizing {gridNode.gameObject.name}");
     }
 
 
 
-    public virtual void Harvest(GridNode gridNode, Action<IPrimitiveRoombaBotActions.ActionStatus> actionStatus)
+    public virtual void Harvest(GridNode gridNode)
     {
         Debug.Log($"Harvesting {gridNode.gameObject.name}");
     }
@@ -117,5 +115,5 @@ public class RoombaBotCommandList
 
         return null;
     }
->>>>>>> Stashed changes
+
 }

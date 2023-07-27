@@ -13,7 +13,7 @@ public class DummyRoombaBotMovement : RoombaBotMovement
         //transform.position = Vector3.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
     }
 
-    public override void Moveto(KeyValuePair<int, int> gridNodeCoordinates)
+    public override void Moveto(Vector2 gridNodeCoordinates)
     {
         //destination = gridNodePositionInWorldSpace;
     }

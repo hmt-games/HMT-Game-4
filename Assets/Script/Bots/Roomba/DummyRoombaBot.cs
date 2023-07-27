@@ -19,14 +19,13 @@ public class DummyRoombaBot : RoombaBot
     {
         
     }
-<<<<<<< Updated upstream
-=======
+
 
 
 
 
     //Define the primitive actions in detail here
-    public override void Fertilize(GridNode gridNode, Action)
+    public override void Fertilize(GridNode gridNode)
     {        
         base.Fertilize(gridNode);
     }
@@ -54,5 +53,4 @@ public class DummyRoombaBot : RoombaBot
     }
 
 
->>>>>>> Stashed changes
 }

@@ -29,7 +29,7 @@ public abstract class RoombaBotMovement : MonoBehaviour
     //On new destination assigned  
     protected Action OnNewDestinationAssigned;
 
-    public abstract void Moveto(KeyValuePair<int, int> gridNodeCoordinates);
+    public abstract void Moveto(Vector2 gridNodeCoordinates);
     
 
 }
