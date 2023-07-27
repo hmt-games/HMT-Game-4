@@ -16,13 +16,19 @@ public class Draw3DGrid : MonoBehaviour
     GridLayer gridLayer;
 
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     private void Start()
     {
         Create3DGrid();
     }
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     public void Create3DGrid()
     {
         transform.position = Vector3.zero;
