@@ -15,6 +15,14 @@ public class Draw3DGrid : MonoBehaviour
 
     GridLayer gridLayer;
 
+
+
+    private void Start()
+    {
+        Create3DGrid();
+    }
+
+
     public void Create3DGrid()
     {
         transform.position = Vector3.zero;

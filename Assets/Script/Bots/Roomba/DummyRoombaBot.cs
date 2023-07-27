@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,4 +19,40 @@ public class DummyRoombaBot : RoombaBot
     {
         
     }
+<<<<<<< Updated upstream
+=======
+
+
+
+
+    //Define the primitive actions in detail here
+    public override void Fertilize(GridNode gridNode, Action)
+    {        
+        base.Fertilize(gridNode);
+    }
+
+    public override void Water(GridNode gridNode)
+    {
+        base.Water(gridNode);
+    }
+
+
+    public override void Harvest(GridNode gridNode)
+    {
+        base.Harvest(gridNode);
+    }
+
+
+    public override void GotoLoc(Vector2 gridNodeCoordinates)
+    {
+        base.GotoLoc(gridNodeCoordinates);
+    }
+
+    public override void ChangeMode(IPrimitiveRoombaBotActions.RoombaBotMode roombaBotMode)
+    {
+        base.ChangeMode(roombaBotMode);
+    }
+
+
+>>>>>>> Stashed changes
 }
