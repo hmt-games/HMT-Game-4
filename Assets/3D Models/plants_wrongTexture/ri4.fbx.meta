@@ -3,7 +3,22 @@ guid: d27fbee3aeac94616b11393f6c770ffd
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.498
+    second: {fileID: 2100000, guid: a0b37b9e33ac143439c0aacd32881be0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: riceBubble
+    second: {fileID: 2100000, guid: 28e3d32d2c2514b379b3f74c86ab11e8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: riceStem
+    second: {fileID: 2100000, guid: 98b246010f590444d97cf274291709f7, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
