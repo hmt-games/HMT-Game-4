@@ -3,7 +3,42 @@ guid: c959c9c83f26a4ced937f9486587edd6
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.433
+    second: {fileID: 2100000, guid: 8ca175657bafc4fa8aaadb4476590039, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.435
+    second: {fileID: 2100000, guid: 8ca175657bafc4fa8aaadb4476590039, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.438
+    second: {fileID: 2100000, guid: 8ca175657bafc4fa8aaadb4476590039, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cacGlow
+    second: {fileID: 2100000, guid: 8ca175657bafc4fa8aaadb4476590039, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cacGreen1
+    second: {fileID: 2100000, guid: 4cef5a21b5da34d16b61a413b5263a78, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cacGreen2
+    second: {fileID: 2100000, guid: 03994f5970ba948ff96818847c252caf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cacTran
+    second: {fileID: 2100000, guid: a5416bfeb91864e19a77da4d4a8d9aea, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

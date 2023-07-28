@@ -3,7 +3,12 @@ guid: 5fb1e94c8d59b4c44a650aae41c51ddc
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: riceStem
+    second: {fileID: 2100000, guid: 98b246010f590444d97cf274291709f7, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

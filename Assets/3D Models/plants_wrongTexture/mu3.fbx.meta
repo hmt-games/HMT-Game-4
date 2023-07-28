@@ -3,7 +3,17 @@ guid: 4a80a0754b3344ad1997584783b686f3
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mushStem
+    second: {fileID: 2100000, guid: e1a46cd96f4dc4f818a4a2039cb62648, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mushTran
+    second: {fileID: 2100000, guid: 0a3b294bfae3544e0941a8261b927c8f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
