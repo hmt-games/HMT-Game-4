@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.114642195, g: 0.33011943, b: 0.71255326, a: 1}
+  m_IndirectSpecularColor: {r: 0.11463373, g: 0.33009413, b: 0.71203697, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 1cf07bd05ab054be491f827d29ca48ca,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -214,14 +215,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 0}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &25919692
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -335,14 +334,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 4}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &58028485
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -456,14 +453,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 0}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &81616979
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -578,14 +573,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 2}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &138656576
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -699,14 +692,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 1}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &158892491
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -821,14 +812,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 2}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &162539234
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -943,14 +932,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 0}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &183942475
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1064,14 +1051,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 4}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &187806691
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1186,14 +1171,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 4}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &202002487
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1308,14 +1291,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 1}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &219371677
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1429,14 +1410,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 3}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &224740396
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1550,14 +1529,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 3}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &227430115
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1671,14 +1648,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 2}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &266512769
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1792,14 +1767,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 0}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &279456453
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1914,14 +1887,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 0}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &289263845
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2034,14 +2005,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 1}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &320687892
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2308,14 +2277,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 2}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &346606039
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2429,14 +2396,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 4}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &360566224
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2550,14 +2515,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 2}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &369156837
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2785,14 +2748,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 3}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &430171378
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2906,14 +2867,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 2}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &438612667
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3026,14 +2985,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 1}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &440082718
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3191,14 +3148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 1}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &459399309
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3312,14 +3267,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 0}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &462406309
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3434,14 +3387,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 2}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &504287194
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3554,14 +3505,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 1}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &507657984
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3675,14 +3624,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 2}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &511922900
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3795,14 +3742,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 1}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &533439605
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3917,14 +3862,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 0}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &556468807
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4039,14 +3982,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 3}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &563281527
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4161,14 +4102,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 3}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &571375385
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4281,14 +4220,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 4}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &571449070
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4403,14 +4340,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 2}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &601508853
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4525,14 +4460,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 1}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &620256760
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4647,14 +4580,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 4}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &674234680
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4768,14 +4699,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 1}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &685246536
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4889,14 +4818,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 3}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &688592484
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5011,14 +4938,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 1}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &689575289
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5133,14 +5058,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 0}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &701516838
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5254,14 +5177,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 2}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &769152610
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5375,14 +5296,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 3}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &773499916
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5495,14 +5414,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 2}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &778417593
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5615,14 +5532,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 2}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &784293118
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5786,14 +5701,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 3}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &834601000
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5906,14 +5819,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 3}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &841823114
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6027,14 +5938,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 3}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &848518320
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6147,14 +6056,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 4}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &853917497
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6268,14 +6175,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 1}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &867291073
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6389,14 +6294,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 2}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &878568990
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6682,14 +6585,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 0}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &899831903
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6802,14 +6703,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 1}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &915654239
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6924,14 +6823,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 3}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &921986660
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7044,14 +6941,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 4}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &922857627
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7166,14 +7061,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 2}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &928970422
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7288,14 +7181,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 1}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &968205091
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7409,14 +7300,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 0}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &974323384
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7530,14 +7419,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 4}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &975404229
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7652,14 +7539,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 0}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &982827447
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7774,14 +7659,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 1}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &988511316
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7894,14 +7777,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 4}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &992892572
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8015,14 +7896,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 4}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &998725918
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8136,14 +8015,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 1}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &999156032
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8257,14 +8134,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 1}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1019009907
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8378,14 +8253,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 4}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1040525899
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8500,14 +8373,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 4}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1067212525
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8621,14 +8492,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 4}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1080392546
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8741,14 +8610,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 2}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1085663323
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8863,14 +8730,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 4}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1087067672
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8983,14 +8848,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 0}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1106086313
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9104,14 +8967,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 3}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1217683111
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9224,14 +9085,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 2}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1225119559
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9345,14 +9204,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 4}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1305397328
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9467,14 +9324,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 3}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1312968112
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9588,14 +9443,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 3}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1340624003
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9781,14 +9634,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 2}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1346574230
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9901,14 +9752,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 1}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1351489512
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10023,14 +9872,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 4}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1386722522
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10145,14 +9992,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 0}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1397109503
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10267,14 +10112,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 0}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1404087097
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10389,14 +10232,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 3}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1412052004
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10542,14 +10383,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 1}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1436410161
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10662,14 +10501,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 3}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1453144619
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10782,14 +10619,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 1}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1457589310
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10904,14 +10739,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 1}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1472250455
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11024,14 +10857,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 1}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1483661291
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11145,14 +10976,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 3}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1488162306
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11265,14 +11094,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 4}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1493342658
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11386,14 +11213,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 0}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1498747652
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11506,14 +11331,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 2}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1504468915
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11628,14 +11451,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 1}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1545549230
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11748,14 +11569,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 1}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1593595931
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11870,14 +11689,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 0}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1597148512
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11991,14 +11808,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 0}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1603479259
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12112,14 +11927,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 4}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1607925851
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12233,14 +12046,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 4}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1613225751
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12353,14 +12164,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 3}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1622220113
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12475,14 +12284,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 2}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1658990759
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12595,14 +12402,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 0}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1676970926
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12716,14 +12521,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 3}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1681753552
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12837,14 +12640,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 3}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1688825337
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12959,14 +12760,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 0}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1739068104
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13173,14 +12972,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 3}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1775485162
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13295,14 +13092,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 3}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1790507705
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13417,14 +13212,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 2}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1795684964
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13538,14 +13331,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 4}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1823319658
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13660,14 +13451,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 2}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1823683911
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13859,14 +13648,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 3}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1860229103
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13981,14 +13768,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 0}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1864507000
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14101,14 +13886,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 2}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1870220202
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14222,14 +14005,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 2}
   layer: 1
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1880190691
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14344,14 +14125,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 3}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1885406747
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14464,14 +14243,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 4}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1903637246
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14584,14 +14361,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 0}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1949768395
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14706,14 +14481,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 0}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1955589696
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14828,14 +14601,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 2, y: 4}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1964168776
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14949,14 +14720,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 4}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &1982217949
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15071,14 +14840,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 2}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2047503609
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15192,14 +14959,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 0}
   layer: 0
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2054813956
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15312,14 +15077,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 1}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2071730548
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15433,14 +15196,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 0, y: 1}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2088212255
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15553,14 +15314,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 0}
   layer: 2
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2097752007
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15675,14 +15434,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 2}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2105063670
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15795,14 +15552,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 3, y: 0}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2126236322
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15916,14 +15671,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 4, y: 4}
   layer: 4
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2132677016
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16038,14 +15791,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70687d7da342b3945b1a1324e434ad18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  defaultMaterialColor: {r: 0, g: 0, b: 0, a: 0}
-  blockedColor: {r: 167, g: 79, b: 29, a: 1}
   coordinate: {x: 1, y: 3}
   layer: 3
-  gridState: 0
+  gridNodeState: 0
   G: 0
   H: 0
+  cameFromNode: {fileID: 0}
 --- !u!65 &2137763996
 BoxCollider:
   m_ObjectHideFlags: 0
