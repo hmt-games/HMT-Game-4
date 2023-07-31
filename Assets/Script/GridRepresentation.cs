@@ -23,7 +23,7 @@ namespace util.GridRepresentation
 
         
         public GridNode GetGridNodeByCoordinate(Vector2 gridNodeCoordinates)
-        {
+        {            
             foreach (var node in nodesOnThisGridLayer)
             {
                 if (node.coordinate == gridNodeCoordinates)

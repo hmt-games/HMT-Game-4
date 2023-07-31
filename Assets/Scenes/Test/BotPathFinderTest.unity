@@ -1699,8 +1699,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -186.58978, y: 159.79352}
-  m_SizeDelta: {x: -373.1796, y: -319.577}
+  m_AnchoredPosition: {x: -186.58978, y: 177.89}
+  m_SizeDelta: {x: -373.1796, y: -355.77}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &709754788
 MonoBehaviour:
@@ -2344,8 +2344,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -156.83125, y: 131.59601}
-  m_SizeDelta: {x: -313.6625, y: -263.192}
+  m_AnchoredPosition: {x: -186.59, y: 177.88782}
+  m_SizeDelta: {x: -373.18, y: -355.7756}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1013592407
 MonoBehaviour:
@@ -2371,15 +2371,11 @@ MonoBehaviour:
 
     - Click Play
 
-    - Select "Grid" Gameobject
+    - Click on the node where
+    you want the bot to move.
 
-    -
-    Click on "Recreate" button in inspector
-
-    - Click on the node where you want
-    the bot to move.
-
-    - Blue (Gizmo) circles will pop up on the calculated path.'
+    - Blue (Gizmo) circles will pop up on the calculated
+    path.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3407,7 +3403,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da05d5f90022bad4d920f4cfb291c67e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  botMovement: {fileID: 0}
 --- !u!114 &1412755360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3421,7 +3416,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 1
-  currentGridNodeUnderBot: {fileID: 0}
 --- !u!65 &1412755361
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -9,7 +9,6 @@ public class GridNode : MonoBehaviour
     public int layer;
 
 
-
     public util.GridRepresentation.GridState gridNodeState = util.GridRepresentation.GridState.Empty;
 
 
