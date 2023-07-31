@@ -13,33 +13,21 @@ using UnityEngine;
 public abstract class RoombaBotMovement : MonoBehaviour
 {
     [SerializeField]
-    protected float movementSpeed;
+    protected float movementSpeed = 1f;
 
     protected util.GridRepresentation.GridLayer currentLayerForRoombaBot;
     
-
-    //On Grid Navigation
+    
     public RoombaBotPathFinder pathFinder = new RoombaBotPathFinder();
-    protected List<GridNode> currentRoombaBotPath;
 
-
-    //On start moving
-    public Action OnStartMovement;
 
     //On reached destination
-    public Action OnReachedDestination;
+    protected Action OnReachedDestination;
 
+    //On new destination assigned  
+    protected Action OnNewDestinationAssigned;
 
-
-    public virtual void Moveto(Vector2 gridNodeCoordinates)
-    {
-
-    }
-
-    public virtual void Moveto(Vector2 gridNodeCoodinates, Action<bool> hasReachedDestination)
-    {
-
-    }
+    public abstract void Moveto(Vector2 gridNodeCoordinates);
 
 
 
@@ -50,7 +38,7 @@ public abstract class RoombaBotMovement : MonoBehaviour
     protected GridNode GridNodeUnderBot(int layerMask = 3)
     {
         ray = new Ray(transform.position, Vector3.down);
-        if(Physics.Raycast(ray, out hitInfo, 5f, 1 << layerMask))
+        if(Physics.Raycast(ray, out hitInfo, 15f, 1 << layerMask))
         {
             return hitInfo.collider.gameObject.GetComponent<GridNode>();
         }
@@ -58,23 +46,5 @@ public abstract class RoombaBotMovement : MonoBehaviour
         return null;
     }
 
-
-
-
-    //Visualize path
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue; ;        
-
-
-        if (currentRoombaBotPath != null)
-        {
-            Gizmos.color = Color.blue;
-            foreach (var item in currentRoombaBotPath)
-            {
-                Gizmos.DrawSphere(item.gameObject.transform.position + new Vector3(0, 0.5f, 0f), 0.4f);
-            }
-        }
-    }
 
 }
