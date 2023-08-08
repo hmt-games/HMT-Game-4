@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f95dfe1e63da4ef0886a0b547b12b4c, type: 3}
+  m_Name: PlantTheme_Default
+  m_EditorClassIdentifier: 
+  scaleBias: {x: 0.46, y: 0.46, z: 0.46}
+  rotationBias: {x: 0, y: 0, z: 0}
+  positionBias: {x: 0, y: 0, z: 0.00951}
+  plantInfos:
+  - plantType: 0
+    plantStages:
+    - {fileID: 919132149155446097, guid: 712a45b5b4e864977814a0d55de08c76, type: 3}
+    - {fileID: 919132149155446097, guid: cdfbd070f2a2242339577bb9d9f999bf, type: 3}
+    - {fileID: 919132149155446097, guid: c959c9c83f26a4ced937f9486587edd6, type: 3}
+    - {fileID: 919132149155446097, guid: b5d271337eb5648fd887176da5772187, type: 3}
+  - plantType: 1
+    plantStages:
+    - {fileID: 919132149155446097, guid: d05adb36374bb493eac16c8350e8f64a, type: 3}
+    - {fileID: 919132149155446097, guid: dbed70031f4364c4c89f6a34a751e352, type: 3}
+    - {fileID: 919132149155446097, guid: 9c8f631571f4242ef81ae63255927fdb, type: 3}
+    - {fileID: 919132149155446097, guid: 95f31d51cbc4d4b93843507c867d945b, type: 3}
+  - plantType: 2
+    plantStages:
+    - {fileID: 919132149155446097, guid: 6f24b00ebf4eb4656b7f498bac51d939, type: 3}
+    - {fileID: 919132149155446097, guid: 49747d6093ca84e668ceb0a2befb8b7a, type: 3}
+    - {fileID: 919132149155446097, guid: 5fb1e94c8d59b4c44a650aae41c51ddc, type: 3}
+    - {fileID: 919132149155446097, guid: d27fbee3aeac94616b11393f6c770ffd, type: 3}
+  - plantType: 3
+    plantStages:
+    - {fileID: 919132149155446097, guid: ae310f2c4a70e479c8aac8a6ac829ff8, type: 3}
+    - {fileID: 919132149155446097, guid: 7a8455d3c3b3d432990cecf019b9b0ce, type: 3}
+    - {fileID: 919132149155446097, guid: 4a80a0754b3344ad1997584783b686f3, type: 3}
+    - {fileID: 919132149155446097, guid: b35a681ce42994143a0c768952414255, type: 3}

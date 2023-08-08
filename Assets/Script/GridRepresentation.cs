@@ -10,7 +10,6 @@ namespace util.GridRepresentation
         Planted
     }
 
-
     [System.Serializable]
     public class GridLayer
     {
@@ -18,19 +17,12 @@ namespace util.GridRepresentation
         public GridLayer(int rowSize, int columnSize)
         {
             this.nodesOnThisGridLayer = new GridNode[rowSize, columnSize];
-        }    
-        
-
+        }
         
         public GridNode GetGridNodeByCoordinate(Vector2 gridNodeCoordinates)
         {
-            foreach (var node in nodesOnThisGridLayer)
-            {
-                if (node.coordinate == gridNodeCoordinates)
-                    return node;
-            }
-
-            return null;
+            if (!GameManager.S.CheckCoordValid(gridNodeCoordinates)) return null;
+            return nodesOnThisGridLayer[(int)gridNodeCoordinates.x, (int)gridNodeCoordinates.y];
         }
     }
 

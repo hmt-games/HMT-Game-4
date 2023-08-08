@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using util.GridRepresentation;
-
-
-
+using util.GameRepresentation;
 
 public class Draw3DGrid : MonoBehaviour
 {

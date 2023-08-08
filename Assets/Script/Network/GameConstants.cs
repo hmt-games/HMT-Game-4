@@ -21,6 +21,9 @@ namespace GameConstants
 
         // https://stackoverflow.com/questions/64105721/get-build-path-of-local-file-unity
         //public string LAYOUT_JSON_FILE = Application.dataPath + "/Resources/CommunicationJson.txt";
+        
+        // Important and useful constant
+        public const float StateMachineTickTime = 1.0f;
     }
 
     public class Character
