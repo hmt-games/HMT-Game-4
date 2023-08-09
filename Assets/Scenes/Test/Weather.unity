@@ -382,7 +382,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 943136654}
-  - component: {fileID: 943136653}
+  - component: {fileID: 943136655}
   m_Layer: 0
   m_Name: WeatherManager
   m_TagString: Untagged
@@ -390,24 +390,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &943136653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 943136652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75aed3236563242a18bcf9340eea1117, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentWeather: 0
-  currentDifficulty: 2
-  CurrentDay: 0
-  DayTime: 10
-  WeatherBias: 
-  _text: {fileID: 590465085}
 --- !u!4 &943136654
 Transform:
   m_ObjectHideFlags: 0
@@ -423,6 +405,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &943136655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943136652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b41e5d451f0a480ca7d1540392b3710, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Easy: {fileID: 11400000, guid: 82053b3c32fdf4ad0b04a9d4294909b0, type: 2}
+  Medium: {fileID: 11400000, guid: f48029cea3b624ae9b09d900e94ae905, type: 2}
+  Hard: {fileID: 11400000, guid: a0eb457604f9b4892be27688da379262, type: 2}
+  currentWeather: 0
+  currentDifficulty: {fileID: 0}
+  CurrentDay: 0
+  CurrentWeek: 0
+  DayTime: 5
+  _text: {fileID: 590465085}
 --- !u!1 &1085259839
 GameObject:
   m_ObjectHideFlags: 0
