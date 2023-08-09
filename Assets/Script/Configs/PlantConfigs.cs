@@ -16,12 +16,30 @@ public class PlantConfigs : ScriptableObject
     public class Plant
     {
         public PlantType plantType;
-        public float dormantMinTime;
-        public float formantMaxTime;
+        public float dormantMinTime;   // turns as seed
+        public float dormantMaxTime;
         public float minWaterLevel;
         public float maxWaterLevel;
+        public int endurance;          // turns before die if condition not met
         public List<NutritionType> nutritionNeeded;
+        public PropagateType propagateType;
+        public float propagateEnergyThreshold;
     }
 
     public List<Plant> plants;
+
+    public bool GetPlantInfo(PlantType plantType, out Plant plant)
+    {
+        foreach (Plant _plant in plants)
+        {
+            if (_plant.plantType == plantType)
+            {
+                plant = _plant;
+                return true;
+            }
+        }
+
+        plant = null;
+        return false;
+    }
 }

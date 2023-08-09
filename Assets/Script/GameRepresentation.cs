@@ -19,4 +19,14 @@ namespace util.GameRepresentation
         Farrtrite,
         Christrogen
     }
+
+    public enum PropagateType
+    {
+        Cross,          // up down left right
+        Square,         // 3x3 square centered around plant
+        VerticalUp,     // up 1 layer
+        VerticalDown,   // down 1 layer
+        VerticalUpCross,
+        VerticalDownCross
+    }
 }

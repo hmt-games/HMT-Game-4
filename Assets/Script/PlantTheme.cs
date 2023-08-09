@@ -48,7 +48,7 @@ public class PlantTheme : ScriptableObject
     public bool GetAllStagesOfPlant(PlantType plantType, out List<GameObject> allStages)
     {
         if (!TryGetPlant(plantType, out allStages)) return false;
-        else return true;
+        return true;
     }
     
     /* Call this to get a specific stage's model.
@@ -61,10 +61,7 @@ public class PlantTheme : ScriptableObject
             model = null;
             return false;
         }
-        else
-        {
-            model = allStages[stage];
-            return true;
-        }
+        model = allStages[stage];
+        return true;
     }
 }

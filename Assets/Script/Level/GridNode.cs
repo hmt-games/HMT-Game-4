@@ -5,11 +5,15 @@ using util.GameRepresentation;
 
 public class GridNode : MonoBehaviour
 {
-    [Header("NODE INFO")]
+    [Header("NODE META")]
     public Vector2Int coordinate;
     public int layer;
     public util.GridRepresentation.GridState gridNodeState = util.GridRepresentation.GridState.Empty;
-    public Dictionary<NutritionType, int> nutrition;
+
+    [Space(15)] 
+    [Header("NODE INFO")] 
+    public float waterLevel;
+    public Dictionary<NutritionType, float> nutrition;
 
     // [Space(15)] 
     // [Header("NODE PLANT INFO")] 

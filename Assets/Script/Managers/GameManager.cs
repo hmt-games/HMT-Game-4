@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameConstants;
 using UnityEngine;
+using util.GameRepresentation;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +12,7 @@ public class GameManager : MonoBehaviour
     
     public PlantTheme plantTheme;
     public Draw3DGrid draw3DGrid;
+    public PlantConfigs plantConfigs;
     [SerializeField] private LevelInitializer levelInitializer;
     [HideInInspector] public LevelConfig levelConfig;
 
@@ -24,12 +28,29 @@ public class GameManager : MonoBehaviour
     {
         draw3DGrid.Create3DGrid();
         levelInitializer.InitPlantsOnGrid();
+        levelInitializer.InitGridStats();
     }
 
-    public bool CheckCoordValid(Vector2 coord)
+    public bool CheckCoordValid(Vector2 coord, int layer = 0)
     {
-        if (coord.x >= draw3DGrid.levelConfig.width) return false;
-        if (coord.y >= draw3DGrid.levelConfig.height) return false;
+        if (layer < 0) return false;
+        if (layer >= levelConfig.layerCount) return false;
+        if (coord.x >= draw3DGrid.levelConfig.width || coord.x < 0) return false;
+        if (coord.y >= draw3DGrid.levelConfig.height || coord.y < 0) return false;
         return true;
+    }
+
+    public void SpawnPlant(Vector2 coord, int layer, PlantType plantType)
+    {
+        if (!CheckCoordValid(coord, layer)) return;
+
+        GridNode gridNode = GameMap.allGridLayers[layer].GetGridNodeByCoordinate(coord);
+        if (gridNode.gameObject.GetComponent<PlantStateMachine>() != null) Destroy(gridNode.gameObject.GetComponent<PlantStateMachine>());
+        PlantStateMachine nFSM = gridNode.gameObject.AddComponent<PlantStateMachine>();
+        nFSM.parentGrid = gridNode;
+        nFSM.plantType = plantType;
+        plantConfigs.GetPlantInfo(plantType, out PlantConfigs.Plant plant);
+        nFSM.dormantTime = Random.Range(plant.dormantMinTime, plant.dormantMaxTime);
+        nFSM.StartTick();
     }
 }
