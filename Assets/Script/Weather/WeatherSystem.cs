@@ -25,9 +25,6 @@ public class WeatherSystem : MonoBehaviour
     // Count for #week in the game. Medium and Hard will appear in later of the game
     private int CurrentWeek = 0;
 
-    [SerializeField]
-    private float DayTime = 5.0f;
-
     private Queue<Dictionary<int, int>> forecast = new Queue<Dictionary<int, int>>();
     private Queue<int> result = new Queue<int>();
 
@@ -169,13 +166,18 @@ public class WeatherSystem : MonoBehaviour
 
         currentWeather = (WeatherCondition)result.Dequeue();
         forecast.Dequeue();
+
+        if (currentWeather == WeatherCondition.Rainy)
+        {
+            GameManager.S.RainyEffect();
+        }
     }
 
     public IEnumerator Ticking()
     {
         DayTick();
         Broadcast();
-        yield return new WaitForSeconds(DayTime);
+        yield return new WaitForSeconds(GameConstants.GlobalConstants.DayTickTime);
 
         StartCoroutine(Ticking());
     }
@@ -184,6 +186,7 @@ public class WeatherSystem : MonoBehaviour
     {
         Debug.Log("Current Weather: " + currentWeather);
         _text.text = "";
+        _text.text += "Current Weather: " + currentWeather + "\n";
 
         Dictionary<int, int>[] arr = forecast.ToArray();
         int j = CurrentDay + 1;

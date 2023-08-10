@@ -53,4 +53,26 @@ public class GameManager : MonoBehaviour
         nFSM.dormantTime = Random.Range(plant.dormantMinTime, plant.dormantMaxTime);
         nFSM.StartTick();
     }
+
+    public void RainyEffect()
+    {
+        var TopLayer = GameMap.allGridLayers[0];
+
+        for (int x = 0; x < levelConfig.width; x++)
+        {
+            for (int y = 0; y < levelConfig.height; y++)
+            {
+                GridNode gridNode = TopLayer.GetGridNodeByCoordinate(new Vector2(x, y));
+
+                if(gridNode.waterLevel < GameConstants.Grid.MaxWaterLevel - 1.0f)
+                {
+                    gridNode.waterLevel += 1.0f;
+                }
+                else
+                {
+                    gridNode.waterLevel = GameConstants.Grid.MaxWaterLevel;
+                }
+            }
+        }
+    }
 }

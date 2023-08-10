@@ -24,6 +24,7 @@ namespace GameConstants
         
         // Important and useful constant
         public const float StateMachineTickTime = 1.0f;
+        public const float DayTickTime = 5.0f;
     }
 
     public class Character
@@ -70,4 +71,8 @@ namespace GameConstants
         public static List<util.GridRepresentation.GridLayer> allGridLayers = new List<util.GridRepresentation.GridLayer>();
     }
 
+    public static class Grid
+    {
+        public static float MaxWaterLevel = 10.0f;
+    }
 }
