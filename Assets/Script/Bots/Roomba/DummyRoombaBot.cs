@@ -3,52 +3,109 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DummyRoombaBot : RoombaBot
-{
-    
-    // Start is called before the first frame update
-
-    public override void Start()
-    {
-        base.Start();
-    }
-
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
-
-
-    //Define the primitive actions in detail here
-    public override void Fertilize(GridNode gridNode)
+{    
+    //Define the primitive actions in detail here. Define only the required ones.
+    public override IEnumerator Fertilize()
     {        
-        base.Fertilize(gridNode);
+
+        yield return ChangeMode(IPrimitiveRoombaBotActions.RoombaBotMode.Fertilize);
+
+        yield return GotoLoc(currentTargetNodeToPerformActionOn.coordinate);
+
+        //Fertilize Action
+        yield return base.Fertilize();
+
+        OnActionFinished?.Invoke();
+
+        Idle();
+
+        yield break;
+
     }
 
-    public override void Water(GridNode gridNode)
+    public override IEnumerator Water()
     {
-        base.Water(gridNode);
+
+        yield return ChangeMode(IPrimitiveRoombaBotActions.RoombaBotMode.Water);
+
+        yield return GotoLoc(currentTargetNodeToPerformActionOn.coordinate);
+
+        //Water Action
+        yield return base.Water();
+
+        OnActionFinished?.Invoke();
+
+        Idle();
+
+        yield break;
+
     }
 
 
-    public override void Harvest(GridNode gridNode)
+    public override IEnumerator Harvest()
     {
-        base.Harvest(gridNode);
+
+        yield return ChangeMode(IPrimitiveRoombaBotActions.RoombaBotMode.Harvest);
+
+        yield return GotoLoc(currentTargetNodeToPerformActionOn.coordinate);
+        
+        //Harvest Action
+        yield return base.Harvest();
+
+        OnActionFinished?.Invoke();
+
+        Idle();
+
+        yield break;
+
     }
 
 
-    public override void GotoLoc(Vector2 gridNodeCoordinates)
+    public override IEnumerator GotoLoc(Vector2 gridNodeCoordinates)
     {
-        base.GotoLoc(gridNodeCoordinates);
+        yield return base.GotoLoc(gridNodeCoordinates);
+        yield break;
     }
 
-    public override void ChangeMode(IPrimitiveRoombaBotActions.RoombaBotMode roombaBotMode)
+    public override IEnumerator ChangeMode(IPrimitiveRoombaBotActions.RoombaBotMode roombaBotMode)
     {
-        base.ChangeMode(roombaBotMode);
+        yield return base.ChangeMode(roombaBotMode);
+        yield break;
     }
 
+
+    public override void Idle()
+    {
+        base.Idle();
+    }
+
+    public override void PerformAction()
+    {
+        base.PerformAction();
+
+        switch (currentActionToPerform)
+        {
+            case IPrimitiveRoombaBotActions.PrimitiveActions.None:
+                Debug.LogError("None Action cannot be performed");
+                break;
+
+            case IPrimitiveRoombaBotActions.PrimitiveActions.Water:
+                StartCoroutine(Water());
+                break;
+
+            case IPrimitiveRoombaBotActions.PrimitiveActions.Fertilize:
+                StartCoroutine(Fertilize());
+                break;
+
+            case IPrimitiveRoombaBotActions.PrimitiveActions.Harvest:
+                StartCoroutine(Harvest());
+                break;
+        }
+    }
+
+    public override void StopAction()
+    {
+        base.StopAction();
+    }
 
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DummyBotMovementInput : MonoBehaviour
+public class DummyBotPathFinderInput : MonoBehaviour
 {
     [SerializeField]
     RoombaBot roombaBot;
@@ -11,14 +11,12 @@ public class DummyBotMovementInput : MonoBehaviour
     GridNode currentNode;
 
     RaycastHit destinationNodehitinfo, startNodehitinfo;
-
-
-    List<GridNode> botPath;
+    List<GridNode> dummyRoombaBotPath;
 
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         if(Input.GetMouseButtonDown(0))
         {
             //Set the Current node
@@ -29,10 +27,6 @@ public class DummyBotMovementInput : MonoBehaviour
             else
                 return;
 
-
-            if(botPath != null)
-                botPath.Clear();
-
             
             //Select Destination after start node has been set.
             if (Physics.Raycast(GetRay(), out destinationNodehitinfo))
@@ -40,10 +34,8 @@ public class DummyBotMovementInput : MonoBehaviour
                 if (destinationNodehitinfo.collider.gameObject.GetComponent<GridNode>())
                 {
                     GridNode selectedNode = destinationNodehitinfo.collider.gameObject.GetComponent<GridNode>();
-
-                    Debug.Log(selectedNode.gameObject.name + " selected");
-
-                    botPath = roombaBot.botMovement.pathFinder.FindPath(currentNode, selectedNode);
+                    dummyRoombaBotPath = roombaBot.botMovement.pathFinder.FindPath(currentNode, selectedNode);
+                    Debug.Log(selectedNode.gameObject.name + " selected");                    
                 }
             }
 
@@ -58,20 +50,19 @@ public class DummyBotMovementInput : MonoBehaviour
 
 
 
+    //Visualize Path
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue; ;
-        Gizmos.DrawRay(roombaBot.gameObject.transform.position, Vector3.down * 50f);
-        
 
-
-        if (botPath != null)
+        if (dummyRoombaBotPath != null)
         {
             Gizmos.color = Color.blue;
-            foreach (var item in botPath)
+            foreach (var item in dummyRoombaBotPath)
             {
                 Gizmos.DrawSphere(item.gameObject.transform.position + new Vector3(0, 0.5f, 0f), 0.4f);
             }
         }
     }
+
 }

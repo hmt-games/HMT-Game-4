@@ -15,6 +15,10 @@ public class CameraManager : MonoBehaviour
     private List<CinemachineVirtualCamera> _layerCams;
     private int _currentActiveLayer = 0;
 
+    //To set the layer index that the player will interact with
+    public static Action<int> OnCameraChangedToLayer;
+
+
     private void Awake()
     {
         if (!S) S = this;
@@ -64,5 +68,8 @@ public class CameraManager : MonoBehaviour
         _layerCams[_currentActiveLayer].Priority = 0;
         _layerCams[layer].Priority = 999;
         _currentActiveLayer = layer;
+
+        //Set the layer that the player will interact with
+        OnCameraChangedToLayer?.Invoke(_currentActiveLayer);
     }
 }

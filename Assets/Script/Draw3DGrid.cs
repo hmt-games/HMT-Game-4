@@ -13,6 +13,7 @@ public class Draw3DGrid : MonoBehaviour
 
     GridLayer gridLayer;
 
+
     public void Create3DGrid()
     {
         transform.position = Vector3.zero;
@@ -56,6 +57,11 @@ public class Draw3DGrid : MonoBehaviour
             //Store all layers to create a world map
             GameConstants.GameMap.allGridLayers.Add(gridLayer);
         }
+
+
+
+        //WAR CRIME - Remove this later
+        GridInteractionManager.gridInteractionManagerInstance.currentGridLayer = GameConstants.GameMap.allGridLayers[0];//  -- CHANGE THIS AS WELL.
     }
 }
 
