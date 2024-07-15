@@ -79,6 +79,9 @@ namespace ErikDraft {
             foreach(PlantBehavior plant in rootedPlants) {
                aggregate += plant.OnTick(waterVolume * (plant.RootMass / rootTotal));
             }
+
+            ///Reconcile the aggregate with the capacities.
+            ///If there is excess, pass it down the farm (or do you pass it out?)
         }
 
         /// <summary>

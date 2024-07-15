@@ -113,11 +113,11 @@ namespace ErikDraft {
 
             /// LEECH
             /// leeches some amount of each compound back into the soil
-            for(int compound = 0; compound < CompoundLevels.Length; compound++) {
-                var leech = Mathf.Min(config.leechRate[compound] * CompoundLevels[compound], parentCell.soilConfig.compoundCapacities[compound] - allocation.compounds[compound]);
-                CompoundLevels[compound] -= leech;
-                allocation.compounds[compound] += leech;
-            }
+            //for(int compound = 0; compound < CompoundLevels.Length; compound++) {
+            //    var leech = Mathf.Min(config.leechRate[compound] * CompoundLevels[compound], parentCell.soilConfig.compoundCapacities[compound] - allocation.compounds[compound]);
+            //    CompoundLevels[compound] -= leech;
+            //    allocation.compounds[compound] += leech;
+            //}
             return allocation;
 
             //TODOSome calculation of height has to go here...

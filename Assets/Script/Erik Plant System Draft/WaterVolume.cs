@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
 using UnityEngine;
 
 namespace ErikDraft {
@@ -36,6 +37,22 @@ namespace ErikDraft {
             result.water = a.water + b.water;
             for (int i = 0; i < a.compounds.Length; i++) {
                 result.compounds[i] = a.compounds[i] + b.compounds[i];
+            }
+            return result;
+        }
+
+        public static WaterVolume operator +(WaterVolume a, float b) {
+            WaterVolume result = new WaterVolume();
+            result.water = a.water + b;
+            return result;
+        }
+
+        public static WaterVolume operator -(WaterVolume a, float b) {
+            WaterVolume result = new WaterVolume();
+            var prev = a.water;
+            result.water = a.water - b;
+            for(int i = 0; i < a.compounds.Length; i++) {
+                result.compounds[i] = a.compounds[i] * (result.water / prev);
             }
             return result;
         }
