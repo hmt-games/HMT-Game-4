@@ -37,7 +37,7 @@ namespace util.Propagate
             (Vector2 vec) => new Vector2(vec.x, vec.y);
 
 
-        // composite actions to be used when plants propagate
+        // composite actions to be used when rootedPlants propagate
         // int in dict means offset for layers
         // e.g. the `List<Vector2>` on key `-1` propagate here at 1 layer lower
         public static Dictionary<int, List<Vector2>> PropagatePlant(PropagateType pType, Vector2 plantPos)
