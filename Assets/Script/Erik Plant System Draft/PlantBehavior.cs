@@ -32,7 +32,11 @@ namespace ErikDraft {
                 _height = Mathf.Max(0, value);
             }
         }   
-        public float WaterLevel { get; private set; } = 0;
+        public float WaterLevel {
+            get {
+                return NutrientLevels.water;
+            }
+        }
         public float EnergyLevel { get; private set; } = 0;
         /// <summary>
         /// Health Level of the Plant is a sliding window average changes in EnergyLevel.
@@ -51,7 +55,9 @@ namespace ErikDraft {
 
         public float Age { get; private set; } = 0;
 
-        public float[] CompoundLevels { get; private set; } = new float[System.Enum.GetValues(typeof(CompoundType)).Length];
+        //public float[] CompoundLevels { get; private set; } = new float[System.Enum.GetValues(typeof(NutrientType)).Length];
+
+        private NutrientSolution NutrientLevels;
 
         public PlantConfig config;
 
@@ -70,60 +76,57 @@ namespace ErikDraft {
 
         }
 
-        public WaterVolume OnTick(WaterVolume allocation) {
-            ///UPTAKE
-            ///The moves an amount of each compound from the soil to the plant based on the uptake rate and the amount of the compound in the soil.
-            for (int compound = 0; compound < CompoundLevels.Length; compound++) { 
-                var uptake = Mathf.Min(config.uptakeRate[compound] * allocation.compounds[compound], config.capacities[compound] - CompoundLevels[compound]);
-                CompoundLevels[compound] += uptake;
-                allocation.compounds[compound] -= uptake;
-            }
+        public NutrientSolution OnTick(NutrientSolution allocation) {
+            /// UPTAKE
+            /// The moves an amount of each compound from the soil to the plant based on the uptake rate and the amount of the compound in the soil.
+            /// either it moves the amount based on its uptake rate OR up to the ammount it can contain if it's full
+            var uptake = Vector4.Min(Vector4.Scale(config.uptakeRate, allocation.nutrients) , config.capacities - NutrientLevels.nutrients);
+            NutrientLevels.nutrients += uptake;
+            allocation.nutrients -= uptake;
 
             /// METABOLISM
-            /// Uses the uptake compounds to contribute to maintaining the plant and converting to energy
-            var metabolismActual = 0f;
-            var metabolismMax = 0f;
-            for (int compound = 0; compound < CompoundLevels.Length; compound++) {
-                metabolismMax+= config.metabolismNeeds[compound] * config.metabolismFactor[compound];
-                var metabolismConsumption = Mathf.Min(CompoundLevels[compound], config.metabolismNeeds[compound]);
-                metabolismActual += metabolismConsumption * config.metabolismFactor[compound];
-                EnergyLevel += config.metabolismFactor[compound] * metabolismConsumption;
-                CompoundLevels[compound] -= metabolismConsumption;
-            }
+            /// Uses the uptake nutrients to contribute to maintaining the plant and converting to energy      
+            var metabolismConsumption = Vector4.Min(NutrientLevels.nutrients, config.metabolismNeeds);
+            EnergyLevel += Vector4.Dot(config.metabolismFactor, metabolismConsumption);
+            NutrientLevels.nutrients -= metabolismConsumption;
 
             /// HEALTH
             /// The health calculation is a sliding window average of the metabolism rate
             if (healthHistory.Count >= maxHealthHistory) {
                 healthHistory.Dequeue();
             }
-            healthHistory.Enqueue(metabolismActual / metabolismMax);
+            healthHistory.Enqueue(metabolismConsumption.Sum() / config.metabolismNeeds.Sum());
 
             if (Health > config.growthToleranceThreshold) {
-                var growth = 0f;
                 /// GROWTH / Consumption
                 /// This consumes compunds to contribute to growth
-                for (int compound = 0; compound < CompoundLevels.Length; compound++) {
-                    var growthConsumption = Mathf.Clamp(CompoundLevels[compound], 0, config.growthConsumptionRateLimit[compound]);
-                    growth += config.growthFactor[compound] * growthConsumption;
-                    CompoundLevels[compound] -= growthConsumption;
-                    RootMass += growth * config.PercentToRoots(Age);
-                    Height += growth * (1 - config.PercentToRoots(Age));
-                }
+                var growthConsumption = Vector4.Min(NutrientLevels.nutrients, config.growthConsumptionRateLimit);
+                var growth = Vector4.Dot(config.growthFactor, growthConsumption);
+                NutrientLevels.nutrients -= growthConsumption;
+                RootMass += growth * config.PercentToRoots(Age);
+                Height += growth * (1 - config.PercentToRoots(Age));
             }
 
             /// LEECH
+            /// Originally I was thinking of having plants leech somehting back into the soil but realized it was more complicated.
+            /// This should probably be a trait but it also might be something we could use for when a plant is dead.
             /// leeches some amount of each compound back into the soil
             //for(int compound = 0; compound < CompoundLevels.Length; compound++) {
-            //    var leech = Mathf.Min(config.leechRate[compound] * CompoundLevels[compound], parentCell.soilConfig.compoundCapacities[compound] - allocation.compounds[compound]);
+            //    var leech = Mathf.Min(config.leechRate[compound] * CompoundLevels[compound], parentCell.soilConfig.compoundCapacities[compound] - allocation.nutrients[compound]);
             //    CompoundLevels[compound] -= leech;
-            //    allocation.compounds[compound] += leech;
+            //    allocation.nutrients[compound] += leech;
             //}
             return allocation;
-
-            //TODOSome calculation of height has to go here...
         }
 
-        public WaterVolume OnWater(WaterVolume waterVolume) {
+        /// <summary>
+        /// Handles when water lands on the plant.
+        /// 
+        /// By default this should be a no-op but is here so it can be overridden by possible future Traits.
+        /// </summary>
+        /// <param name="waterVolume"></param>
+        /// <returns></returns>
+        public NutrientSolution OnWater(NutrientSolution waterVolume) {
             return waterVolume;
         }
     }

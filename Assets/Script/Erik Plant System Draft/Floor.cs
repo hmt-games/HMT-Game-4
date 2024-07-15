@@ -30,7 +30,7 @@ namespace ErikDraft {
 
         }
 
-        public WaterVolume[,] OnWater(WaterVolume[,] volumes) {
+        public NutrientSolution[,] OnWater(NutrientSolution[,] volumes) {
             for (int x = 0; x < Cells.GetLength(0); x++) {
                 for (int y = 0; y < Cells.GetLength(1); y++) {
                     volumes[x,y] = Cells[x, y].OnWater(volumes[x, y]);
@@ -51,6 +51,9 @@ namespace ErikDraft {
 
     public class Tower:MonoBehaviour {
 
+        /// <summary>
+        /// The floors in the tower. Indicies count up so 0 is the ground floor.
+        /// </summary>
         public Floor[] floors;
 
         /// <summary>
@@ -64,10 +67,10 @@ namespace ErikDraft {
 
 
         IEnumerator OnWater(float intialVolumePerTile) {
-            WaterVolume[,] volumes = new WaterVolume[floors[0].Cells.GetLength(0), floors[1].Cells.GetLength(1)];
+            NutrientSolution[,] volumes = new NutrientSolution[floors[0].Cells.GetLength(0), floors[1].Cells.GetLength(1)];
             for(int x = 0; x < volumes.GetLength(0); x++) {
                 for (int y = 0; y < volumes.GetLength(1); y++) {
-                    volumes[x, y] = new WaterVolume(intialVolumePerTile);
+                    volumes[x, y] = new NutrientSolution(intialVolumePerTile);
                 }
             }
             for(int f = floors.Length - 1; f >= 0; f--) {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using UnityEngine;
 using static Cinemachine.DocumentationSortingAttribute;
@@ -52,16 +53,16 @@ namespace ErikDraft {
 
         //public float[] compoundLevels;
 
-        public WaterVolume waterVolume;
+        public NutrientSolution NutrientLevels;
 
         private void Awake() {
             rootedPlants = new List<PlantBehavior>();
-            waterVolume = WaterVolume.Empty;
+            NutrientLevels = NutrientSolution.Empty;
         }
 
         public float RemainingWaterCapacity {
             get {
-                return soilConfig.waterCapacity - waterVolume.water;
+                return soilConfig.capacities.water - NutrientLevels.water;
             }
         }
 
@@ -70,18 +71,48 @@ namespace ErikDraft {
         /// I've contemplated whether this should get a paramter of the local light level/color. I would probalby make it a simplified version of the actual Unity lighting system to reduce the complexity space.
         /// </summary>
         public void OnTick() {
+            ///Reconile Excess Water
+
             float rootTotal = 0;
             foreach(PlantBehavior plant in rootedPlants) {
                 rootTotal += plant.RootMass;
             }
             ///Doll out nutrients / water volunme based on the relative root mass of each plant.
-            WaterVolume aggregate = WaterVolume.Empty;
+            NutrientSolution aggregate = NutrientSolution.Empty;
             foreach(PlantBehavior plant in rootedPlants) {
-               aggregate += plant.OnTick(waterVolume * (plant.RootMass / rootTotal));
+               aggregate += plant.OnTick(NutrientLevels * (plant.RootMass / rootTotal));
+            }
+            
+            if (aggregate.water > 0) {
+                //If there is room in the soil for the water, add it all but you need to check that there is capacity for the nutrients.
+                if (soilConfig.capacities > aggregate + NutrientLevels) {
+                    NutrientLevels += aggregate;
+                }
+                //If there is not room in the soil for the water, split the water and add the portion that fits.
+                else {
+                    NutrientLevels += (aggregate - RemainingWaterCapacity);
+                }
+
+                NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.capacities);
+                NutrientLevels -= excess;
+                StartCoroutine(Drain(excess));
             }
 
             ///Reconcile the aggregate with the capacities.
             ///If there is excess, pass it down the farm (or do you pass it out?)
+        }
+
+
+        /// <summary>
+        /// Removes the Excess water / nutrients.
+        /// Not sure when this should happen, currently it's an arbitrary delay at the end of tick but it should probably be better
+        /// synchronoized and that.
+        /// </summary>
+        /// <param name="excess"></param>
+        /// <returns></returns>
+        private IEnumerator Drain(NutrientSolution excess) {
+            yield return new WaitForSeconds(soilConfig.drainTime);
+            
         }
 
         /// <summary>
@@ -89,47 +120,29 @@ namespace ErikDraft {
         /// It should return a volume of water that was not absorbed by the cell or of it's plants to pass down farther.
         /// </summary>
         /// <param name="waterVolume"></param>
-        public WaterVolume OnWater(WaterVolume waterVolume) {
+        public NutrientSolution OnWater(NutrientSolution waterVolume) {
             foreach(PlantBehavior plant in surfacePlants.OrderByDescending(p => p.Height)) {
                 waterVolume = plant.OnWater(waterVolume);
             }
             if (waterVolume.water > 0) {
-                (WaterVolume portion, WaterVolume remainder) split = waterVolume.Split(RemainingWaterCapacity);
-                waterVolume.water += split.portion.water;
-                
-                for(int compound=0; compound < waterVolume.compounds.Length; compound++) {
-                    AddCompoundAmount(compound, split.portion.compounds[compound], split.remainder);
+                //If there is room in the soil for the water, add it all but you need to check that there is capacity for the nutrients.
+                if (soilConfig.capacities > waterVolume + NutrientLevels) {
+                    NutrientLevels += waterVolume;
                 }
-                if (split.remainder.water > 0) {
-                    return split.remainder;
-                }
+                //If there is not room in the soil for the water, split the water and add the portion that fits.
                 else {
-                    return WaterVolume.Empty;
+                    NutrientLevels += (waterVolume - RemainingWaterCapacity);
                 }
+
+                NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.capacities);
+                NutrientLevels -= excess;
+                return excess;
             }
             else {
-                return WaterVolume.Empty;
+                return NutrientSolution.Empty;
             }
-        }
 
-        private void AddCompoundAmount(int compound,  float level, WaterVolume residual) {
-            residual.compounds[compound] += AddCompoundAmount(compound, level);
-        }
-
-        public float AddCompoundAmmount(CompoundType compound, float level) {
-            return AddCompoundAmount((int)compound, level);
-        }
-
-        public float AddCompoundAmount(int compound, float level) {
-            float remainingCapacity = soilConfig.compoundCapacities[compound] - waterVolume.compounds[compound];
-            if (level > remainingCapacity) {
-                waterVolume.compounds[compound] = soilConfig.compoundCapacities[compound];
-                return level - remainingCapacity;
-            }
-            else {
-                waterVolume.compounds[compound] += level;
-                return 0;
-            }
+                
         }
 
         // Start is called before the first frame update

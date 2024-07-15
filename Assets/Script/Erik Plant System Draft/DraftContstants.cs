@@ -6,11 +6,11 @@ using UnityEngine;
 namespace ErikDraft {
 
     /// <summary>
-    /// The different kinds of compounds that form the basis for rootedPlants and resource targets
+    /// The different kinds of nutrients that form the basis for rootedPlants and resource targets
     /// 
-    /// I'm making the assumption that different numbers of compounds could be possible later.
+    /// I'm making the assumption that different numbers of nutrients could be possible later.
     /// </summary>
-    public enum CompoundType {
+    public enum NutrientType {
         A = 0, 
         B = 1, 
         C = 2, 
