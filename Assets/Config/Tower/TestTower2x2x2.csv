@@ -1,0 +1,17 @@
+TowerHeight,2,
+,,
+Floor1,2x2,
+Plant,AB,CD
+,AB,BD
+SoilWater,2,2
+,1,3
+SoilNutrition,4|4|4|4,4|4|4|4
+,4|4|4|4,4|4|4|4
+,,
+Floor2,2x2,
+Plant,AB,CD
+,AB,BD
+SoilWater,2,2
+,1,3
+SoilNutrition,4|4|4|4,4|4|4|4
+,4|4|4|4,4|4|4|4
