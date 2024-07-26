@@ -54,6 +54,8 @@ public class MapGenerator : MonoBehaviour
         {
             nTower.floors[i-1] = CreateFloor(towerInfo[i], i, nTower);
         }
+
+        GameManager.Instance.parentTower = nTower;
     }
 
     private Floor CreateFloor(string floorInfo, int floorIdx, Tower parentTower)
