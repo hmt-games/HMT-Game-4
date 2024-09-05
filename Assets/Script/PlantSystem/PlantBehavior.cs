@@ -111,7 +111,7 @@ public class PlantBehavior : MonoBehaviour {
             /// leeches some amount of each compound back into the soil
             //for(int compound = 0; compound < CompoundLevels.Length; compound++) {
             //    var leech = Mathf.Min(config.leechRate[compound] * CompoundLevels[compound], parentCell.soilConfig.compoundCapacities[compound] - allocation.nutrients[compound]);
-            //    CompoundLevels[compound] -= leech;
+            //    CompoundLevels[compound] -= leech;?";[]=----p['
             //    allocation.nutrients[compound] += leech;
             //}
             return allocation;

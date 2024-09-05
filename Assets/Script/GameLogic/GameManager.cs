@@ -14,4 +14,10 @@ public class GameManager : MonoBehaviour
         if (Instance) Destroy(this.gameObject);
         else Instance = this;
     }
+
+    public void Tick()
+    {
+        parentTower.OnTick();
+        HeatMapSwicher.S.SwitchOnHeatMap();
+    }
 }

@@ -62,9 +62,9 @@ public class GridCellBehavior : MonoBehaviour {
     /// This is called as a regular heartbeat of the cellular automata game.
     /// I've contemplated whether this should get a paramter of the local light level/color. I would probalby make it a simplified version of the actual Unity lighting system to reduce the complexity space.
     /// </summary>
-    public void OnTick() {
+    public void OnTickk() {
         ///Reconile Excess Water
-
+    
         float rootTotal = 0;
         foreach(PlantBehavior plant in rootedPlants) {
             rootTotal += plant.RootMass;
@@ -84,14 +84,31 @@ public class GridCellBehavior : MonoBehaviour {
             else {
                 NutrientLevels += (aggregate - RemainingWaterCapacity);
             }
-
+    
             NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.capacities);
             NutrientLevels -= excess;
             StartCoroutine(Drain(excess));
         }
-
+    
         ///Reconcile the aggregate with the capacities.
         ///If there is excess, pass it down the farm (or do you pass it out?)
+    }
+
+    public void OnTick()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (Random.Range(0.0f, 1.0f) <= 0.5f)
+            {
+                NutrientLevels.nutrients[i] += 1;
+                Debug.Log("++++");
+            }
+            else
+            {
+                NutrientLevels.nutrients[i] -= 1;
+                Debug.Log("----");
+            }
+        }
     }
 
 

@@ -6,7 +6,13 @@ using UnityEngine;
 public class HeatMapSwicher : MonoBehaviour
 {
     private bool _heatMapOn = false;
-    
+    public static HeatMapSwicher S;
+
+    private void Awake()
+    {
+        S = this;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -44,7 +50,7 @@ public class HeatMapSwicher : MonoBehaviour
         _heatMapOn = false;
     }
 
-    private void SwitchOnHeatMap()
+    public void SwitchOnHeatMap()
     {
         foreach (Floor floor  in GameManager.Instance.parentTower.floors)
         {

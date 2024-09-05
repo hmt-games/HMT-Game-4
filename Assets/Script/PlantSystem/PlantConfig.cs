@@ -48,7 +48,7 @@ public class PlantConfig : ScriptableObject {
     /// The point at which the plan transitions from growing root mass to growing height
     /// Ultimately I'd like to explore this being a more complex function but right now it is a simple linear transition based on age
     /// </summary>
-    public int rootHeightTransition;
+    public float rootHeightTransition;
 
     /// <summary>
     /// The minimum amount of health necessary in a tick to grow
@@ -60,7 +60,7 @@ public class PlantConfig : ScriptableObject {
             return 1;
         }
         else {
-            return Mathf.Clamp01((float)age / rootHeightTransition);
+            return 1 - Mathf.Clamp01((float)age / rootHeightTransition);
         }
     }
 
