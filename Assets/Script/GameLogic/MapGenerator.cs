@@ -50,12 +50,12 @@ public class MapGenerator : MonoBehaviour
         towerObj.name = "Tower";
         Tower nTower = towerObj.AddComponent<Tower>();
         nTower.floors = new Floor[Int32.Parse(towerHeight)];
+        
+        GameManager.Instance.parentTower = nTower;
         for (int i = 1; i < towerInfo.Length; i++)
         {
             nTower.floors[i-1] = CreateFloor(towerInfo[i], i, nTower);
         }
-
-        GameManager.Instance.parentTower = nTower;
     }
 
     private Floor CreateFloor(string floorInfo, int floorIdx, Tower parentTower)
@@ -65,6 +65,10 @@ public class MapGenerator : MonoBehaviour
         string[] floorSize = floorData[0].Split(",")[1].Split("x");
         int floorSizeX = Int32.Parse(floorSize[0]);
         int floorSizeY = Int32.Parse(floorSize[1]);
+
+        GameManager.Instance.parentTower.width = floorSizeX;
+        GameManager.Instance.parentTower.depth = floorSizeY;
+        
         
         Debug.Log($"Creating floor {floorIdx} with size {floorSizeX}x{floorSizeY}");
         GameObject floorObj = new GameObject();
