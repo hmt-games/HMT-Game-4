@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GridCellBehavior : MonoBehaviour {
 
@@ -16,7 +17,7 @@ public class GridCellBehavior : MonoBehaviour {
     /// Keep it as x,y instead of row, column because that will make it eaiser to think ahout for the agent interface.
     /// </summary>
     public int gridX;
-    public int gridY;
+    [FormerlySerializedAs("gridY")] public int gridZ;
 
 
     /// <summary>

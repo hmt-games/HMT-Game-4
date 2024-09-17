@@ -19,6 +19,11 @@ public struct NutrientSolution {
             this.water = water;
             nutrients = Vector4.zero;
         }
+        
+        public NutrientSolution(float water, Vector4 nutrients) {
+            this.water = water;
+            this.nutrients = nutrients;
+        }
 
         public NutrientSolution(NutrientSolution waterVolume) {
             water = waterVolume.water;

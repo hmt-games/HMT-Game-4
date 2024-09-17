@@ -9,7 +9,7 @@ public class PlantBehavior : MonoBehaviour {
         /// <summary>
         /// Plants can in principle reach to multiple cells to draw resources from, but need to figure out the best way to represent this
         /// </summary>
-        GridCellBehavior parentCell;
+        public GridCellBehavior parentCell;
 
         private float _rootMass=0;
         public float RootMass { 
@@ -63,17 +63,23 @@ public class PlantBehavior : MonoBehaviour {
 
         private float healthTotal = 0;
         private Queue<float> healthHistory;
+
+        public void SetInitialProperties(float rootMass, float height, float energyLevel, float health, float age,
+            Vector4 nutrients, float water)
+        {
+            _rootMass = rootMass;
+            _height = height;
+            EnergyLevel = energyLevel;
+            healthHistory = new Queue<float>();
+            for (int i = 0; i < maxHealthHistory; i++)
+            {
+                healthHistory.Enqueue(health);
+            }
+
+            Age = age;
+            NutrientLevels = new NutrientSolution(water, nutrients);
+        }
         
-        // Start is called before the first frame update
-        void Start() {
-            
-        }
-
-        // Update is called once per frame
-        void Update() {
-
-        }
-
         public NutrientSolution OnTick(NutrientSolution allocation) {
             /// UPTAKE
             /// The moves an amount of each compound from the soil to the plant based on the uptake rate and the amount of the compound in the soil.

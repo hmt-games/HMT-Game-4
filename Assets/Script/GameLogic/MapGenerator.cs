@@ -107,7 +107,7 @@ public class MapGenerator : MonoBehaviour
         GridCellBehavior nGrid = gridObj.AddComponent<GridCellBehavior>();
         nGrid.parentFloor = parentFloor;
         nGrid.gridX = x;
-        nGrid.gridY = y;
+        nGrid.gridZ = y;
         
         //TODO: maybe we want our infrastructure to support arbitrary plant in the same cell
         if (plants.Length > 4)
