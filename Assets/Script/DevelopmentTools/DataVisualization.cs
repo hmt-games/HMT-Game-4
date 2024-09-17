@@ -10,7 +10,7 @@ public class DataVisualization : MonoBehaviour
     [SerializeField] private GameObject toggleParent;
 
     private TMP_Text[,,] _gridTextField = null;
-    private bool _gridTextFieldActive = false;
+    // private bool _gridTextFieldActive = false;
 
     private IEnumerator Start()
     {

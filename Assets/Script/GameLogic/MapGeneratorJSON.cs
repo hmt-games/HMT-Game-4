@@ -56,6 +56,7 @@ public class MapGeneratorJSON : MonoBehaviour
 
         _width = width;
         _depth = depth;
+        nTower.floors = new Floor[height];
         for (int level = 0; level < height; level++)
         {
             CreateFloor(towerJObject[$"Floor{level}"], level, nTower);
@@ -77,6 +78,8 @@ public class MapGeneratorJSON : MonoBehaviour
         {
             CreateGrid(floorGrids[gridIdx], gridIdx, nFloor);
         }
+
+        parentTower.floors[floorIdx] = nFloor;
     }
 
     private void CreateGrid(JToken gridJObject, int gridIdx, Floor parentFloor)
@@ -118,13 +121,15 @@ public class MapGeneratorJSON : MonoBehaviour
             foreach (var property in surfacePlantsObj.Properties())
             {
                 JToken plantJToken = property.Value;
-                CreatePlant(plantJToken, nGrid, plantsSlot.GetChild(plantIdx));
+                CreatePlant(plantJToken, nGrid, plantsSlot.GetChild(plantIdx), true);
                 plantIdx++;
             }
         }
+
+        parentFloor.Cells[x, z] = nGrid;
     }
 
-    private void CreatePlant(JToken plantJToken, GridCellBehavior parentGrid, Transform plantSlot)
+    private void CreatePlant(JToken plantJToken, GridCellBehavior parentGrid, Transform plantSlot, bool isSurfacePlant)
     {
         string plantConfigName = (string)plantJToken["config"];
         if (!_plantConfigs.ContainsKey(plantConfigName)) CreatePlantConfig(plantConfigName);
@@ -140,6 +145,9 @@ public class MapGeneratorJSON : MonoBehaviour
             Vector4FromJTokenList(plantJToken["nutrient"].ToList()),
             (float)plantJToken["water"]);
         nPlant.parentCell = parentGrid;
+
+        if (isSurfacePlant) parentGrid.surfacePlants.Add(nPlant);
+        else parentGrid.rootedPlants.Add(nPlant);
     }
 
     private void CreatePlantConfig(string configName)
