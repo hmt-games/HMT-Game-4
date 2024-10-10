@@ -237,6 +237,7 @@ public class Plants2d : MonoBehaviour
     {
         GameObject branch = new GameObject("Branch");
         branch.transform.position = (start + end) / 2;
+        branch.transform.parent = transform;
 
         SpriteRenderer sr = branch.AddComponent<SpriteRenderer>();
         sr.sprite = randBranchSprite;
@@ -262,6 +263,7 @@ public class Plants2d : MonoBehaviour
         GameObject fruit = new GameObject("Fruit");
         fruit.transform.position = pos;
         fruit.transform.localScale = new Vector3(randFruitScale, randFruitScale, 1f);
+        fruit.transform.parent = transform;
 
         SpriteRenderer sr = fruit.AddComponent<SpriteRenderer>();
         sr.sprite = randFruitSprite;
