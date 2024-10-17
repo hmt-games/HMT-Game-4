@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Plants2d : MonoBehaviour
 {
-    public string startAxiom = "F";
+    
     public int iterCount = 0;
     public float ang = 25f;
     public float segLength = 0.5f;
@@ -17,6 +17,8 @@ public class Plants2d : MonoBehaviour
     private Dictionary<char, string> ruleSet = new Dictionary<char, string>();
     private string curString;
     public int numOfRules = 5;
+
+    public string startAxiom;
 
     private List<string> rules = new List<string>();
 
@@ -53,42 +55,151 @@ public class Plants2d : MonoBehaviour
     void GenerateRules(int numOfRules)
     {
         rules.Clear();
+
+        bool goBack = true; //second sequence
+
+        //valid sequences inside brackets(go back)
+        List<string> validSequences = new List<string> { "F", "+F", "-F", "++F", "+F+F", "--F", "-F-F" };
+
+        //valid sequences outside brackets
+        List<string> validOutside = new List<string> { "F", "FF"};
+
+        //valid options for the last sequence, all inside brackets
+        List<string> validLastSequences = new List<string> { "[F]", "[+F]", "[-F]" };
+
+        string lastselected = "";
+       
+        bool lastDoubleSymbol = false;
+        int doubleSymbolCount = 0;
+        int ffCount = 0;
+
+        List<string> firstBranch = new List<string> {"F"};
+
+
         for (int r = 0; r < numOfRules; r++)
         {
-            int numOfSymbols = Random.Range(5, 10);
+            int numOfSymbols = Random.Range(1, 5);
 
-            //all start with a branch F
+            //all start with a branch F, FF makes a plant taller, could be added to the first branch list if necessary
+            string startAxiom = firstBranch[Random.Range(0, firstBranch.Count)];
+
             string rule = startAxiom;
 
             for (int s = 0; s < numOfSymbols; s++)
             {
-                bool goBack = Random.Range(0, 2) == 1;
+                string selected = "";
+
+                if (s == numOfSymbols - 1)
+                {
+                    int randIndex = Random.Range(0, validLastSequences.Count);
+                    rule += validLastSequences[randIndex];
+                    continue;
+                }
+
+                //nno consecutive sequences
+                bool found = false;
+
+                while (!found)
+                {
+
+                    if (goBack)
+                    {
+                        selected = validSequences[Random.Range(0, validSequences.Count)];
+                    }
+
+                    //only allow F or FF or F- or F+
+                    else
+                    {
+                        selected = validOutside[Random.Range(0, validOutside.Count)];
+                    }
+
+                    //use of double symbol sequences twice max
+                    if ((selected == "++F" || selected == "+F+F" || selected == "--F" || selected == "-F-F") && doubleSymbolCount >= 2)
+                    {
+                        continue;
+                    }
+
+                    //no consecutive double symbol sequences
+                    if ((selected == "++F" || selected == "+F+F" || selected == "--F" || selected == "-F-F") && lastDoubleSymbol)
+                    {
+                        continue;
+                    }
+
+                    //double symbols inside brackets only
+                    if ((selected == "++F" || selected == "+F+F" || selected == "--F" || selected == "-F-F") && !goBack)
+                    {
+                        continue; //skip if we're outside brackets and a double symbol is selected
+                    }
+
+                    //FF only once per rule
+                    if (selected == "FF" && ffCount >= 1)
+                    {
+                        continue;
+                    }
+
+                    //no consecutive -
+                    if (lastselected.EndsWith("-F") && selected == "F")
+                    {
+                        selected = "+F";
+                    }
+
+                    //no consecutive +
+                    if (lastselected.EndsWith("+F") && selected == "F")
+                    {
+                        selected = "-F";
+                    }
+
+                    //double symbol follows by F
+                    if (lastDoubleSymbol)
+                    {
+                        selected = "F";
+                        lastDoubleSymbol = false;
+                    }
+
+                    found = true;
+                }
+
+                //double symbol used
+                if (selected == "++F" || selected == "+F+F" || selected == "--F" || selected == "-F-F")
+                {
+                    doubleSymbolCount++;
+                    lastDoubleSymbol = true;
+                }
+
+                //usage of FF
+                if (selected == "FF")
+                {
+                    ffCount++;
+                }
 
                 //go back to the saved pos
                 if (goBack)
                 {
-                    rule += "[";
-                    int numOfSymbolsInBracket = Random.Range(1, 3);
-                    for (int ns = 0; ns < numOfSymbolsInBracket; ns++)
-                    {
-                        int randSymbolIndex = Random.Range(0, ruleSymbols.Count);
-                        rule += ruleSymbols[randSymbolIndex];
-                    }
-                    rule += "]";
+                   
+                    rule += "[" + selected + "]";
+
+                    goBack = false;
                 }
+
                 else
                 {
-                    int numOfSymbolsNoBracket = Random.Range(1, 3);
-                    for (int ns = 0; ns < numOfSymbolsNoBracket; ns++)
-                    {
-                        int randSymbolIndex = Random.Range(0, ruleSymbols.Count);
-                        rule += ruleSymbols[randSymbolIndex];
-                    }
+                    rule += selected;
+                    goBack = true;
                 }
+
+                lastselected = selected;
             }
+
+            //reset
+            goBack = true;
+            doubleSymbolCount = 0;
+            ffCount = 0;
+
             rules.Add(rule);
         }
     }
+
+
 
     void SetRule(int i)
     {
@@ -98,8 +209,6 @@ public class Plants2d : MonoBehaviour
 
         ruleSet.Add('F', rules[i]);
 
-
-
         RandomizeScales();
         RandomizeColors();
         RandomizeSprites();
@@ -108,14 +217,19 @@ public class Plants2d : MonoBehaviour
 
     void RandomizeScales()
     {
-        randFruitScale = Random.Range(0.008f, 0.02f);
+        
         randBranchScale = Random.Range(0.002f, 0.05f);
+
+        float minFruitScale = Mathf.Max(randBranchScale/3, 0.02f);
+
+        randFruitScale = Random.Range(minFruitScale, randBranchScale/2);
     }
 
     void RandomizeColors()
     {
-        randFruitColor = new Color(Random.value, Random.value, Random.value, 1.0f);
         randBranchColor = new Color(Random.value, Random.value, Random.value, 1.0f);
+        //opposite color of branch
+        randFruitColor = new Color(1.0f - randBranchColor.r, 1.0f - randBranchColor.g, 1.0f - randBranchColor.b, 1.0f);
     }
 
     void RandomizeSprites()
@@ -168,14 +282,16 @@ public class Plants2d : MonoBehaviour
         sp.Clear();
 
         Stack<transformInfo> transformStack = new Stack<transformInfo>();
-        HashSet<Vector3> endpoints = new HashSet<Vector3>();
+        List<Vector3> endpoints = new List<Vector3>();
 
-        // Initialize position and rotation with the empty object's position and rotation
+
         Vector3 pos = transform.position;
         Quaternion rot = transform.rotation;
 
         foreach (char c in curString)
         {
+            //float angleRandom = Random.Range(0, 25);
+            //ang = angleRandom;
             //draw a branch
             if (c == 'F')
             {
@@ -212,13 +328,42 @@ public class Plants2d : MonoBehaviour
             }
         }
 
+        //randomized fuit num and position 
         if (fruitStage)
         {
-            foreach (var endpoint in endpoints)
+            bool fruitCreated = false;
+            int fruitNum = 0;
+            for (int i = endpoints.Count - 1; i >= 0; i--)
             {
-                CreateFruit(endpoint);
+
+                //randomized whether there is a fruit or not at this end point
+                int fruitNumMax = endpoints.Count / 3;
+                if (Random.Range(0f, 1f) > 0.5f && fruitNum < fruitNumMax)
+                {
+                    CreateFruit(endpoints[i]);
+                    fruitCreated = true;
+                    fruitNum++;
+                }
+            }
+
+            if (!fruitCreated)
+            {
+                Vector3 randomEnd = endpoints[Random.Range(0, endpoints.Count)];
+                CreateFruit(randomEnd);
             }
         }
+
+
+        //us this code if don't want random fruit number and position
+        //if (fruitStage)
+        //{
+        //    bool fruitCreated = false;
+        //    int fruitNum = 0;
+        //    for (int i = endpoints.Count - 1; i >= 0; i--)
+        //    {
+        //        CreateFruit(endpoints[i]);
+        //    }
+        //}
     }
 
 
@@ -258,11 +403,13 @@ public class Plants2d : MonoBehaviour
         sp.Add(branch);
     }
 
+
+
     void CreateFruit(Vector3 pos)
     {
         GameObject fruit = new GameObject("Fruit");
         fruit.transform.position = pos;
-        fruit.transform.localScale = new Vector3(randFruitScale, randFruitScale, 1f);
+        fruit.transform.localScale = new Vector3(randFruitScale, randFruitScale, 1);
         fruit.transform.parent = transform;
 
         SpriteRenderer sr = fruit.AddComponent<SpriteRenderer>();
@@ -275,6 +422,7 @@ public class Plants2d : MonoBehaviour
 
         sp.Add(fruit);
     }
+
 
     public void IncreaseIterations()
     {
