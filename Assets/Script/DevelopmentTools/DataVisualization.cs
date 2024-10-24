@@ -12,9 +12,23 @@ public class DataVisualization : MonoBehaviour
     private TMP_Text[,,] _gridTextField = null;
     private bool _gridTextFieldActive = false;
 
+    public static DataVisualization Instance;
+
+    private void Awake()
+    {
+        if (Instance) Destroy(this.gameObject);
+        else Instance = this;
+    }
+
     private IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
+
+    }
+
+
+    public void Init()
+    {
         Tower tower = GameManager.Instance.parentTower;
         _gridTextField = new TMP_Text[tower.floors.Length, tower.width, tower.depth];
         for (int y = 0; y < _gridTextField.GetLength(0); y++)

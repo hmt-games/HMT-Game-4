@@ -81,6 +81,8 @@ public class HeatMapSwicher : MonoBehaviour
                     GameObject gridObj = grid.gameObject;
                     Transform heatMapObj = gridObj.transform.GetChild(0);
 
+                    Debug.Log("Grid cell: [" + x + ", " + y + "] " + "Nutrient: " + nutrients.x + ", " + nutrients.y + ", " + nutrients.x + ", " + nutrients.z);
+
                     float h, s, v;
                     Color AColor = heatMapObj.GetChild(0).GetComponent<SpriteRenderer>().color;
                     Color.RGBToHSV(AColor, out h, out s, out v);

@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Fusion;
 
-public class GridCellBehavior : MonoBehaviour {
+public class GridCellBehavior : NetworkBehaviour {
 
 
     /// <summary>
@@ -15,20 +16,33 @@ public class GridCellBehavior : MonoBehaviour {
     /// The x and y coordinates of the cell in the grid.
     /// Keep it as x,y instead of row, column because that will make it eaiser to think ahout for the agent interface.
     /// </summary>
-    public int gridX;
-    public int gridY;
+    [Networked]
+    public int gridX { get; set; }
+
+    [Networked]
+    public int gridY { get; set; }
 
 
     /// <summary>
     /// The plants that have roots in the tile's soil. Realistically they probably won't be fully public
     /// </summary>
     public List<PlantBehavior> rootedPlants;
-    
+    /*
+    [Networked]
+    [Capacity(10)] // -> fixed capacity
+    public NetworkArray<PlantBehavior> rootedPlants { get; set; }
+    */
+
     /// <summary>
     /// Plants that are on the tile above the surface.
     /// The basic distinction is that surface plants don't get the water events.
     /// </summary>
     public List<PlantBehavior> surfacePlants;
+    /*
+    [Networked]
+    [Capacity(10)]
+    public NetworkArray<PlantBehavior> surfacePlants { get; set; }
+    */
 
     /// <summary>
     /// Soil configurations will contain stull like water capacity and maybe implications for nutrient levels.
@@ -45,11 +59,14 @@ public class GridCellBehavior : MonoBehaviour {
 
     //public float[] compoundLevels;
 
-    public NutrientSolution NutrientLevels;
+    //public NutrientSolution NutrientLevels;
+    [Networked]
+    public ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
 
     private void Awake() {
-        rootedPlants = new List<PlantBehavior>();
-        NutrientLevels = NutrientSolution.Empty;
+        //rootedPlants = new List<PlantBehavior>();
+        //rootedPlants = MakeInitializer(new PlantBehavior[] { });
+        //NutrientLevels = NutrientSolution.Empty;
     }
 
     public float RemainingWaterCapacity {

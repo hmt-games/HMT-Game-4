@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class Floor : MonoBehaviour {
+public class Floor : NetworkBehaviour {
 
     /// <summary>
     /// The Cells on the floor
@@ -15,7 +16,13 @@ public class Floor : MonoBehaviour {
     /// <summary>
     /// What floor in the tower this is (0 is the ground)
     /// </summary>
-    public int floorNumber;
+    [Networked]
+    public int floorNumber { get; set; }
+    [Networked]
+    public int SizeX { get; set; }
+    [Networked]
+    public int SizeY { get; set; }
+
 
     // Start is called before the first frame update
     void Start() {

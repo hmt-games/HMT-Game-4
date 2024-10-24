@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class Tower:MonoBehaviour {
+public class Tower:NetworkBehaviour {
 
     /// <summary>
     /// The floors in the tower. Indicies count up so 0 is the ground floor.
@@ -12,11 +13,13 @@ public class Tower:MonoBehaviour {
     /// <summary>
     /// The number of cells in the x direction
     /// </summary>
-    public int width;
+    [Networked]
+    public int width { get; set; }
     /// <summary>
     /// The number of cells in the z direction
     /// </summary>
-    public int depth;
+    [Networked]
+    public int depth { get; set; }
 
 
     IEnumerator OnWater(float intialVolumePerTile) {
@@ -35,9 +38,11 @@ public class Tower:MonoBehaviour {
     }
             
     public void OnTick() {
-        for(int f = floors.Length-1; f >= 0; f--) {
-            floors[f].OnTick();
-        }
+            for (int f = floors.Length - 1; f >= 0; f--)
+            {
+                floors[f].OnTick();
+            }
+
     }
     
 }

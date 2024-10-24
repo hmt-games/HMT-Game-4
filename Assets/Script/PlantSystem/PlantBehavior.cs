@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Security.Permissions;
 using UnityEngine;
+using Fusion;
 
-public class PlantBehavior : MonoBehaviour {
+public class PlantBehavior : NetworkBehaviour {
 
         /// <summary>
         /// Plants can in principle reach to multiple cells to draw resources from, but need to figure out the best way to represent this
         /// </summary>
         GridCellBehavior parentCell;
 
-        private float _rootMass=0;
+        [Networked]
+        private float _rootMass { get; set; } = 0;
+
         public float RootMass { 
             get {
                 return _rootMass;
@@ -21,7 +24,9 @@ public class PlantBehavior : MonoBehaviour {
             } 
         }
 
-        private float _height = 0;
+        [Networked]
+        private float _height { get; set; } = 0;
+
         public float Height {
             get {
                 return _height;
@@ -29,18 +34,26 @@ public class PlantBehavior : MonoBehaviour {
             private set {
                 _height = Mathf.Max(0, value);
             }
-        }   
+        }
+
         public float WaterLevel {
             get {
                 return NutrientLevels.water;
             }
         }
+
+        [Networked]
         public float EnergyLevel { get; private set; } = 0;
+
         /// <summary>
         /// Health Level of the Plant is a sliding window average changes in EnergyLevel.
         /// 
         /// Ideally this would be normalzied to a range of -1 to 1 but will need to figure out the math.
         /// </summary>
+        /// 
+        [Networked]
+        public float Health { get; private set; } = 0;
+        /*
         public float Health { 
             get {
                 healthTotal = 0;
@@ -50,18 +63,28 @@ public class PlantBehavior : MonoBehaviour {
                 return healthTotal / healthHistory.Count;
             }
         }
+        */
 
+        [Networked]
         public float Age { get; private set; } = 0;
-
+    
         //public float[] CompoundLevels { get; private set; } = new float[System.Enum.GetValues(typeof(NutrientType)).Length];
 
-        private NutrientSolution NutrientLevels;
+        /*
+        [Networked]
+        private NutrientSolution NutrientLevels { get; set; }
+        */
+        [Networked]
+        private ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
 
-        public PlantConfig config;
+    public PlantConfig config;
 
-        public int maxHealthHistory = 10;
+        public int maxHealthHistory { get; set; } = 10;
 
-        private float healthTotal = 0;
+        private float healthTotal { get; set; } = 0;
+
+        //Need to think about how to sync this.
+        //Maybe not syncthing this at all
         private Queue<float> healthHistory;
         
         // Start is called before the first frame update
@@ -105,16 +128,25 @@ public class PlantBehavior : MonoBehaviour {
                 Height += growth * (1 - config.PercentToRoots(Age));
             }
 
-            /// LEECH
-            /// Originally I was thinking of having plants leech somehting back into the soil but realized it was more complicated.
-            /// This should probably be a trait but it also might be something we could use for when a plant is dead.
-            /// leeches some amount of each compound back into the soil
-            //for(int compound = 0; compound < CompoundLevels.Length; compound++) {
-            //    var leech = Mathf.Min(config.leechRate[compound] * CompoundLevels[compound], parentCell.soilConfig.compoundCapacities[compound] - allocation.nutrients[compound]);
-            //    CompoundLevels[compound] -= leech;?";[]=----p['
-            //    allocation.nutrients[compound] += leech;
-            //}
-            return allocation;
+            //update health value
+            healthTotal = 0;
+            foreach (float f in healthHistory)
+            {
+                healthTotal += f;
+            }
+            Health = healthTotal / healthHistory.Count;
+
+
+        /// LEECH
+        /// Originally I was thinking of having plants leech somehting back into the soil but realized it was more complicated.
+        /// This should probably be a trait but it also might be something we could use for when a plant is dead.
+        /// leeches some amount of each compound back into the soil
+        //for(int compound = 0; compound < CompoundLevels.Length; compound++) {
+        //    var leech = Mathf.Min(config.leechRate[compound] * CompoundLevels[compound], parentCell.soilConfig.compoundCapacities[compound] - allocation.nutrients[compound]);
+        //    CompoundLevels[compound] -= leech;?";[]=----p['
+        //    allocation.nutrients[compound] += leech;
+        //}
+        return allocation;
         }
 
         /// <summary>

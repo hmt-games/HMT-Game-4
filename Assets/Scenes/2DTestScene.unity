@@ -826,6 +826,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 464916906}
   m_CullTransparentMesh: 1
+--- !u!1 &475527672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 475527674}
+  - component: {fileID: 475527673}
+  m_Layer: 0
+  m_Name: BasicSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &475527673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475527672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbdf348810494784c8484011ebf0cfdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPrefab:
+    RawGuidValue: 00000000000000000000000000000000
+  _plantPrefab:
+    RawGuidValue: 00000000000000000000000000000000
+--- !u!4 &475527674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475527672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.240795, y: 3.880496, z: -11.108613}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &574541743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1095,6 +1143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 679498430}
   - component: {fileID: 679498429}
+  - component: {fileID: 679498431}
   m_Layer: 0
   m_Name: MapGenerator
   m_TagString: Untagged
@@ -1115,6 +1164,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerConfig: {fileID: 4900000, guid: a86e9443d3f754d58986b8618cfee7bc, type: 3}
+  towerPrefab: {fileID: 2097316857579910324, guid: 04f460e93788cbe40ba71eafa84c92f5,
+    type: 3}
+  floorPrefab: {fileID: 5506204637265881596, guid: 40d003f94d117974186aae2776841760,
+    type: 3}
   tilePrefab: {fileID: 2505949527415372711, guid: b0d9a3063d2cf4f0c9d81c821a9dfac1,
     type: 3}
   grid2DTheme: {fileID: 11400000, guid: 52a33883be6c542ad90e696c33757c1e, type: 2}
@@ -1123,6 +1176,7 @@ MonoBehaviour:
   - {fileID: 795365366231090156, guid: d3f38ad44e05b4384a4d1939bf42d200, type: 3}
   - {fileID: 6379857324670022788, guid: 986250200e3d14a97a6edd7d0b082ecd, type: 3}
   - {fileID: 4388266366318184518, guid: 69f0030f95c164c1e9545ffd9fd0fc99, type: 3}
+  mapUpdated: 0
 --- !u!4 &679498430
 Transform:
   m_ObjectHideFlags: 0
@@ -1138,6 +1192,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &679498431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679498428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2485839607
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 679498429}
 --- !u!1 &693960265
 GameObject:
   m_ObjectHideFlags: 0
@@ -2414,3 +2486,4 @@ SceneRoots:
   - {fileID: 1153302787}
   - {fileID: 1807974442}
   - {fileID: 1435228464}
+  - {fileID: 475527674}

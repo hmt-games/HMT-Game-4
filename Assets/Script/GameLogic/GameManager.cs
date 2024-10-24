@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public Tower parentTower;
 
+    public bool readyToProceed = false;
+
     private void Awake()
     {
         if (Instance) Destroy(this.gameObject);
@@ -17,7 +19,15 @@ public class GameManager : MonoBehaviour
 
     public void Tick()
     {
-        parentTower.OnTick();
-        HeatMapSwicher.S.SwitchOnHeatMap();
+        if (BasicSpawner._runner.IsServer)
+        {
+            parentTower.OnTick();
+        }
+        //HeatMapSwicher.S.SwitchOnHeatMap();
+    }
+    public void Update()
+    {
+
+
     }
 }
