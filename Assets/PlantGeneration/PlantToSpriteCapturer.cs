@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlantToSpriteCapturer : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class PlantToSpriteCapturer : MonoBehaviour
     [SerializeField] private List<GameObject> quadDisplays;
     [SerializeField] private int iterations = 4;
     [SerializeField] private Plants2d plants2d;
+    [SerializeField] private int TestQuadAmount = 1000;
+
+    public static PlantToSpriteCapturer Instance;
     
     private List<Sprite> _capturedSprite;
 
@@ -17,8 +22,30 @@ public class PlantToSpriteCapturer : MonoBehaviour
         StartCoroutine(CaptureHelper());
     }
 
+    public List<Sprite> CreatePlantSprites()
+    {
+        List<Sprite> newPlantSprites = new List<Sprite>(iterations);
+        
+        plants2d.OnButtonPress();
+        for (int i = 0; i < iterations; i++)
+        {
+            CaptureStage(newPlantSprites);
+            plants2d.IncreaseIterations();
+        }
+        
+        foreach(Transform child in transform)
+            Destroy(child.gameObject);
+        
+        return newPlantSprites;
+    }
+
     private IEnumerator CaptureHelper()
     {
+        foreach(Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
         foreach (var quad in quadDisplays)
         {
             quad.SetActive(false);
@@ -37,7 +64,7 @@ public class PlantToSpriteCapturer : MonoBehaviour
         DisplayAllSpriteOnQuad();
     }
 
-    private void CaptureStage()
+    private void CaptureStage(List<Sprite> sprites = null)
     {
         Bounds bounds = CalculateBounds(targetSpriteObject);
         SetCameraToBounds(captureCamera, bounds);
@@ -48,9 +75,9 @@ public class PlantToSpriteCapturer : MonoBehaviour
         //     (int)Mathf.Max(bounds.size.y, 1.0f) * 500, 
         //     32);
         RenderTexture renderTexture = new RenderTexture(
-            1000, 
-            1000, 
-            32);
+            1024, 
+            1024, 
+            16);
         captureCamera.targetTexture = renderTexture;
         captureCamera.Render();
         
@@ -68,7 +95,9 @@ public class PlantToSpriteCapturer : MonoBehaviour
         
         // Create the sprite from the Texture2D
         Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-        _capturedSprite.Add(newSprite);
+        
+        if (sprites == null) _capturedSprite.Add(newSprite);
+        else sprites.Add(newSprite);
     }
     
     // Returns a camera bound that will exactly match the dimension of obj
@@ -90,9 +119,10 @@ public class PlantToSpriteCapturer : MonoBehaviour
     private void SetCameraToBounds(Camera cam, Bounds bounds)
     {
         cam.transform.position = new Vector3(bounds.center.x, bounds.center.y, cam.transform.position.z);
-        cam.orthographicSize = Mathf.Max(bounds.size.x, bounds.size.y) / 2f;
         float aspectRatio = (float)Screen.width / Screen.height;
-        cam.orthographicSize = Mathf.Max(bounds.size.x / 2f / aspectRatio, bounds.size.y / 2f);
+        float sizeX = bounds.size.x / 2f / aspectRatio;
+        float sizeY = bounds.size.y / 2f;
+        cam.orthographicSize = Mathf.Max(sizeX, sizeY);
     }
     
     // remove all transparent data from original texture
@@ -141,6 +171,27 @@ public class PlantToSpriteCapturer : MonoBehaviour
         for (int i = 0; i < iterations; i++)
         {
             DisplaySpriteOnQuad(_capturedSprite[i], quadDisplays[i]);
+        }
+    }
+
+    public void PerformanceTest()
+    {
+        Sprite sprite = _capturedSprite[2];
+        
+        Material sharedMaterial = new Material(Shader.Find("Sprites/Default"));
+        sharedMaterial.mainTexture = sprite.texture;
+        sharedMaterial.enableInstancing = true; // Enable GPU instancing
+        
+        for (int i = 0; i < TestQuadAmount; i++)
+        {
+            // Vector3 screenPosition = new Vector3(Random.Range(0, Screen.width), Random.Range(0, Screen.height), 0);
+            // Vector3 worldPosition = cam.ScreenToWorldPoint(screenPosition);
+            GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            quad.transform.position = new Vector3(Random.Range(-1f, 17f), Random.Range(-2f, 10f), 0f);
+            quad.transform.localScale = new Vector3(sprite.bounds.size.x, sprite.bounds.size.y, 1);
+            quad.transform.parent = transform;
+            quad.GetComponent<Renderer>().material = sharedMaterial;
+            quad.isStatic = true; // Enable static batching for each quad
         }
     }
 }

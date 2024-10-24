@@ -55,6 +55,8 @@ public class PlantConfig : ScriptableObject {
     /// </summary>
     public float growthToleranceThreshold;
 
+    public List<Sprite> plantSprites;
+
     public float PercentToRoots(float age) {
         if (rootHeightTransition < 1) {
             return 1;

@@ -13,12 +13,11 @@ public class MapGeneratorJSON : MonoBehaviour
     [SerializeField] private TextAsset towerJSON;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private GridTheme grid2DTheme;
-    [SerializeField] private List<GameObject> plantsPrefab;
+    [SerializeField] private GameObject plantPrefab;
 
     private Dictionary<string, PlantConfig> _plantConfigs;
     private Dictionary<string, SoilConfig> _soilConfigs;
-    private Dictionary<string, GameObject> _name2Plant;
-    private int _plantsIdxPointer = 0;
+    // private Dictionary<string, GameObject> _name2Plant;
 
     private JObject _configJObject;
     
@@ -29,7 +28,7 @@ public class MapGeneratorJSON : MonoBehaviour
     {
         _plantConfigs = new Dictionary<string, PlantConfig>();
         _soilConfigs = new Dictionary<string, SoilConfig>();
-        _name2Plant = new Dictionary<string, GameObject>();
+        // _name2Plant = new Dictionary<string, GameObject>();
         _configJObject = JObject.Parse(configJSON.text);
     }
 
@@ -133,7 +132,7 @@ public class MapGeneratorJSON : MonoBehaviour
     {
         string plantConfigName = (string)plantJToken["config"];
         if (!_plantConfigs.ContainsKey(plantConfigName)) CreatePlantConfig(plantConfigName);
-        GameObject plantObj = Instantiate(_name2Plant[plantConfigName], plantSlot.position, quaternion.identity, plantSlot);
+        GameObject plantObj = Instantiate(plantPrefab, plantSlot.position, quaternion.identity, plantSlot);
         PlantBehavior nPlant = plantObj.AddComponent<PlantBehavior>();
         nPlant.config = _plantConfigs[plantConfigName];
         nPlant.SetInitialProperties(
@@ -144,6 +143,7 @@ public class MapGeneratorJSON : MonoBehaviour
             (float)plantJToken["age"],
             Vector4FromJTokenList(plantJToken["nutrient"].ToList()),
             (float)plantJToken["water"]);
+        nPlant.GetComponent<SpriteRenderer>().sprite = nPlant.config.plantSprites[0];
         nPlant.parentCell = parentGrid;
 
         if (isSurfacePlant) parentGrid.surfacePlants.Add(nPlant);
@@ -172,9 +172,8 @@ public class MapGeneratorJSON : MonoBehaviour
         plantConfig.rootHeightTransition = rootHeightTransition;
         plantConfig.growthToleranceThreshold = growthToleranceThreshold;
 
+        plantConfig.plantSprites = PlantToSpriteCapturer.Instance.CreatePlantSprites();
         _plantConfigs[configName] = plantConfig;
-        _name2Plant[configName] = plantsPrefab[_plantsIdxPointer];
-        _plantsIdxPointer = (_plantsIdxPointer + 1) % plantsPrefab.Count;
     }
 
     private void CreateSoilConfig(string configName)
