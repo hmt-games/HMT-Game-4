@@ -14,13 +14,13 @@ public class Plants2d : MonoBehaviour
     public Sprite[] fruitSprites;
 
 
-    private Dictionary<char, string> ruleSet = new Dictionary<char, string>();
-    private string curString;
+    public Dictionary<char, string> ruleSet = new Dictionary<char, string>();
+    public string curString;
     public int numOfRules = 5;
 
     public string startAxiom;
 
-    private List<string> rules = new List<string>();
+    public List<string> rules = new List<string>();
 
     //example rules:
     //"F[+F]F[-F]F",
@@ -30,26 +30,26 @@ public class Plants2d : MonoBehaviour
     //"FF[+F][-F]F"
 
 
-    private List<string> ruleSymbols = new List<string> { "F", "+", "-" };
+    public List<string> ruleSymbols = new List<string> { "F", "+", "-" };
 
 
 
-    private List<GameObject> sp = new List<GameObject>();
-    private float randFruitScale;
-    private float randBranchScale;
-    private Color randFruitColor;
-    private Color randBranchColor;
-    private Sprite randBranchSprite;
-    private Sprite randFruitSprite;
+    public List<GameObject> sp = new List<GameObject>();
+    public float randFruitScale;
+    public float randBranchScale;
+    public Color randFruitColor;
+    public Color randBranchColor;
+    public Sprite randBranchSprite;
+    public Sprite randFruitSprite;
 
     public int maxIter = 3;
-    private bool fruitStage = false;
+    public bool fruitStage = false;
 
     void Start()
     {
-        GenerateRules(numOfRules);
-        SetRule(0);
-        GenerateTree();
+        // GenerateRules(numOfRules);
+        // SetRule(0);
+        // GenerateTree();
     }
 
     void GenerateRules(int numOfRules)
@@ -244,6 +244,7 @@ public class Plants2d : MonoBehaviour
 
         for (int i = 0; i < iterations; i++)
         {
+            Debug.Log($"updating curString iteration: {i}");
             string res = "";
 
             foreach (char c in curString)
@@ -253,10 +254,12 @@ public class Plants2d : MonoBehaviour
 
 
                     res += ruleSet[c];
+                    Debug.Log("updated from ruleset");
                 }
                 else
                 {
                     res += c.ToString();
+                    Debug.Log("updated from string");
                 }
             }
 
@@ -268,7 +271,9 @@ public class Plants2d : MonoBehaviour
 
     void GenerateTree()
     {
+        Debug.Log($"iterCount: {iterCount}");
         curString = GenerateString(startAxiom, ruleSet, iterCount);
+        Debug.Log($"curString: {curString}");
         DrawTree();
     }
 
@@ -454,6 +459,8 @@ public class Plants2d : MonoBehaviour
 
     public void OnButtonPress()
     {
+        GenerateRules(numOfRules);
+        
         int i = Random.Range(0, rules.Count);
         SetRule(i);
         iterCount = 0; //reset iter

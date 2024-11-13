@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7892613395736536890}
   - component: {fileID: 5413959946408050086}
+  - component: {fileID: -4454653274443710318}
   m_Layer: 0
   m_Name: 2DPlantPrefab
   m_TagString: Untagged
@@ -84,3 +85,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-4454653274443710318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8738970323915121554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bdc91c8d8684b6e9f0fd2d5675d49e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentCell: {fileID: 0}
+  config: {fileID: 0}
+  maxHealthHistory: 10

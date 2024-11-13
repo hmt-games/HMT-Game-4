@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,9 +18,61 @@ public class PlantToSpriteCapturer : MonoBehaviour
     
     private List<Sprite> _capturedSprite;
 
+    private void Awake()
+    {
+        if (Instance)
+        {
+            Debug.LogWarning("There should never be more than 1 PlantToSpriteCapturer in scene");
+            Destroy(gameObject);
+        }
+        else Instance = this;
+    }
+
     public void Capture()
     {
         StartCoroutine(CaptureHelper());
+    }
+
+    public List<Sprite> CaptureAllStagesAtOnce()
+    {
+        int posStep = Random.Range(500, 99999);
+        List<PlantToSpriteCamera> plantToSpriteCameras = new List<PlantToSpriteCamera>();
+        plantToSpriteCameras.Add(targetSpriteObject.GetComponentInChildren<PlantToSpriteCamera>());
+
+        List<GameObject> nPlants = new List<GameObject>();
+
+        Vector3 originalPos = targetSpriteObject.transform.position;
+        
+        plants2d.OnButtonPress();
+        Dictionary<char, string> ruleSet = plants2d.ruleSet;
+        for (int i = 1; i < iterations; i++)
+        {
+            Debug.Log($"Iteration {i} with max iteration {iterations}");
+            Vector3 nPlantPos = originalPos + Vector3.up * (i * posStep);
+            GameObject nPlant = Instantiate(targetSpriteObject, nPlantPos, quaternion.identity);
+            nPlants.Add(nPlant);
+            Plants2d nPlant2d = nPlant.GetComponent<Plants2d>();
+            nPlant2d.ruleSet = ruleSet;
+            for (int j = 0; j < i; j++)
+            {
+                Debug.Log($"stage {j+1} with max stage {i}");
+                nPlant2d.IncreaseIterations();
+            }
+            plantToSpriteCameras.Add(nPlant.GetComponentInChildren<PlantToSpriteCamera>());
+        }
+
+        _capturedSprite = new List<Sprite>();
+        foreach (PlantToSpriteCamera plantToSpriteCamera in plantToSpriteCameras)
+        {
+            _capturedSprite.Add(plantToSpriteCamera.Capture());
+        }
+
+        foreach (GameObject plant in nPlants)
+        {
+            Destroy(plant);
+        }
+        
+        return _capturedSprite;
     }
 
     public List<Sprite> CreatePlantSprites()

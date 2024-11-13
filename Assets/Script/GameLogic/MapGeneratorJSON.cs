@@ -133,7 +133,7 @@ public class MapGeneratorJSON : MonoBehaviour
         string plantConfigName = (string)plantJToken["config"];
         if (!_plantConfigs.ContainsKey(plantConfigName)) CreatePlantConfig(plantConfigName);
         GameObject plantObj = Instantiate(plantPrefab, plantSlot.position, quaternion.identity, plantSlot);
-        PlantBehavior nPlant = plantObj.AddComponent<PlantBehavior>();
+        PlantBehavior nPlant = plantObj.GetComponent<PlantBehavior>();
         nPlant.config = _plantConfigs[plantConfigName];
         nPlant.SetInitialProperties(
             (float)plantJToken["rootMass"],
@@ -172,7 +172,7 @@ public class MapGeneratorJSON : MonoBehaviour
         plantConfig.rootHeightTransition = rootHeightTransition;
         plantConfig.growthToleranceThreshold = growthToleranceThreshold;
 
-        plantConfig.plantSprites = PlantToSpriteCapturer.Instance.CreatePlantSprites();
+        plantConfig.plantSprites = PlantToSpriteCapturer.Instance.CaptureAllStagesAtOnce();
         _plantConfigs[configName] = plantConfig;
     }
 
