@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public void Tick()
     {
         parentTower.OnTick();
-        HeatMapSwicher.S.SwitchOnHeatMap();
+        //HeatMapSwicher.S.SwitchOnHeatMap();
     }
     
     // golden finger for testing

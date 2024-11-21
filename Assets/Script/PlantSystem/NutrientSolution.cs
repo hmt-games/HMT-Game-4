@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
 using GameConstant;
+using Fusion;
 
-public struct NutrientSolution {
+public struct NutrientSolution : INetworkStruct
+{
 
         /// <summary>
         /// The actual volume of water

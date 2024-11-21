@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
+using Fusion;
 
-public class PlantBehavior : MonoBehaviour {
+
+public class PlantBehavior : NetworkBehaviour
+{
 
         /// <summary>
         /// Plants can in principle reach to multiple cells to draw resources from, but need to figure out the best way to represent this
         /// </summary>
         public GridCellBehavior parentCell;
 
-        private float _rootMass=0;
+        [Networked]
+        private float _rootMass { get; set; } = 0;
         public float RootMass { 
             get {
                 return _rootMass;
@@ -21,7 +25,9 @@ public class PlantBehavior : MonoBehaviour {
             } 
         }
 
-        private float _height = 0;
+
+        [Networked]
+        private float _height { get; set; } = 0;
         public float Height {
             get {
                 return _height;
@@ -35,12 +41,18 @@ public class PlantBehavior : MonoBehaviour {
                 return NutrientLevels.water;
             }
         }
+        [Networked]
         public float EnergyLevel { get; private set; } = 0;
+
+
+        [Networked]
+        public float Health { get; private set; } = 0;
         /// <summary>
         /// Health Level of the Plant is a sliding window average changes in EnergyLevel.
         /// 
         /// Ideally this would be normalzied to a range of -1 to 1 but will need to figure out the math.
         /// </summary>
+        /*
         public float Health { 
             get {
                 healthTotal = 0;
@@ -50,12 +62,16 @@ public class PlantBehavior : MonoBehaviour {
                 return healthTotal / healthHistory.Count;
             }
         }
+        */
 
+        [Networked]
         public float Age { get; private set; } = 0;
 
         //public float[] CompoundLevels { get; private set; } = new float[System.Enum.GetValues(typeof(NutrientType)).Length];
 
-        private NutrientSolution NutrientLevels;
+        //private NutrientSolution NutrientLevels;
+        [Networked]
+        private ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
 
         public PlantConfig config;
 
@@ -111,6 +127,15 @@ public class PlantBehavior : MonoBehaviour {
                 Height += growth * (1 - config.PercentToRoots(Age));
             }
 
+
+            //update health value
+            healthTotal = 0;
+            foreach (float f in healthHistory)
+            {
+                healthTotal += f;
+            }
+            Health = healthTotal / healthHistory.Count;
+
             /// LEECH
             /// Originally I was thinking of having plants leech somehting back into the soil but realized it was more complicated.
             /// This should probably be a trait but it also might be something we could use for when a plant is dead.
@@ -121,16 +146,16 @@ public class PlantBehavior : MonoBehaviour {
             //    allocation.nutrients[compound] += leech;
             //}
             return allocation;
-        }
+            }
 
-        /// <summary>
-        /// Handles when water lands on the plant.
-        /// 
-        /// By default this should be a no-op but is here so it can be overridden by possible future Traits.
-        /// </summary>
-        /// <param name="waterVolume"></param>
-        /// <returns></returns>
-        public NutrientSolution OnWater(NutrientSolution waterVolume) {
-            return waterVolume;
-        }
+            /// <summary>
+            /// Handles when water lands on the plant.
+            /// 
+            /// By default this should be a no-op but is here so it can be overridden by possible future Traits.
+            /// </summary>
+            /// <param name="waterVolume"></param>
+            /// <returns></returns>
+            public NutrientSolution OnWater(NutrientSolution waterVolume) {
+                return waterVolume;
+            }
     }

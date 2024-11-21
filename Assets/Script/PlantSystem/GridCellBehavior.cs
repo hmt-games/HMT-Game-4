@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Fusion;
 
-public class GridCellBehavior : MonoBehaviour {
+public class GridCellBehavior : NetworkBehaviour
+{
 
 
     /// <summary>
@@ -16,8 +18,11 @@ public class GridCellBehavior : MonoBehaviour {
     /// The x and y coordinates of the cell in the grid.
     /// Keep it as x,y instead of row, column because that will make it eaiser to think ahout for the agent interface.
     /// </summary>
-    public int gridX;
-    [FormerlySerializedAs("gridY")] public int gridZ;
+    [Networked]
+    public int gridX { get; set; }
+    //[FormerlySerializedAs("gridY")]
+    [Networked]
+    public int gridZ { get; set; }
 
 
     /// <summary>
@@ -46,11 +51,14 @@ public class GridCellBehavior : MonoBehaviour {
 
     //public float[] compoundLevels;
 
-    public NutrientSolution NutrientLevels;
+    //public NutrientSolution NutrientLevels;
+
+    [Networked]
+    public ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
 
     private void Awake() {
         rootedPlants = new List<PlantBehavior>();
-        NutrientLevels = NutrientSolution.Empty;
+        //NutrientLevels = NutrientSolution.Empty;
     }
 
     public float RemainingWaterCapacity {
