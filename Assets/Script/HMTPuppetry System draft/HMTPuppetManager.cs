@@ -7,40 +7,45 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 using System.Collections.Concurrent;
 using Cinemachine;
+using System.Net;
+using Newtonsoft.Json;
+using Unity.VisualScripting;
+using UnityEngine.UI;
+using UnityEditor;
+using System.Security.Policy;
 
 namespace HMT {
     public class HMTPuppetManager : MonoBehaviour {
         public static HMTPuppetManager Instance { get; private set; }
+        private static int SERVICE_TARGET_COUNTER = 0;
 
         [Header("AI Socket Settings")]
-        [Tooltip("Whethe rthe server should automatically start itself on Start or wait to be started by an external caller.")]
-        public bool StartServerOnStart = false;
-        [Tooltip("The URL of the socket server, will default to localhost if empty.")]
-        public string socketUrl = "ws://localhost";
-        [Tooltip("The port of the socket server.")]
+        [Tooltip("Whether the server should automatically start itself on Start or wait to be started by an external caller.")]
+        public bool StartServerOnStart = true;
+        //[Tooltip("The URL of the socket server, will default to localhost if empty.")]
+        //public string socketUrl = "ws://localhost";
+        [Tooltip("The port that the puppetry server should use.")]
         public int socketPort = 4649;
         [Tooltip("The name of the root service apprended to the url for the puppet manager.")]
         public string rootService = "hmt";
-        [Tooltip("The list of API targets that the puppet manager will listen for. These should coorespond to different API types (eg. bots-lowlevel, bots-highlevel, floors, towers, etc.)")]
-        public string[] apiTargets = new string[0];
+        [Tooltip("Whether service targets should be assigned sequentially or randomly. If true, targets will be incremental integers, if false they will be randomly generated GUIDs")]
+        public bool useSequentialServiceTargets = true;
+        [Tooltip("Whether the puppet manager should use API keys to authenticate calls to service targets.")]
+        public bool useAPIKeys = false;
+
         [Tooltip("The threshold for automatic responses to commands. If a command is not responded to by the target puppet in this time, a generic acknoweldgement will be sent. Note that this is in terms of unscaledTime not regular time so it does not respect speed up or pausing.")]
         public float autoResponseThreshold = 3f;
-
         [Tooltip("The default priority level for agent commands that do not specify on registration.")]
         [Range(0, 255)]
         public int defaultCommandPriority = 128;
 
+        internal HttpServer server = null;
+
         private ArgParser Args;
-
-        internal WebSocketServer server = null;
-
-        public Dictionary<string, AgentRegistrationRecord> RegisteredAgents;
-
         private ConcurrentQueue<PuppetCommand> commandQueue;
-        private Dictionary<string, int> apiTargetIdCounters;
-        private Dictionary<string, Dictionary<string, IPuppet>> PuppetsByTarget;
-
         private List<(float time, PuppetCommand puppet)> commandsInFlight;
+        private Dictionary<string, IPuppet> PuppetIndex = new Dictionary<string, IPuppet>();
+        private Dictionary<string, HMTService> ServiceIndex = new Dictionary<string, HMTService>();
 
         void Awake() {
             if (Instance == null) {
@@ -49,22 +54,15 @@ namespace HMT {
                 Destroy(this);
             }
             Args = new ArgParser();
-            Args.AddArg("hmtsocketurl", ArgParser.ArgType.One);
             Args.AddArg("hmtsocketport", ArgParser.ArgType.One);
             Args.ParseArgs();
 
+            Dictionary<string, IPuppet> PuppetIndex = new Dictionary<string, IPuppet>();
+            Dictionary<string, HMTService> ServiceIndex = new Dictionary<string, HMTService>();
+
             commandQueue = new ConcurrentQueue<PuppetCommand>();
             commandsInFlight = new List<(float time, PuppetCommand puppet)>();
-
-            RegisteredAgents = new Dictionary<string, AgentRegistrationRecord>();
-
-            apiTargetIdCounters = new Dictionary<string, int>();
-            PuppetsByTarget = new Dictionary<string, Dictionary<string, IPuppet>>();
-
-            foreach (string target in apiTargets) {
-                apiTargetIdCounters.Add(target, 0);
-                PuppetsByTarget.Add(target, new Dictionary<string, IPuppet>());
-            }
+            
         }
 
         // Start is called before the first frame update
@@ -74,34 +72,102 @@ namespace HMT {
             }
         }
 
-
         public void StartSocketServer() {
             socketPort = Args.GetArgValue("hmtsocketport", socketPort);
-            socketUrl = Args.GetArgValue("hmtsocketurl", socketUrl);
 
             if (socketPort == 80) {
-                Debug.LogWarning("HMTPuppetManager Socket set to Port 80, which will probably have permissions issues.");
+                Debug.LogWarning("HMTPuppetManager Socket set to Port 80, this might cause permissions issues.");
             }
 
-            if (socketUrl == string.Empty) {
-                Debug.LogWarning("HMTPuppetManager Socket url is empty so opening socket is equivalent to local context.");
-                server = new WebSocketServer(socketPort);
+            server = new HttpServer(socketPort);
+            server.OnGet += Server_OnGet;
+            server.OnPost += Server_OnPost;
+            server.Start();
+        }
+
+        private void Server_OnPost(object sender, HttpRequestEventArgs e) {
+            var path = e.Request.RawUrl;
+
+            switch (path) {
+                case "/register_agent":
+                    JObject postData = e.GetJsonPostData();
+                    string agentId = postData["agent_id"].ToString();
+                    string puppetId = postData["puppet_id"].ToString();
+                    string sessionID = postData.TryGetDefault<string>("session_id", System.Guid.NewGuid().ToString());
+                    byte priority = postData.TryGetDefault<byte>("priority", (byte)defaultCommandPriority);
+                    
+                    if(!PuppetIndex.ContainsKey(puppetId)) {
+                        Debug.LogWarning("Puppet ID not found in Puppet Index");
+                        e.SendBasicResponse((int)HttpStatusCode.BadRequest, "Puppet ID not found in Puppet Index");
+                        return;
+                    }
+                    
+                    (string newServiceTarget, string apiKey) = LaunchNewServiceTarget(agentId, puppetId, priority);
+                    JObject response = new JObject {
+                        { "service_target", newServiceTarget },
+                        { "session_id", sessionID },
+                        { "agent_id", agentId },
+                        { "puppet_id", puppetId },
+                        { "priority", priority},
+                        { "action_set", new JArray(PuppetIndex[puppetId].SupportedActions) }
+                    };
+                    if (useAPIKeys) {
+                        response["api_key"] = apiKey;
+                    }
+                    e.SendJsonResponse(response);
+                    break;
+                case "/list_agents":
+                    e.SendJsonResponse(ListPuppets());
+                    break;
+                default:
+                    e.SendBasicResponse((int)HttpStatusCode.NotFound, "path does not exist");
+                    break;
+            }
+        }
+
+        private void Server_OnGet(object sender, HttpRequestEventArgs e) {
+            var path = e.Request.RawUrl;
+            switch (path) {
+                case "/list_agents":
+                    e.SendJsonResponse(ListPuppets());
+                    break;
+                default:
+                    e.SendBasicResponse((int)HttpStatusCode.NotFound, "path does not exist");
+                    break;
+            }
+        }
+
+        private JObject ListPuppets() {
+            JObject job = new JObject();
+            JArray puppetList = new JArray();
+            foreach(string key in PuppetIndex.Keys) {
+                puppetList.Add(new JObject {
+                    {"id", key },
+                    {"actions", new JArray(PuppetIndex[key].SupportedActions) }
+                });
+            }
+            job["puppets"] = puppetList;
+            return job;
+        }
+
+        public (string, string) LaunchNewServiceTarget(string agent_id, string puppet_id, byte priority) {
+            string newServiceTarget = string.Empty;
+            string apiKey = useAPIKeys ? System.Guid.NewGuid().ToString() : string.Empty;
+            if (useSequentialServiceTargets) {
+                newServiceTarget = ServiceIndex.Count.ToString();
             }
             else {
-                server = new WebSocketServer(socketUrl + ":" + socketPort);
+                newServiceTarget = System.Guid.NewGuid().ToString();
             }
-
-            foreach (string target in apiTargets) {
-                server.AddWebSocketService<HMTService>("/" + rootService + "/" + target);
-            }
-
-            server.AddWebSocketService<HMTService>("/" + rootService);
-            server.Start();
-
-            foreach (string target in apiTargets) {
-                Debug.LogFormat("[HMTPuppetManager] Agent Target available at: {0}:{1}/{2}/{3}",
-                socketUrl == string.Empty ? "ws://localhost" : socketUrl, socketPort, rootService, target);
-            }
+            server.AddWebSocketService<HMTService>("/" + newServiceTarget, s => {
+                s.ServiceTarget = newServiceTarget;
+                s.AgentId = agent_id;
+                s.PuppetId = puppet_id;
+                s.CommandPriority = priority;
+                s.APIKey = apiKey;
+                s.ActionSet = PuppetIndex[puppet_id].SupportedActions;
+            });
+            return (newServiceTarget, apiKey);
         }
 
         public void EnqueueCommand(PuppetCommand command) {
@@ -112,30 +178,19 @@ namespace HMT {
         void Update() {
             while(commandQueue.Count > 0) {
                 if (commandQueue.TryDequeue(out PuppetCommand command)) {
-                    if(!apiTargetIdCounters.ContainsKey(command.targetAPI)) {
-                        Debug.LogErrorFormat("[HMTPuppetManager] API Target {0} not found. This should not be possible!?", command.targetAPI);
-                        command.SendNotFoundResponse(3000, "API Target not found. This should be impossible...");
-                        continue;
-                    }
-
+                    IPuppet puppet = PuppetIndex[command.targetPuppet];
                     switch (command.command) {
-                        case "register_agent":
-                            RegisterAgent(command);
+                        case PuppetCommand.EXECUTE_ACTION:
+                            StartCoroutine(puppet.ExecuteAction(command, command.priority));
+                            commandsInFlight.Add((Time.unscaledTime, command));
                             break;
-                        case "unregister_agent":
-                            UnregisterAgent(command);
+                        case PuppetCommand.EXECUTE_PLAN:
+                            StartCoroutine(puppet.ExecutePlan(command, command.GetPlan(), command.priority));
+                            commandsInFlight.Add((Time.unscaledTime, command));
                             break;
-                        case "list_puppets":
-                            ListPuppets(command);
-                            break;
-                        case "execute_action":
-                            ExecuteAction(command);
-                            break;
-                        case "execute_plan":
-                            ExecutePlan(command);
-                            break;
-                        case "get_state":
-                            GetState(command);
+                        case PuppetCommand.GET_STATE:
+                            JObject state = puppet.GetState(command);
+                            command.SendStateResponse(state);
                             break;
                     }
                 }
@@ -154,104 +209,26 @@ namespace HMT {
             }
         }
 
-        public void RegisterAgent(PuppetCommand command) {
-            string agentId = command.json["agent_id"].ToString();
-            byte priority = command.json.TryGetValue("priority", out JToken priorityToken) ? priorityToken.Value<byte>() : (byte)defaultCommandPriority;
-            if (RegisteredAgents.ContainsKey(agentId)) {
-                RegisteredAgents[agentId].AddPuppet(command.targetAPI, command.targetPuppet);
-            }
-            else {
-                string sessionID = command.json.TryGetValue("session_id", out JToken sessionIDToken) ? sessionIDToken.ToString() : System.Guid.NewGuid().ToString();
-                AgentRegistrationRecord record = new AgentRegistrationRecord(agentId, sessionID, command.targetAPI, command.targetPuppet, priority);
-                RegisteredAgents.Add(agentId, record);
-            }
-            //TODO we may want to do the same thing we did in DiceAdventure where this waited for the game to be ready before responding.
-            command.SendAcknowledgeResponse();
-        }
-
-        public void UnregisterAgent(PuppetCommand command) {
-            string agentId = command.json["agent_id"].ToString();
-            if (RegisteredAgents.ContainsKey(agentId)) {
-                RegisteredAgents[agentId].RemovePuppet(command.targetAPI, command.targetPuppet);
-                if (RegisteredAgents[agentId].PuppetCount == 0) {
-                    RegisteredAgents.Remove(agentId);
-                }
-                command.SendAcknowledgeResponse();
-            }
-            else {
-                command.SendErrorResponse(3001, "Agent not registered.");
-            }
-        }
-
-        public void ListPuppets(PuppetCommand command) {
-            command.SendOKResponse(2001, "Puppets Found", string.Format("{\"puppets\":[{0}]}", string.Join(",", PuppetsByTarget[command.targetAPI].Keys)));
-        }
-
-        public void ExecuteAction(PuppetCommand command) {
-            if(!RegisteredAgents.ContainsKey(command.agentId)) {
-                command.SendErrorResponse(3002, "Agent sent actions before being registered.");
-            }
-            AgentRegistrationRecord agent = RegisteredAgents[command.agentId];
-
-            if (PuppetsByTarget.ContainsKey(command.targetAPI)) {
-                if (PuppetsByTarget[command.targetAPI].ContainsKey(command.targetPuppet)) {
-                    IPuppet puppet = PuppetsByTarget[command.targetAPI][command.targetPuppet];
-                    if (puppet.ActionSupported(command.targetAPI, command.action)) {
-                        StartCoroutine(PuppetsByTarget[command.targetAPI][command.targetPuppet].ExecuteAction(command, agent.priority));
-                        commandsInFlight.Add((Time.unscaledTime, command));
-                    }
-                    else {
-                        command.SendIllegalResponse(4000, "Action not supported by Puppet", string.Format("{ \"supported_actions\":[{0}]}", string.Join(",", puppet.SupportedActions(command.targetAPI).Select(x => "\"" + x + "\""))));
-                    }
-                }
-                else {
-                    command.SendNotFoundResponse(3001, "Puppet not found at API Target");
-                }
-            }
-            else {
-                command.SendNotFoundResponse(3000, "API Target not found");
-            }
-        }
-
-        public void ExecutePlan(PuppetCommand command) {
-            if (!RegisteredAgents.ContainsKey(command.agentId)) {
-                command.SendErrorResponse(3002, "Agent sent actions before being registered.");
-            }
-            AgentRegistrationRecord agent = RegisteredAgents[command.agentId];
-        }
-
-        public void GetState(PuppetCommand command) {
-
-        }
-
-
-
-
         /// <summary>
-        /// Adds a Puppet to a given API Target and returns its ID for that target.
+        /// Adds a Puppet to the puppet list.
         /// </summary>
-        /// <param name="apiTarget"></param>
         /// <param name="puppet"></param>
         /// <returns></returns>
-        public void AddPuppet(string apiTarget, IPuppet puppet) {
-            PuppetsByTarget[apiTarget].Add(puppet.PuppetID, puppet);
+        public void AddPuppet(IPuppet puppet) {
+            PuppetIndex[puppet.PuppetID] = puppet;
         }
 
         /// <summary>
-        /// Removes a Puppet fro ma given API Target and returns its ID for that target.
+        /// Removes a Puppet from the puppet list.
         /// </summary>
-        /// <param name="apiTarget"></param>
         /// <param name="puppetId"></param>
         /// <returns></returns>
-        public void RemovePuppet(string apiTarget, IPuppet puppet) {
-            if (PuppetsByTarget[apiTarget].ContainsKey(puppet.PuppetID)) {
-                PuppetsByTarget[apiTarget].Remove(puppet.PuppetID);
+        public void RemovePuppet(IPuppet puppet) {
+            if (PuppetIndex.ContainsKey(puppet.PuppetID)) {
+                PuppetIndex.Remove(puppet.PuppetID);
             }
-        }
 
-        private string GetNewPuppetId(string target) {
-            apiTargetIdCounters[target]++;
-            return target + "_" + apiTargetIdCounters[target].ToString();
+            //TODO remove any socket connections that are attached to this puppet.
         }
     }
 
@@ -263,6 +240,14 @@ namespace HMT {
     /// </summary>
     public class HMTService : WebSocketBehavior {
 
+        public string ServiceTarget { get; set; }
+        public string AgentId { get; set; }
+        public string PuppetId { get; set; }
+        public byte CommandPriority { get; set; }
+        public string APIKey { get; set; } = string.Empty;
+
+        public HashSet<string> ActionSet { get; set; }
+
         protected override void OnMessage(MessageEventArgs e) {
             Debug.LogFormat("[HMTPuppetManager] recieved command: {0}", e.Data);
 
@@ -270,13 +255,29 @@ namespace HMT {
             try {
                 json = JObject.Parse(e.Data);
             }
-            catch (Newtonsoft.Json.JsonReaderException ex) {
+            catch (JsonReaderException ex) {
                 Debug.LogErrorFormat("[HMTPuppetManager] Error parsing JSON: {0}", ex.Message);
                 Context.WebSocket.Send(string.Format("{\"status\": \"ERROR\",\"message\": \"Invalid JSON\",\"content\": {0}}", e.Data));
                 return;
             }
             
-            PuppetCommand newCommand = new PuppetCommand(Context.RequestUri.Segments[Context.RequestUri.Segments.Length - 1], json, this);
+            if (APIKey != string.Empty && json.TryGetDefault("api_key", string.Empty) != APIKey){
+                Debug.LogErrorFormat("API Key Mismatch: {0} != {1}", json["api_key"], APIKey);
+                Context.WebSocket.Send("{\"status\": \"ERROR\",\"message\": \"Invalid API Key\"}");
+                return;
+            }
+            PuppetCommand newCommand = new PuppetCommand(json, this);
+            
+            if (!PuppetCommand.VALID_COMMANDS.Contains(newCommand.command)) {
+                newCommand.SendErrorResponse(5001, "Command Not Recognized");
+                return;
+            }
+            if(newCommand.HasAction && !ActionSet.Contains(newCommand.action)) {
+                newCommand.SendErrorResponse(5002, "Action Not Supported by Puppet");
+                return;
+            }
+
+            // Enqueue the command to the manager to handle cross thread concurrency issues.
             HMTPuppetManager.Instance.EnqueueCommand(newCommand);
         }
 
@@ -293,5 +294,49 @@ namespace HMT {
             Debug.LogException(e.Exception);
         }
     }
+
+
+  public static class WebsocketSharpExtensionMethods {
+        public static JObject GetJsonPostData(this HttpRequestEventArgs e) {
+            var req = e.Request;
+            string json;
+            using (var reader = new System.IO.StreamReader(req.InputStream, req.ContentEncoding)) {
+                json = reader.ReadToEnd();
+            }
+            return JObject.Parse(json);
+        }
+
+        public static void SendJsonResponse(this HttpRequestEventArgs e, JObject json) {
+            var response = e.Response;
+            var buffer = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(json));
+
+            response.StatusCode = (int)HttpStatusCode.OK;
+            response.ContentType = "application/json";
+            response.ContentEncoding = System.Text.Encoding.UTF8;
+            response.ContentLength64 = buffer.Length;
+            response.OutputStream.Write(buffer, 0, buffer.Length);
+            response.Close();
+        }
+
+        public static void SendBasicResponse(this HttpRequestEventArgs e, int statusCode, string statusMessage, string content=null) {
+            var response = e.Response;
+            if (content == null) {
+                content = statusMessage;
+            }
+            var buffer = System.Text.Encoding.UTF8.GetBytes(content);
+            response.StatusCode = statusCode;
+            response.StatusDescription = statusMessage;
+            response.ContentType = "text/plain";
+            response.ContentEncoding = System.Text.Encoding.UTF8;
+            response.ContentLength64 = buffer.Length;
+            response.OutputStream.Write(buffer, 0, buffer.Length);
+            response.Close();
+        }
+
+        public static T TryGetDefault<T>(this JObject job, string key, T defaultValue) {
+            return job.TryGetValue(key, out JToken token) ? token.Value<T>() : defaultValue;
+        }   
+    }
+
 
 }

@@ -1,4 +1,5 @@
 using HMT;
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security;
@@ -6,18 +7,6 @@ using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public abstract class PuppetBehavior : MonoBehaviour, IPuppet {
-
-    #region Static Elements
-    
-    private static Dictionary<string, int> ID_COUNTERS = new Dictionary<string, int>();
-    protected static string GenerateUniquePuppetID(string prefix = null) {
-        if (prefix == null) prefix = "puppet";
-        if (!ID_COUNTERS.ContainsKey(prefix)) ID_COUNTERS[prefix] = 0;
-        ID_COUNTERS[prefix]++;
-        return prefix + "_" + ID_COUNTERS[prefix];
-    }
-
-    #endregion
 
     public virtual string PuppetID { get; protected set; }
 
@@ -34,9 +23,9 @@ public abstract class PuppetBehavior : MonoBehaviour, IPuppet {
 
     // Start is called before the first frame update
     protected virtual void Start() {
-        PuppetID = GenerateUniquePuppetID(puppetIDPrefix);
+        PuppetID = IPuppet.GenerateUniquePuppetID(puppetIDPrefix);
         foreach(string target in apiTarget) {
-            HMTPuppetManager.Instance.AddPuppet(target, this);
+            HMTPuppetManager.Instance.AddPuppet(this);
         }
         CurrentCommandPriority = IPuppet.IDLE_PRIORITY;
         currentPlan = null;
@@ -68,11 +57,11 @@ public abstract class PuppetBehavior : MonoBehaviour, IPuppet {
 
     public abstract bool ExecutingAction { get; }
 
-    public abstract string[] SupportedActions(string api); 
-
-    public abstract bool ActionSupported(string api, string action);
+    public abstract HashSet<string> SupportedActions { get; }
 
     public abstract IEnumerator ExecuteAction(PuppetCommand command, byte priority);
+
+    public abstract JObject GetState(PuppetCommand command);
 
     #endregion
 }
