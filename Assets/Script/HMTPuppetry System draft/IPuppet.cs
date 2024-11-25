@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -12,7 +13,15 @@ namespace HMT {
     /// </summary>
     public interface IPuppet {
 
-        public static byte IDLE_PRIORITY = 255;
+        public const byte IDLE_PRIORITY = 255;
+
+        public static Dictionary<string, int> ID_COUNTERS = new Dictionary<string, int>();
+        public static string GenerateUniquePuppetID(string prefix = null) {
+            if (prefix == null) prefix = "puppet";
+            if (!ID_COUNTERS.ContainsKey(prefix)) ID_COUNTERS[prefix] = 0;
+            ID_COUNTERS[prefix]++;
+            return prefix + "_" + ID_COUNTERS[prefix];
+        }
 
         /// <summary>
         /// The ID of the puppet, which is used as it's address in the system.
@@ -38,21 +47,12 @@ namespace HMT {
         /// </summary>
         public bool ExecutingAction { get; }
 
-
-        /// <summary>
-        /// Returns whether or not the action is supported by the puppet at the given API.
-        /// </summary>
-        /// <param name="api"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public bool ActionSupported(string api, string action);
-
         /// <summary>
         /// Returns the list of actions supported by the puppet at the given API.
         /// </summary>
         /// <param name="api"></param>
         /// <returns></returns>
-        public string[] SupportedActions(string api);
+        public HashSet<string> SupportedActions { get; }
 
         /// <summary>
         /// Takes a command from the HMTPupperManager and executes it.
@@ -83,6 +83,13 @@ namespace HMT {
         /// </summary>
         /// <param name="priority"></param>
         public void Countermand(byte priority);
+
+        /// <summary>
+        /// Returns the Json representation of the state as percieved by the puppet
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public JObject GetState(PuppetCommand command);
     }
 
 }
