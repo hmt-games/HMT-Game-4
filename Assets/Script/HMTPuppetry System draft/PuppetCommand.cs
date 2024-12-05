@@ -27,7 +27,7 @@ namespace HMT {
 
         public bool Responded { get; private set; }
         public bool HasAction => action != NO_ACTION;
-        public bool HasPlan => json.TryGetValue("plan", out _);
+        public bool HasPlan => this.command == EXECUTE_PLAN && json.TryGetValue("plan", out _);
 
         public PuppetCommand(JObject json, HMTService originService) {
             agentId = originService.AgentId;
@@ -41,13 +41,24 @@ namespace HMT {
             Responded = false;
         }
 
+        private PuppetCommand(string action, PuppetCommand original) {
+            agentId = original.agentId;
+            targetPuppet = original.targetPuppet;
+            command = original.command;
+            this.action = action;
+            json = new JObject();
+            originService = original.originService;
+            priority = original.priority;
+            Responded = false;
+        }
+
         public List<PuppetCommand> GetPlan() {
-            if (this.command == "exectute_plan") {
+            if (this.command == EXECUTE_PLAN) {
                 List<PuppetCommand> plan = new List<PuppetCommand>();
                 JToken swap;
                 if (json.TryGetValue("plan", out swap)) {
-                    foreach (JObject planStep in swap) {
-                        plan.Add(new PuppetCommand(planStep, originService));
+                    foreach (JValue planStep in swap) {
+                        plan.Add(new PuppetCommand(planStep.ToString(), this));
                     }
                 }
                 return plan;
@@ -73,6 +84,12 @@ namespace HMT {
         }
         public void SendGameOverResponse() {
             string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, 2999, "OK", "Game Over", null);
+            originService.Context.WebSocket.Send(mess);
+            Responded = true;
+        }
+
+        public void SendStateResponse(JObject state) {
+            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, 2001, "OK", "State Retrieved", state.ToString());
             originService.Context.WebSocket.Send(mess);
             Responded = true;
         }

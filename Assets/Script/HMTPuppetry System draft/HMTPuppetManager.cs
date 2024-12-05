@@ -29,9 +29,9 @@ namespace HMT {
         [Tooltip("The name of the root service apprended to the url for the puppet manager.")]
         public string rootService = "hmt";
         [Tooltip("Whether service targets should be assigned sequentially or randomly. If true, targets will be incremental integers, if false they will be randomly generated GUIDs")]
-        public bool useSequentialServiceTargets = true;
+        public bool useSequentialServiceTargets = false;
         [Tooltip("Whether the puppet manager should use API keys to authenticate calls to service targets.")]
-        public bool useAPIKeys = false;
+        public bool useAPIKeys = true;
 
         [Tooltip("The threshold for automatic responses to commands. If a command is not responded to by the target puppet in this time, a generic acknoweldgement will be sent. Note that this is in terms of unscaledTime not regular time so it does not respect speed up or pausing.")]
         public float autoResponseThreshold = 3f;
@@ -55,7 +55,12 @@ namespace HMT {
             }
             Args = new ArgParser();
             Args.AddArg("hmtsocketport", ArgParser.ArgType.One);
+            Args.AddArg("hmtapikeys", ArgParser.ArgType.Flag);
+            Args.AddArg("hmtsequentialservices", ArgParser.ArgType.Flag);
             Args.ParseArgs();
+
+            useSequentialServiceTargets = Args.GetArgValue("hmtsequentialservices", useSequentialServiceTargets);
+            useAPIKeys = Args.GetArgValue("hmtapikeys", useAPIKeys);
 
             Dictionary<string, IPuppet> PuppetIndex = new Dictionary<string, IPuppet>();
             Dictionary<string, HMTService> ServiceIndex = new Dictionary<string, HMTService>();
@@ -104,7 +109,7 @@ namespace HMT {
                     
                     (string newServiceTarget, string apiKey) = LaunchNewServiceTarget(agentId, puppetId, priority);
                     JObject response = new JObject {
-                        { "service_target", newServiceTarget },
+                        { "service_target", string.Format("ws://localhost:{0}/{1}/{2}", socketPort, rootService, newServiceTarget) },
                         { "session_id", sessionID },
                         { "agent_id", agentId },
                         { "puppet_id", puppetId },
@@ -116,7 +121,7 @@ namespace HMT {
                     }
                     e.SendJsonResponse(response);
                     break;
-                case "/list_agents":
+                case "/list_puppets":
                     e.SendJsonResponse(ListPuppets());
                     break;
                 default:
@@ -128,7 +133,7 @@ namespace HMT {
         private void Server_OnGet(object sender, HttpRequestEventArgs e) {
             var path = e.Request.RawUrl;
             switch (path) {
-                case "/list_agents":
+                case "/list_puppets":
                     e.SendJsonResponse(ListPuppets());
                     break;
                 default:
@@ -142,8 +147,8 @@ namespace HMT {
             JArray puppetList = new JArray();
             foreach(string key in PuppetIndex.Keys) {
                 puppetList.Add(new JObject {
-                    {"id", key },
-                    {"actions", new JArray(PuppetIndex[key].SupportedActions) }
+                    {"puppet_id", key },
+                    {"action_set", new JArray(PuppetIndex[key].SupportedActions) }
                 });
             }
             job["puppets"] = puppetList;
@@ -245,7 +250,6 @@ namespace HMT {
         public string PuppetId { get; set; }
         public byte CommandPriority { get; set; }
         public string APIKey { get; set; } = string.Empty;
-
         public HashSet<string> ActionSet { get; set; }
 
         protected override void OnMessage(MessageEventArgs e) {
