@@ -65,7 +65,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private IEnumerator InitializeMap()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(1f);
 
         if (!_runner.IsServer)
         {
@@ -77,6 +77,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             MapGeneratorJSON.Instance.floorIDsReceived = false;
             MapGeneratorJSON.Instance.gridCellIDsReceived = false;
             MapGeneratorJSON.Instance.plantIDsReceived = false;
+            MapGeneratorJSON.Instance.soilConfigReceived = false;
+            MapGeneratorJSON.Instance.plantConfigReceived = false;
 
             // Wait for all data to be received via streaming
             while (!MapGeneratorJSON.Instance.mapUpdated)
@@ -85,7 +87,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             }
         }
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(1f);
 
         // Now that all data is received, create the tower and initialize the map
         MapGeneratorJSON.Instance.CreateTower();
@@ -229,10 +231,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log("OnReliableDataReceived triggered");
 
-        int floorCount = 4;  // Example
-        int gridX = 6;
-        int gridY = 6;
-        int plantCount = 4;
+        int floorCount = 20;  // Example
+        int gridX = 8;
+        int gridY = 8;
+        int plantCount = 5;
 
 
         // Extract the integers from the key for comparison
@@ -290,9 +292,30 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             MapGeneratorJSON.Instance.plantIDsReceived = true;
         }
 
+
+        // Plant Configs
+        var plantConfigKey = ReliableKey.FromInts(4, 0, 0, 0);
+        if (key.Equals(plantConfigKey))
+        {
+            MapGeneratorJSON.Instance.DeserializePlantConfigs(data.Array);
+            Debug.Log("Received and deserialized Plant Configs.");
+            MapGeneratorJSON.Instance.plantConfigReceived = true;
+        }
+
+        // Soil Configs
+        var soilConfigKey = ReliableKey.FromInts(5, 0, 0, 0);
+        if (key.Equals(soilConfigKey))
+        {
+            MapGeneratorJSON.Instance.DeserializeSoilConfigs(data.Array);
+            Debug.Log("Received and deserialized Soil Configs.");
+            MapGeneratorJSON.Instance.soilConfigReceived = true;
+        }
+
+
         // Update the mapUpdated flag when all IDs are received
         if (MapGeneratorJSON.Instance.towerIDReceived && MapGeneratorJSON.Instance.floorIDsReceived
-            && MapGeneratorJSON.Instance.gridCellIDsReceived && MapGeneratorJSON.Instance.plantIDsReceived)
+            && MapGeneratorJSON.Instance.gridCellIDsReceived && MapGeneratorJSON.Instance.plantIDsReceived
+            && MapGeneratorJSON.Instance.plantConfigReceived && MapGeneratorJSON.Instance.soilConfigReceived)
         {
             MapGeneratorJSON.Instance.mapUpdated = true;
         }
@@ -319,5 +342,28 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
     }
+
+    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    [Rpc]
+    public void RPC_PlantNextStage()
+    {
+        Debug.Log("Plant sprite goes to next stage");
+        GameManager.Instance.PlantNextStage();
+    }
+
+    public void CallPlantNextStage()
+    {
+        if (BasicSpawner._runner.IsServer)
+        {
+            RPC_PlantNextStage();
+        }
+        else
+        {
+            Debug.LogWarning("Only the server can trigger plant growth.");
+            RPC_PlantNextStage();
+        }
+    }
+
+
 
 }

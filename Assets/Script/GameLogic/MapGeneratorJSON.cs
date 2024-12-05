@@ -8,6 +8,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
+using System.Text;
 
 public class MapGeneratorJSON : NetworkBehaviour
 {
@@ -43,6 +44,8 @@ public class MapGeneratorJSON : NetworkBehaviour
     public bool floorIDsReceived;
     public bool gridCellIDsReceived;
     public bool plantIDsReceived;
+    public bool soilConfigReceived;
+    public bool plantConfigReceived;
 
 
 
@@ -63,20 +66,41 @@ public class MapGeneratorJSON : NetworkBehaviour
 
 
 
+    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    [Rpc]
+    public void RPC_PlantNextStage()
+    {
+        Debug.Log("Plant sprite goes to next stage");
+        GameManager.Instance.PlantNextStage();
+    }
+
+    public void OnGrowButtonPressed()
+    {
+        if (BasicSpawner._runner.IsServer)
+        {
+            RPC_PlantNextStage();
+        }
+        else
+        {
+            Debug.LogWarning("Only the server can trigger plant growth.");
+            //RPC_PlantNextStage();
+        }
+    }
+
+
+
+
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_RequestNetworkIDs(PlayerRef requestingPlayer)
     {
-        Debug.Log("Client requesting map IDs from the server.");
+        Debug.Log("Client requesting object IDs from the server.");
 
         if (BasicSpawner._runner.IsServer)
         {
             // Server sends data to the client using the data streaming method.
             SendNetworkData(requestingPlayer);
+            SendConfigData(requestingPlayer);
         }
-        // else
-        // {
-        //     mapUpdated = false;
-        // }
     }
 
     private void SendNetworkData(PlayerRef player)
@@ -203,7 +227,152 @@ public class MapGeneratorJSON : NetworkBehaviour
         return plantIDs;
     }
 
+    [System.Serializable]
+    public class PlantConfigDTO
+    {
+        public float[] capacities;
+        public float[] uptakeRate;
+        public float[] metabolismNeeds;
+        public float[] metabolismFactor;
+        public float[] growthConsumptionRateLimit;
+        public float[] growthFactor;
+        public float rootHeightTransition;
+        public float growthToleranceThreshold;
+        public List<string> spriteBase64; // Serialized sprite data in base64 format
+    }
 
+    [System.Serializable]
+    public class SoilConfigDTO
+    {
+        public float drainTime;
+        public float[] nutrientCapacities;
+        public float waterCapacity;
+    }
+
+    public void SendConfigData(PlayerRef player)
+    {
+        var runner = BasicSpawner._runner;
+
+        // Serialize the configurations
+        byte[] plantConfigData = SerializePlantConfigs();
+        byte[] soilConfigData = SerializeSoilConfigs();
+
+        // Define unique keys for each data type
+        var plantConfigKey = ReliableKey.FromInts(4, 0, 0, 0);
+        var soilConfigKey = ReliableKey.FromInts(5, 0, 0, 0);
+
+        // Send the data to the requesting player
+        runner.SendReliableDataToPlayer(player, plantConfigKey, plantConfigData);
+        runner.SendReliableDataToPlayer(player, soilConfigKey, soilConfigData);
+    }
+
+    public byte[] SerializePlantConfigs()
+    {
+        var dtoDictionary = _plantConfigs.ToDictionary(
+            kvp => kvp.Key,
+            kvp => new PlantConfigDTO
+            {
+                capacities = ConvertToFloatArray(kvp.Value.capacities),
+                uptakeRate = ConvertToFloatArray(kvp.Value.uptakeRate),
+                metabolismNeeds = ConvertToFloatArray(kvp.Value.metabolismNeeds),
+                metabolismFactor = ConvertToFloatArray(kvp.Value.metabolismFactor),
+                growthConsumptionRateLimit = ConvertToFloatArray(kvp.Value.growthConsumptionRateLimit),
+                growthFactor = ConvertToFloatArray(kvp.Value.growthFactor),
+                rootHeightTransition = kvp.Value.rootHeightTransition,
+                growthToleranceThreshold = kvp.Value.growthToleranceThreshold,
+                spriteBase64 = kvp.Value.plantSprites.Select(SpriteToBase64).ToList()
+            }
+        );
+
+        return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(dtoDictionary));
+    }
+
+    public byte[] SerializeSoilConfigs()
+    {
+        var dtoDictionary = _soilConfigs.ToDictionary(
+            kvp => kvp.Key,
+            kvp => new SoilConfigDTO
+            {
+                drainTime = kvp.Value.drainTime,
+                nutrientCapacities = ConvertToFloatArray(kvp.Value.capacities.nutrients),
+                waterCapacity = kvp.Value.capacities.water
+            }
+        );
+
+        return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(dtoDictionary));
+    }
+
+    public void DeserializePlantConfigs(byte[] data)
+    {
+        var json = Encoding.UTF8.GetString(data);
+        var dtoDictionary = JsonConvert.DeserializeObject<Dictionary<string, PlantConfigDTO>>(json);
+
+        _plantConfigs = dtoDictionary.ToDictionary(
+            kvp => kvp.Key,
+            kvp =>
+            {
+                var config = ScriptableObject.CreateInstance<PlantConfig>();
+                config.capacities = ConvertToVector4(kvp.Value.capacities);
+                config.uptakeRate = ConvertToVector4(kvp.Value.uptakeRate);
+                config.metabolismNeeds = ConvertToVector4(kvp.Value.metabolismNeeds);
+                config.metabolismFactor = ConvertToVector4(kvp.Value.metabolismFactor);
+                config.growthConsumptionRateLimit = ConvertToVector4(kvp.Value.growthConsumptionRateLimit);
+                config.growthFactor = ConvertToVector4(kvp.Value.growthFactor);
+                config.rootHeightTransition = kvp.Value.rootHeightTransition;
+                config.growthToleranceThreshold = kvp.Value.growthToleranceThreshold;
+                config.plantSprites = kvp.Value.spriteBase64.Select(Base64ToSprite).ToList();
+
+
+                //DisplayReceivedSprite(config.plantSprites[0]);
+                return config;
+            }
+        );
+    }
+
+    private float[] ConvertToFloatArray(Vector4 vector)
+    {
+        return new float[] { vector.x, vector.y, vector.z, vector.w };
+    }
+
+    private Vector4 ConvertToVector4(float[] array)
+    {
+        if (array.Length != 4) throw new ArgumentException("Array must have exactly 4 elements.");
+        return new Vector4(array[0], array[1], array[2], array[3]);
+    }
+
+    private string SpriteToBase64(Sprite sprite)
+    {
+        Texture2D texture = sprite.texture;
+        byte[] textureData = texture.EncodeToPNG(); // Convert texture to PNG
+        return Convert.ToBase64String(textureData); // Encode as Base64
+    }
+
+    private Sprite Base64ToSprite(string base64)
+    {
+        byte[] textureData = Convert.FromBase64String(base64); // Decode Base64
+        Texture2D texture = new Texture2D(2, 2);
+        texture.LoadImage(textureData); // Load texture from PNG data
+
+        // Create a sprite from the texture
+        return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+    }
+
+    public void DeserializeSoilConfigs(byte[] data)
+    {
+        var json = Encoding.UTF8.GetString(data);
+        var dtoDictionary = JsonConvert.DeserializeObject<Dictionary<string, SoilConfigDTO>>(json);
+
+        _soilConfigs = dtoDictionary.ToDictionary(
+            kvp => kvp.Key,
+            kvp =>
+            {
+                var config = ScriptableObject.CreateInstance<SoilConfig>();
+                config.drainTime = kvp.Value.drainTime;
+                config.capacities = new NutrientSolution(kvp.Value.waterCapacity, ConvertToVector4(kvp.Value.nutrientCapacities));
+                return config;
+            }
+        );
+    }
 
 
 
@@ -224,9 +393,10 @@ public class MapGeneratorJSON : NetworkBehaviour
             towerID = towerObj.Id;
 
             int floorCount = height;
-            floorIDs = new NetworkId[floorCount];
-            gridCellIDs = new NetworkId[floorCount, 6, 6];
-            plantIDs = new NetworkId[floorCount, 6, 6, 4];
+            Debug.Log("Total floors designed in scene: " + height);
+            floorIDs = new NetworkId[20];
+            gridCellIDs = new NetworkId[20, 8, 8];
+            plantIDs = new NetworkId[20, 8, 8, 5];
         }
         //if this is not server instance, extract information from server
         else
@@ -263,6 +433,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         if (BasicSpawner._runner.IsServer)
         {
             floorObj = BasicSpawner._runner.Spawn(floorPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
+            Debug.Log("Floor index: " + floorIdx);
             floorIDs[floorIdx] = floorObj.Id;
         }
         //if this is not server instance, extract information from server
@@ -365,13 +536,22 @@ public class MapGeneratorJSON : NetworkBehaviour
     private void CreatePlant(JToken plantJToken, GridCellBehavior parentGrid, Transform plantSlot, bool isSurfacePlant, int plantIdx)
     {
         string plantConfigName = (string)plantJToken["config"];
-        if (!_plantConfigs.ContainsKey(plantConfigName)) CreatePlantConfig(plantConfigName);
+        if (!_plantConfigs.ContainsKey(plantConfigName)) {
+            if (!BasicSpawner._runner.IsServer)
+            {
+                Debug.LogError("Error: Client didn't get the required sprite");
+            }
+            else
+            {
+                CreatePlantConfig(plantConfigName);
+            }
+        }
+
         //GameObject plantObj = Instantiate(plantPrefab, plantSlot.position, quaternion.identity, plantSlot);
         NetworkObject plantObj;
         if (BasicSpawner._runner.IsServer)
         {
             plantObj = BasicSpawner._runner.Spawn(plantPrefab, plantSlot.position, Quaternion.identity);
-            plantObj.transform.SetParent(plantSlot);
             plantIDs[parentGrid.parentFloor.floorNumber, parentGrid.gridX, parentGrid.gridZ, plantIdx] = plantObj.Id;
         }
         else
@@ -380,9 +560,11 @@ public class MapGeneratorJSON : NetworkBehaviour
             if (!BasicSpawner._runner.TryFindObject(plantID, out plantObj))
             {
                 Debug.LogError($"Failed to extract plant cell's network ID for cell [{parentGrid.gridX}, {parentGrid.gridZ}] on floor {parentGrid.parentFloor.floorNumber}");
+                Debug.Log("plant ID: " + plantID);
             }
-        }
 
+        }
+        plantObj.transform.SetParent(plantSlot);
         PlantBehavior nPlant = plantObj.GetComponent<PlantBehavior>();
         nPlant.config = _plantConfigs[plantConfigName];
         nPlant.SetInitialProperties(
@@ -393,6 +575,8 @@ public class MapGeneratorJSON : NetworkBehaviour
             (float)plantJToken["age"],
             Vector4FromJTokenList(plantJToken["nutrient"].ToList()),
             (float)plantJToken["water"]);
+        //DisplayReceivedSprite(nPlant.config.plantSprites[0]);
+
         nPlant.GetComponent<SpriteRenderer>().sprite = nPlant.config.plantSprites[0];
         nPlant.parentCell = parentGrid;
 

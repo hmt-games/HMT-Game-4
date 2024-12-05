@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Fusion;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,7 +18,11 @@ public class GameManager : MonoBehaviour
 
     public void Tick()
     {
-        parentTower.OnTick();
+        if (BasicSpawner._runner.IsServer)
+        {
+            parentTower.OnTick();
+        }
+
         //HeatMapSwicher.S.SwitchOnHeatMap();
     }
     
@@ -46,4 +51,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+
+
 }

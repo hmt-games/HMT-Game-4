@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 37077477}
   - component: {fileID: 37077476}
+  - component: {fileID: 37077478}
   m_Layer: 0
   m_Name: MapGenerator
   m_TagString: Untagged
@@ -170,6 +171,8 @@ MonoBehaviour:
   floorIDsReceived: 0
   gridCellIDsReceived: 0
   plantIDsReceived: 0
+  soilConfigReceived: 0
+  plantConfigReceived: 0
 --- !u!4 &37077477
 Transform:
   m_ObjectHideFlags: 0
@@ -185,6 +188,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &37077478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37077475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3923784515
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 37077476}
 --- !u!1 &61273128
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,9 +368,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1518213129}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: PlantNextStage
+      - m_Target: {fileID: 37077476}
+        m_TargetAssemblyTypeName: MapGeneratorJSON, Assembly-CSharp
+        m_MethodName: OnGrowButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
