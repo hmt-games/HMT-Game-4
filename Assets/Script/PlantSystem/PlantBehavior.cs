@@ -71,7 +71,7 @@ public class PlantBehavior : NetworkBehaviour
 
         //private NutrientSolution NutrientLevels;
         [Networked]
-        private ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
+        public ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
 
         public PlantConfig config;
 

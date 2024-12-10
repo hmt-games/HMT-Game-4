@@ -23,6 +23,10 @@ public class HeatMapSwicher : MonoBehaviour
                 SwitchOffHeatMap();
 
         }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            PrintPlantStats();
+        }
     }
 
     private void SwitchOffHeatMap()
@@ -49,6 +53,34 @@ public class HeatMapSwicher : MonoBehaviour
 
         _heatMapOn = false;
     }
+
+
+    public void PrintPlantStats()
+    {
+        foreach (Floor floor in GameManager.Instance.parentTower.floors)
+        {
+            for (int x = 0; x < floor.Cells.GetLength(0); x++)
+            {
+                for (int y = 0; y < floor.Cells.GetLength(1); y++)
+                {
+                    for (int z = 0; z < floor.Cells[x, y].surfacePlants.Count; z++)
+                    {
+                        PlantBehavior plant = floor.Cells[x, y].surfacePlants[z];
+                        Vector4 nutrients = plant.NutrientLevels.nutrients;
+                        Debug.Log("Plant index: " + x + "," + "y," + "z, " + "Root Mass: " + plant.RootMass + ", Height: " + plant.Height + ", WaterLevel: " + plant.WaterLevel
+                            + ", EnergyLevel: " + plant.EnergyLevel + ", Health: " + plant.Health + ", Age: " + plant.Age + ", NutrientLevels: " + nutrients.x + "," + nutrients.y + "," + nutrients.z);
+                    }
+
+                    for (int z = 0; z < floor.Cells[x, y].rootedPlants.Count; z++)
+                    {
+                        PlantBehavior plant = floor.Cells[x, y].rootedPlants[z];
+                    }
+
+                }
+            }
+        }
+    }
+
 
     public void SwitchOnHeatMap()
     {
@@ -80,6 +112,8 @@ public class HeatMapSwicher : MonoBehaviour
                     Vector4 nutrients = grid.NutrientLevels.nutrients;
                     GameObject gridObj = grid.gameObject;
                     Transform heatMapObj = gridObj.transform.GetChild(0);
+
+                    Debug.Log("Grid cell: [" + x + ", " + y + "] " + "Nutrient: " + nutrients.x + ", " + nutrients.y + ", " + nutrients.z);
 
                     float h, s, v;
                     Color AColor = heatMapObj.GetChild(0).GetComponent<SpriteRenderer>().color;

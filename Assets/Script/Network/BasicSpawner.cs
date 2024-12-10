@@ -231,10 +231,17 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log("OnReliableDataReceived triggered");
 
+        /*
         int floorCount = 20;  // Example
         int gridX = 8;
         int gridY = 8;
         int plantCount = 5;
+        */
+        int floorCount = MapGeneratorJSON.Instance._height;  
+        int gridX = MapGeneratorJSON.Instance._width;
+        int gridY = MapGeneratorJSON.Instance._depth;
+        int plantCount = 5;
+
 
 
         // Extract the integers from the key for comparison

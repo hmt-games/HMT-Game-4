@@ -27,8 +27,9 @@ public class MapGeneratorJSON : NetworkBehaviour
 
     private JObject _configJObject;
     
-    private int _width;
-    private int _depth;
+    public int _width;
+    public int _depth;
+    public int _height;
 
     public static MapGeneratorJSON Instance;
 
@@ -38,6 +39,10 @@ public class MapGeneratorJSON : NetworkBehaviour
     public NetworkId[,,] gridCellIDs;
     // 4D array: floorNum * gridX * gridY * plantNum
     public NetworkId[,,,] plantIDs;
+    // 4D array plantstructs (containing actual data) here...
+
+    // 3D array of soil? gridcell? struct (containing actual data)
+
     public bool mapUpdated;
 
     public bool towerIDReceived;
@@ -57,6 +62,22 @@ public class MapGeneratorJSON : NetworkBehaviour
         _soilConfigs = new Dictionary<string, SoilConfig>();
         // _name2Plant = new Dictionary<string, GameObject>();
         _configJObject = JObject.Parse(configJSON.text);
+
+        JObject towerJObject = JObject.Parse(towerJSON.text);
+        int width = (int)towerJObject["Tower"]["width"];
+        int depth = (int)towerJObject["Tower"]["depth"];
+        int height = (int)towerJObject["Tower"]["height"];
+
+        _width = width;
+        _depth = depth;
+        _height = height;
+
+        Debug.Log("height: " + height + " width: " + width + " depth: " + depth);
+        floorIDs = new NetworkId[height];
+        gridCellIDs = new NetworkId[height, width, depth];
+        plantIDs = new NetworkId[height, width, depth, 5];
+
+
     }
 
     private void Start()
@@ -382,7 +403,6 @@ public class MapGeneratorJSON : NetworkBehaviour
         int width = (int)towerJObject["Tower"]["width"];
         int depth = (int)towerJObject["Tower"]["depth"];
         int height = (int)towerJObject["Tower"]["height"];
-        Debug.Log($"Creating a tower with w{width}, d{depth}, h{height}");
 
         NetworkObject towerObj;
 
@@ -392,11 +412,6 @@ public class MapGeneratorJSON : NetworkBehaviour
             towerObj = BasicSpawner._runner.Spawn(towerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
             towerID = towerObj.Id;
 
-            int floorCount = height;
-            Debug.Log("Total floors designed in scene: " + height);
-            floorIDs = new NetworkId[20];
-            gridCellIDs = new NetworkId[20, 8, 8];
-            plantIDs = new NetworkId[20, 8, 8, 5];
         }
         //if this is not server instance, extract information from server
         else
@@ -415,8 +430,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             nTower.depth = depth;
         }
         GameManager.Instance.parentTower = nTower;
-        _width = width;
-        _depth = depth;
+
         nTower.floors = new Floor[height];
 
         for (int level = 0; level < height; level++)
@@ -458,6 +472,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         nFloor.Cells = new GridCellBehavior[_width, _depth];
         
         List<JToken> floorGrids = floorJObject.ToList();
+        Debug.Log("floorGridx.Count: " + floorGrids.Count);
         for (int gridIdx = 0; gridIdx < floorGrids.Count; gridIdx++)
         {
             CreateGrid(floorGrids[gridIdx], gridIdx, nFloor);
@@ -483,6 +498,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         }
         else
         {
+
             NetworkId gridCellID = gridCellIDs[parentFloor.floorNumber, x, z];
             if (!BasicSpawner._runner.TryFindObject(gridCellID, out gridObj))
             {
