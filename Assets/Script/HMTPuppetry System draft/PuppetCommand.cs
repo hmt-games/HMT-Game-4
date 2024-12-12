@@ -1,59 +1,130 @@
 using Newtonsoft.Json.Linq;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using WebSocketSharp.Server;
 
-namespace HMT {
-    public struct PuppetCommand {
+namespace HMT.Puppetry {
+    public enum PuppetCommandType {
+        INVALID_COMMAND,
+        EXECUTE_ACTION,
+        EXECUTE_PLAN,
+        GET_STATE,
+        COMMUNICATE,
+        CONFIGURE,
+    }
+
+    public enum PuppetResponseCode {
+        GameIntializing = 1000,
+        PuppetIntializing = 1001,
+        GamePaused = 1002,
+
+        CommandAcknowleged = 2000,
+        ReturnedState = 2001,
+        GameOver = 2999,
+
+        IllegalAction = 4000,
+        InsufficientPriority = 4001,
+
+        CommandParseError = 5000,
+        APIKeyMismatch = 5001,
+        CommandNotRecognized = 5002,
+        ActionNotSupportedByPuppet = 5003,
+    }
+
+
+    public class PuppetCommand {
         private const string RESPONSE_FORMAT = "{{\"command\":\"{0}\", \"puppet_id\":{1}  \"code\":{2}, \"status\":\"{3}\", \"message\":\"{4}\", \"content\":{5} }}";
         private const string NO_ACTION = "no_action";
-        private const string NO_COMMAND = "no_command";
 
-        public static HashSet<string> VALID_COMMANDS = new HashSet<string> { EXECUTE_ACTION, EXECUTE_PLAN, GET_STATE, CONFIGURE };
+        public static string ResponseCodeToStatus(int code) {
+            return (code / 1000) switch {
+                1 => "RESEND",
+                2 => "OK",
+                3 => "NOTFOUND",
+                4 => "ILLEGAL",
+                5 => "ERROR",
+                _ => "UNKNOWN"
+            };
+        }
 
-        public const string EXECUTE_ACTION = "execute_action";
-        public const string EXECUTE_PLAN = "execute_plan";
-        public const string GET_STATE = "get_state";
-        public const string CONFIGURE = "configure";
+        public static HashSet<string> VALID_COMMANDS = new HashSet<string> { "execute_action", "execute_plan", "get_state", "configure", "communicate" };
 
-        public string agentId;
-        public string targetPuppet;
-        public string command;
-        public string action;
-        public JObject json;
-        private HMTService originService;
-        public byte priority;
+        public static string CommandTypeToString(PuppetCommandType command) {
+            return command switch {
+                PuppetCommandType.EXECUTE_ACTION => "execute_action",
+                PuppetCommandType.EXECUTE_PLAN => "execute_plan",
+                PuppetCommandType.GET_STATE => "get_state",
+                PuppetCommandType.COMMUNICATE => "communicate",
+                PuppetCommandType.CONFIGURE => "configure",
+                _ => "invalid_command"
+            };
+        }
 
+        public static string FormatResponse(PuppetCommandType command, string puppetId, int code, string message, string content = "{}") {
+            return string.Format(RESPONSE_FORMAT, CommandTypeToString(command), puppetId, code, ResponseCodeToStatus(code), message, content);
+        }
+
+        private static PuppetCommandType ParseCommandType(string commandString) {
+            switch (commandString.ToLower()) {
+                case "execute_action":
+                    return PuppetCommandType.EXECUTE_ACTION;
+                case "execute_plan":
+                    return PuppetCommandType.EXECUTE_PLAN;
+                case "get_state":
+                    return PuppetCommandType.GET_STATE;
+                case "configure":
+                    return PuppetCommandType.CONFIGURE;
+                case "communicate":
+                    return PuppetCommandType.COMMUNICATE;
+                default:
+                    return PuppetCommandType.INVALID_COMMAND;
+            }
+        }
+
+        public const byte IDLE_PRIORITY = 255;
+
+        public string Action { get; private set; }
+        public PuppetCommandType Command { get; private set; }
+        public AgentServiceConfig AgentConfig { get; private set; }
+        public string TargetPuppet { get { return AgentConfig.PuppetId; } }
+        public byte Priority { get { return AgentConfig.CommandPriority; } }
+        public JObject json { get; private set; }
         public bool Responded { get; private set; }
-        public bool HasAction => action != NO_ACTION;
-        public bool HasPlan => this.command == EXECUTE_PLAN && json.TryGetValue("plan", out _);
+        private HMTPuppetService originService;
 
-        public PuppetCommand(JObject json, HMTService originService) {
-            agentId = originService.AgentId;
-            targetPuppet = originService.PuppetId;
-            priority = originService.CommandPriority;
+        public PuppetCommand(JObject json, HMTPuppetService originService) {
+            AgentConfig = originService.ServiceConfig;
             this.originService = originService;
             
-            command = json.TryGetDefault("command", NO_COMMAND).ToLower();
-            action = json.TryGetDefault("action", NO_ACTION).ToLower();
+            Command = ParseCommandType(json.TryGetDefault("Command", string.Empty));
+            Action = json.TryGetDefault("Action", NO_ACTION).ToLower();
             this.json = json;            
             Responded = false;
         }
 
+        public PuppetCommand(string puppet_id, string action, byte priority = 128) {
+            AgentConfig = new AgentServiceConfig(puppet_id, priority);
+            Command = PuppetCommandType.EXECUTE_ACTION;
+            this.Action = action;
+            json = new JObject();
+            originService = null;
+            Responded = false;
+        }
+
+        /// <summary>
+        /// A copy constructor that is only used for creating Action commands from plan commands.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="original"></param>
         private PuppetCommand(string action, PuppetCommand original) {
-            agentId = original.agentId;
-            targetPuppet = original.targetPuppet;
-            command = original.command;
-            this.action = action;
+            AgentConfig = original.AgentConfig;
+            Command = PuppetCommandType.EXECUTE_ACTION;
+            this.Action = action;
             json = new JObject();
             originService = original.originService;
-            priority = original.priority;
             Responded = false;
         }
 
         public List<PuppetCommand> GetPlan() {
-            if (this.command == EXECUTE_PLAN) {
+            if (this.Command == PuppetCommandType.EXECUTE_PLAN) {
                 List<PuppetCommand> plan = new List<PuppetCommand>();
                 JToken swap;
                 if (json.TryGetValue("plan", out swap)) {
@@ -68,66 +139,63 @@ namespace HMT {
             }
         }
 
-        public void SendRetryResponse(int code, string message, string content = null) {
-            if(code / 1000 != 1) {
-                throw new System.ArgumentException("RETRY Codes must be between 1000 and 1999");
+        private void FormatAndSendResponse(int code, string message, string content = "{}") {
+            if(originService == null || Responded) {
+                return;
             }
-            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, code, "RETRY", message, content);
+
+            string mess = string.Format(RESPONSE_FORMAT, Command, TargetPuppet, code, message, content);
             originService.Context.WebSocket.Send(mess);
             Responded = true;
+        }
+
+        public void SendGameInitializingResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.GameIntializing, "Game Initializing");
+        }
+
+        public void SendPuppetInitializingResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.PuppetIntializing, "Puppet Initializing");
+        }
+
+        public void SendGamePausedResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.GamePaused, "Game Paused");
         }
 
         public void SendAcknowledgeResponse() {
-            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, 2000, "OK", "Command Acknowledged", null);
-            originService.Context.WebSocket.Send(mess);
-            Responded = true;
+            FormatAndSendResponse((int)PuppetResponseCode.CommandAcknowleged, "Command Acknowledged");
         }
+
         public void SendGameOverResponse() {
-            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, 2999, "OK", "Game Over", null);
-            originService.Context.WebSocket.Send(mess);
-            Responded = true;
+            FormatAndSendResponse((int)PuppetResponseCode.GameOver, "Game Over");
         }
 
         public void SendStateResponse(JObject state) {
-            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, 2001, "OK", "State Retrieved", state.ToString());
-            originService.Context.WebSocket.Send(mess);
-            Responded = true;
+            FormatAndSendResponse((int)PuppetResponseCode.ReturnedState, "State Retrieved", state.ToString());
         }
 
-        public void SendOKResponse(int code, string message, string content = null) {
-            if(code <= 2001 || code >= 2999) {
-                throw new System.ArgumentException("OK Codes must be between 2001 and 2998");
-            }
-            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, code, "OK", message, content);
-            originService.Context.WebSocket.Send(mess);
-            Responded = true;
+        public void SendAPIKeyMismatchResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.APIKeyMismatch, "API Key Mismatch");
         }
 
-        public void SendNotFoundResponse(int code, string message, string content = null) {
-            if (code / 1000 != 3) {
-                throw new System.ArgumentException("NOTFOUND Codes must be between 3000 and 3999");
-            }
-            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, code, "NOTFOUND", message, content);
-            originService.Context.WebSocket.Send(mess);
-            Responded = true;
+        public void SendCommandNotRecognizedResposne() {
+            JObject content = new JObject();
+            content["valid_commands"] = JArray.FromObject(VALID_COMMANDS);
+            FormatAndSendResponse((int)PuppetResponseCode.CommandNotRecognized, "Command Not Recognized", content.ToString());
         }
 
-        public void SendIllegalResponse(int code, string message, string content = null) {
-            if(code / 1000 != 4) {
-                throw new System.ArgumentException("ILLEGAL Codes must be between 4000 and 4999");
-            }
-            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, code, "ILLEGAL", message, content);
-            originService.Context.WebSocket.Send(mess);
-            Responded = true;
+        public void SendActionNotSupportedResponse(IEnumerable<string> supportedActions) {
+            JObject content = new JObject {
+                ["action_set"] = JArray.FromObject(supportedActions)
+            };
+            FormatAndSendResponse((int)PuppetResponseCode.ActionNotSupportedByPuppet, "Action Not Supported By Puppet", content.ToString());
         }
 
-        public void SendErrorResponse(int code, string message, string content = null) {
-            if(code / 1000 != 5) {
-                throw new System.ArgumentException("ERROR Codes must be between 5000 and 5999");
-            }
-            string mess = string.Format(RESPONSE_FORMAT, command, targetPuppet, code, "ERROR", message, content);
-            originService.Context.WebSocket.Send(mess);
-            Responded = true;
+        public void SendIllegalActionResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.IllegalAction, "Illegal Action");
+        }
+
+        public void SendInsufficientPriorityResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.InsufficientPriority, "Insufficient Priority");
         }
     }
 }
