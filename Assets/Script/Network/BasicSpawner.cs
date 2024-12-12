@@ -46,22 +46,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    /*
-    private IEnumerator InitializeMap() {
-        yield return new WaitForSeconds(5f);
-        if (!_runner.IsServer)
-        {
-            MapGenerator.Instance.RPC_RequestNetworkIDs();
-            while (!BasicSpawner._runner.IsServer && !MapGenerator.Instance.mapUpdated)
-            {
-                yield return null;
-            }
-        }
-        yield return new WaitForSeconds(5f);
-        MapGenerator.Instance.CreateTower();
-        DataVisualization.Instance.Init();
-    }
-    */
+
 
     private IEnumerator InitializeMap()
     {
@@ -105,25 +90,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    private void SpawnPlants()
-    {
-        int n = 10;
-        for (int x = 0; x < n; x++)
-        {
-            for (int y = 0; y < n; y++)
-            {
-                Vector3 position = new Vector3(2 * x, 0, 2 * y);
-                NetworkObject networkObject = _runner.Spawn(_plantPrefab, position, Quaternion.identity);
-                /*
-                if (networkObject != null)
-                {
-                    NetworkedPlantBehavior plantBehavior = networkObject.GetComponent<NetworkedPlantBehavior>();
-                    GameManager.instance.plants.Add(plantBehavior);
-                }
-                */
-            }
-        }
-    }
 
 
     private void OnGUI()
