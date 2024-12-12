@@ -1,10 +1,7 @@
 using Newtonsoft.Json.Linq;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 
-namespace HMT {
+namespace HMT.Puppetry {
 
     /// <summary>
     /// This is an interface that will be used internally in the PupperManager system.
@@ -12,9 +9,6 @@ namespace HMT {
     /// You should use it if you *NEED* to base your code on a different base class, otherwise use the abstract class.
     /// </summary>
     public interface IPuppet {
-
-        public const byte IDLE_PRIORITY = 255;
-
         public static Dictionary<string, int> ID_COUNTERS = new Dictionary<string, int>();
         public static string GenerateUniquePuppetID(string prefix = null) {
             if (prefix == null) prefix = "puppet";
@@ -29,23 +23,19 @@ namespace HMT {
         public string PuppetID { get; }
 
         /// <summary>
-        /// The priority level of the current command being executed.
-        /// 
-        /// Commands with less or equal priority will take precendence over commands with higher priority. When the puppet is idle it's priority will be 255.
+        /// The current Action Command being executed by the puppet.
         /// </summary>
-        public byte CurrentCommandPriority { get; }
+        public PuppetCommand CurrentCommand { get; }
 
         /// <summary>
-        /// Return whether the puppet is currently executing a plan.
-        /// 
-        /// If not currently executing a plan it can still be executing a single command.
-        /// </summary>
-        public bool ExecutingPlan { get; }
-
-        /// <summary>
-        /// Return whether the puppet is currently executing a single action.
+        /// Returns whether the puppet is currently executing an Action.
         /// </summary>
         public bool ExecutingAction { get; }
+
+        /// <summary>
+        /// Returns whether the puppet is currently executing a plan.
+        /// </summary>
+        public bool ExecutingPlan { get; }
 
         /// <summary>
         /// Returns the list of actions supported by the puppet at the given API.
@@ -55,34 +45,30 @@ namespace HMT {
         public HashSet<string> SupportedActions { get; }
 
         /// <summary>
-        /// Takes a command from the HMTPupperManager and executes it.
+        /// Takes a Command from the HMTPupperManager and executes it.
         /// 
-        /// The IEnumerator is used to allow for coroutines to be used in the implementation but it could also just set a variable or trigger an action. 
+        /// The IEnumerator is used to allow for coroutines to be used in the implementation but it could also just set a variable or trigger an Action. 
         /// 
         /// All commands executions should recieve a response to the origin service even if it's just an acknowledgment of receipt.
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public IEnumerator ExecuteAction(PuppetCommand command, byte priority);
+        public void ExecuteAction(PuppetCommand command);
 
         /// <summary>
         /// Takes a sequence of commands and executes them in order.
         /// 
-        /// This plan would come bundled as part of a single command from the HMTPupperManager.
+        /// This plan would come bundled as part of a single Command from the HMTPupperManager.
         /// </summary>
-        /// <param name="sourceCommand"></param>
-        /// <param name="plan"></param>
-        /// <param name="priority"></param>
+        /// <param name="command"></param>
         /// <returns></returns>
-        public IEnumerator ExecutePlan(PuppetCommand sourceCommand, IEnumerable<PuppetCommand> plan, byte priority);
-
+        public void ExecutePlan(PuppetCommand command);
+        
         /// <summary>
-        /// Countermands a command with a given priority.
-        /// 
-        /// If the puppet is currently executing a plan it will also stop the plan.
+        /// Takes a Commnuicate Command and executes it.
         /// </summary>
-        /// <param name="priority"></param>
-        public void Countermand(byte priority);
+        /// <param name="command"></param>
+        public void ExecuteCommunicate(PuppetCommand command);
 
         /// <summary>
         /// Returns the Json representation of the state as percieved by the puppet
@@ -90,6 +76,9 @@ namespace HMT {
         /// <param name="command"></param>
         /// <returns></returns>
         public JObject GetState(PuppetCommand command);
+
+
+
     }
 
 }
