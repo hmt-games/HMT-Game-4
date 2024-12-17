@@ -163,6 +163,9 @@ MonoBehaviour:
     type: 3}
   floorPrefab: {fileID: 4019688216618479052, guid: 51a3ee820b1dfc140aee919ff6742688,
     type: 3}
+  _width: 0
+  _depth: 0
+  _height: 0
   towerID:
     Raw: 0
   floorIDs: []
@@ -2014,6 +2017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentTower: {fileID: 0}
+  bot: {fileID: 1553247983956851260, guid: 38a38a5b619c04ad7bcff75e127ad6a7, type: 3}
 --- !u!4 &1518213130
 Transform:
   m_ObjectHideFlags: 0
@@ -2041,6 +2045,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6822c553b113d4075a6cfe976a761693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1579258186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1579258187}
+  m_Layer: 0
+  m_Name: ============
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1579258187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579258186}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.3026701, y: 0.03402811, z: 0.42962196}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1595786164
 GameObject:
   m_ObjectHideFlags: 0
@@ -2995,3 +3030,4 @@ SceneRoots:
   - {fileID: 239463755}
   - {fileID: 1392853620}
   - {fileID: 400860585}
+  - {fileID: 1579258187}

@@ -52,6 +52,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    // Test script for bot Spawn
+    // TODO: Delete this later
+    [SerializeField] private GameObject bot;
+    public void SpawnBot()
+    {
+        Instantiate(bot, parentTower.floors[0].Cells[0, 0].transform.position, Quaternion.identity);
+    }
 
 }

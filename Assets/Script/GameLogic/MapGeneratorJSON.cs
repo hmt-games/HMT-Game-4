@@ -437,6 +437,9 @@ public class MapGeneratorJSON : NetworkBehaviour
         {
             CreateFloor(towerJObject[$"Floor{level}"], level, nTower);
         }
+        
+        Debug.LogWarning("Map generation for host should be done?");
+        GameManager.Instance.SpawnBot();
     }
 
     private void CreateFloor(JToken floorJObject, int floorIdx, Tower parentTower)
