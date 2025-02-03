@@ -105,19 +105,7 @@ public class GridCellBehavior : NetworkBehaviour
 
     public void OnTick()
     {
-        for (int i = 0; i < 4; i++)
-        {
-            if (Random.Range(0.0f, 1.0f) <= 0.5f)
-            {
-                NutrientLevels.nutrients[i] += 1;
-                Debug.Log("++++");
-            }
-            else
-            {
-                NutrientLevels.nutrients[i] -= 1;
-                Debug.Log("----");
-            }
-        }
+        
     }
 
 
