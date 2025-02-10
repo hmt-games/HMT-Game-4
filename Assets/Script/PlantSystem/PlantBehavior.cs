@@ -75,6 +75,12 @@ public class PlantBehavior : NetworkBehaviour
 
         public PlantConfig config;
 
+        public int plantCurrentStage = 0;
+        private int _plantMaxStage = 3;
+        //TODO: make this configurable in JSON spec
+        private List<float> _stageTransitionThreshold = new List<float> { 0.0f, 1.5f, 3.0f, 5.3f };
+        public bool hasFruit = false;
+
         public int maxHealthHistory = 10;
 
         private float healthTotal = 0;
@@ -109,6 +115,8 @@ public class PlantBehavior : NetworkBehaviour
             var metabolismConsumption = Vector4.Min(NutrientLevels.nutrients, config.metabolismNeeds);
             EnergyLevel += Vector4.Dot(config.metabolismFactor, metabolismConsumption);
             NutrientLevels.nutrients -= metabolismConsumption;
+            
+            //TODO: add plant deteriorating and dying based on energy level
 
             /// HEALTH
             /// The health calculation is a sliding window average of the metabolism rate
@@ -127,6 +135,7 @@ public class PlantBehavior : NetworkBehaviour
                 Height += growth * (1 - config.PercentToRoots(Age));
             }
 
+            PlantNextStage();
 
             //update health value
             healthTotal = 0;
@@ -157,5 +166,22 @@ public class PlantBehavior : NetworkBehaviour
             /// <returns></returns>
             public NutrientSolution OnWater(NutrientSolution waterVolume) {
                 return waterVolume;
+            }
+
+            private void PlantNextStage()
+            {
+                if (plantCurrentStage == _plantMaxStage) return;
+                
+                while (Height >= _stageTransitionThreshold[plantCurrentStage + 1])
+                {
+                    plantCurrentStage++;
+                    if (plantCurrentStage == _plantMaxStage) break;
+                }
+                
+                GetComponent<SpriteRenderer>().sprite = config.plantSprites[plantCurrentStage];
+                if (plantCurrentStage == _plantMaxStage)
+                {
+                    hasFruit = true;
+                }
             }
     }

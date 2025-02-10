@@ -71,7 +71,7 @@ public class GridCellBehavior : NetworkBehaviour
     /// This is called as a regular heartbeat of the cellular automata game.
     /// I've contemplated whether this should get a paramter of the local light level/color. I would probalby make it a simplified version of the actual Unity lighting system to reduce the complexity space.
     /// </summary>
-    public void OnTickk() {
+    public void OnTick() {
         ///Reconile Excess Water
     
         float rootTotal = 0;
@@ -82,6 +82,16 @@ public class GridCellBehavior : NetworkBehaviour
         NutrientSolution aggregate = NutrientSolution.Empty;
         foreach(PlantBehavior plant in rootedPlants) {
            aggregate += plant.OnTick(NutrientLevels * (plant.RootMass / rootTotal));
+        }
+        
+        rootTotal = 0;
+        
+        foreach(PlantBehavior plant in surfacePlants) {
+            rootTotal += plant.RootMass;
+        }
+        
+        foreach(PlantBehavior plant in surfacePlants) {
+            aggregate += plant.OnTick(NutrientLevels * (plant.RootMass / rootTotal));
         }
         
         if (aggregate.water > 0) {
@@ -101,11 +111,6 @@ public class GridCellBehavior : NetworkBehaviour
     
         ///Reconcile the aggregate with the capacities.
         ///If there is excess, pass it down the farm (or do you pass it out?)
-    }
-
-    public void OnTick()
-    {
-        
     }
 
 
