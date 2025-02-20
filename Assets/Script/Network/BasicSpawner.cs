@@ -72,6 +72,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             }
         }
 
+        //TODO: ?? replace this with wait for some event ??
         yield return new WaitForSeconds(1f);
 
         // Now that all data is received, create the tower and initialize the map

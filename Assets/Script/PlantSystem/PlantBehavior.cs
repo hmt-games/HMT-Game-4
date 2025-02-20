@@ -106,9 +106,9 @@ public class PlantBehavior : NetworkBehaviour
             /// UPTAKE
             /// The moves an amount of each compound from the soil to the plant based on the uptake rate and the amount of the compound in the soil.
             /// either it moves the amount based on its uptake rate OR up to the ammount it can contain if it's full
-            var uptake = Vector4.Min(Vector4.Scale(config.uptakeRate, allocation.nutrients) , config.capacities - NutrientLevels.nutrients);
-            NutrientLevels.nutrients += uptake;
-            allocation.nutrients -= uptake;
+            float uptake = Mathf.Min(allocation.water, Mathf.Min(config.capacities - NutrientLevels.water, config.uptakeRate));
+            NutrientLevels += allocation * (uptake / allocation.water);
+            allocation -= uptake;
 
             /// METABOLISM
             /// Uses the uptake nutrients to contribute to maintaining the plant and converting to energy      
@@ -165,7 +165,8 @@ public class PlantBehavior : NetworkBehaviour
             /// <param name="waterVolume"></param>
             /// <returns></returns>
             public NutrientSolution OnWater(NutrientSolution waterVolume) {
-                return waterVolume;
+                if (config.onWaterCallbackBypass) return waterVolume;
+                return waterVolume; //TODO do something meaningful here
             }
 
             private void PlantNextStage()

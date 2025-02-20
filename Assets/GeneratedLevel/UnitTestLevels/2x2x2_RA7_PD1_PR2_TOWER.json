@@ -1,0 +1,149 @@
+﻿{
+  "Tower": {
+    "width": 2,
+    "depth": 2,
+    "height": 2
+  },
+  "Floor0": [
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {
+        "Plant0": {
+          "config": "PlantConfig0",
+          "rootMass": 3.0,
+          "height": 0.1,
+          "energyLevel": 0.0,
+          "health": 2.0,
+          "age": 0.0,
+          "nutrient": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "water": 0.0
+        }
+      }
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    }
+  ],
+  "Floor1": [
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {
+        "Plant0": {
+          "config": "PlantConfig0",
+          "rootMass": 3.0,
+          "height": 0.1,
+          "energyLevel": 0.0,
+          "health": 2.0,
+          "age": 0.0,
+          "nutrient": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "water": 0.0
+        }
+      }
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    }
+  ]
+}
+    
+    

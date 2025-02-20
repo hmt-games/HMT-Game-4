@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa39593c53264294a9f6eeba97af5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configJSON: {fileID: 4900000, guid: 05048fae03a8c433ebd452edbf2bfd14, type: 3}
-  towerJSON: {fileID: 4900000, guid: d6dbcaf8315ba41bcb8243c3bfba6fe3, type: 3}
+  configJSON: {fileID: 4900000, guid: 376ab4992cf24bbbb2b1746a0f617b7a, type: 3}
+  towerJSON: {fileID: 4900000, guid: 972c3314ca284d7692111aa11713491f, type: 3}
   tilePrefab: {fileID: 2505949527415372711, guid: b0d9a3063d2cf4f0c9d81c821a9dfac1,
     type: 3}
   grid2DTheme: {fileID: 11400000, guid: 52a33883be6c542ad90e696c33757c1e, type: 2}

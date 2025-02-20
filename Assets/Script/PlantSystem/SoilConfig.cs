@@ -8,7 +8,7 @@ public class SoilConfig: ScriptableObject {
     /// 
     /// TODO we need to make a custom property drawer for NutrientSolutions
     /// </summary>
-    public NutrientSolution capacities;
+    public float capacities;
 
     public float drainTime;
 }

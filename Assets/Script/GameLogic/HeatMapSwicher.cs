@@ -63,19 +63,13 @@ public class HeatMapSwicher : MonoBehaviour
             {
                 for (int y = 0; y < floor.Cells.GetLength(1); y++)
                 {
-                    for (int z = 0; z < floor.Cells[x, y].surfacePlants.Count; z++)
+                    for (int z = 0; z < floor.Cells[x, y].plants.Count; z++)
                     {
-                        PlantBehavior plant = floor.Cells[x, y].surfacePlants[z];
+                        PlantBehavior plant = floor.Cells[x, y].plants[z];
                         Vector4 nutrients = plant.NutrientLevels.nutrients;
                         Debug.Log("Plant index: " + x + "," + "y," + "z, " + "Root Mass: " + plant.RootMass + ", Height: " + plant.Height + ", WaterLevel: " + plant.WaterLevel
                             + ", EnergyLevel: " + plant.EnergyLevel + ", Health: " + plant.Health + ", Age: " + plant.Age + ", NutrientLevels: " + nutrients.x + "," + nutrients.y + "," + nutrients.z);
                     }
-
-                    for (int z = 0; z < floor.Cells[x, y].rootedPlants.Count; z++)
-                    {
-                        PlantBehavior plant = floor.Cells[x, y].rootedPlants[z];
-                    }
-
                 }
             }
         }

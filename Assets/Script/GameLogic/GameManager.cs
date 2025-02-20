@@ -39,11 +39,7 @@ public class GameManager : MonoBehaviour
                 for (int j = 0; j < Cells.GetLength(1); j++)
                 {
                     GridCellBehavior cell = Cells[i,j];
-                    foreach (PlantBehavior plant in cell.surfacePlants)
-                    {
-                        plant.GetComponent<SpriteRenderer>().sprite = plant.config.plantSprites[plantStages];
-                    }
-                    foreach (PlantBehavior plant in cell.rootedPlants)
+                    foreach (PlantBehavior plant in cell.plants)
                     {
                         plant.GetComponent<SpriteRenderer>().sprite = plant.config.plantSprites[plantStages];
                     }

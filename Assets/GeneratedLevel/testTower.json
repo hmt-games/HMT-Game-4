@@ -18,7 +18,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -62,7 +62,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -178,7 +178,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -222,7 +222,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -252,7 +252,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -311,7 +311,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -353,7 +353,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -383,7 +383,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -613,7 +613,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -702,7 +702,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -861,7 +861,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -933,7 +933,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -948,7 +948,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -963,7 +963,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1051,7 +1051,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1151,6 +1151,7 @@
             2.0,
             4.0
           ],
+      
           "water": 3.0
         },
         "Plant2": {
@@ -1226,7 +1227,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1285,7 +1286,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1498,7 +1499,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1540,7 +1541,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1570,7 +1571,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1585,7 +1586,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1614,7 +1615,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1701,7 +1702,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1758,7 +1759,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -1817,7 +1818,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2023,7 +2024,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2038,7 +2039,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2067,7 +2068,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2126,7 +2127,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2241,7 +2242,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2384,7 +2385,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2442,7 +2443,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2484,7 +2485,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2556,7 +2557,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2630,7 +2631,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2659,7 +2660,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2746,7 +2747,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2775,7 +2776,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -2952,7 +2953,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3011,7 +3012,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3055,7 +3056,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3085,7 +3086,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3129,7 +3130,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3202,7 +3203,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3319,7 +3320,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3393,7 +3394,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3452,7 +3453,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3496,7 +3497,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3511,7 +3512,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3600,7 +3601,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3759,7 +3760,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3930,7 +3931,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -3945,7 +3946,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4050,7 +4051,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4311,7 +4312,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4326,7 +4327,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4370,7 +4371,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4414,7 +4415,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4503,7 +4504,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4532,7 +4533,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4587,7 +4588,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4602,7 +4603,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4632,7 +4633,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4733,7 +4734,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4807,7 +4808,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -4997,7 +4998,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5172,7 +5173,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5187,7 +5188,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5231,7 +5232,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5260,7 +5261,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5319,7 +5320,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5348,7 +5349,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5378,7 +5379,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5393,7 +5394,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5464,7 +5465,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5606,7 +5607,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5650,7 +5651,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5665,7 +5666,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5709,7 +5710,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5768,7 +5769,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5871,7 +5872,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5886,7 +5887,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5945,7 +5946,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -5974,7 +5975,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6004,7 +6005,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6048,7 +6049,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6092,7 +6093,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6107,7 +6108,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6182,7 +6183,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6300,7 +6301,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6416,7 +6417,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6473,7 +6474,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6488,7 +6489,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6620,7 +6621,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6650,7 +6651,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6753,7 +6754,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6869,7 +6870,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6899,7 +6900,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -6971,7 +6972,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7101,7 +7102,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7160,7 +7161,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7333,7 +7334,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7436,7 +7437,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7481,7 +7482,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7510,7 +7511,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7525,7 +7526,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7554,7 +7555,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7714,7 +7715,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7758,7 +7759,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7773,7 +7774,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7832,7 +7833,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -7891,7 +7892,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8140,7 +8141,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8195,7 +8196,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8239,7 +8240,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8254,7 +8255,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8311,7 +8312,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8414,7 +8415,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8458,7 +8459,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8473,7 +8474,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8503,7 +8504,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8618,7 +8619,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8691,7 +8692,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8763,7 +8764,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -8793,7 +8794,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9051,7 +9052,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9066,7 +9067,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9096,7 +9097,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9138,7 +9139,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9168,7 +9169,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9199,7 +9200,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9229,7 +9230,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9273,7 +9274,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9303,7 +9304,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9347,7 +9348,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9391,7 +9392,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9420,7 +9421,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9435,7 +9436,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9494,7 +9495,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9582,7 +9583,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9770,7 +9771,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -9844,7 +9845,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10029,7 +10030,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10246,7 +10247,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10275,7 +10276,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10305,7 +10306,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10422,7 +10423,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10481,7 +10482,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10496,7 +10497,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10568,7 +10569,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10773,7 +10774,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10935,7 +10936,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10950,7 +10951,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10965,7 +10966,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -10980,7 +10981,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11024,7 +11025,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11039,7 +11040,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11054,7 +11055,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11083,7 +11084,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11199,7 +11200,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11391,7 +11392,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11435,7 +11436,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11492,7 +11493,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11521,7 +11522,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11536,7 +11537,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11609,7 +11610,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11739,7 +11740,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11812,7 +11813,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11884,7 +11885,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -11943,7 +11944,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12076,7 +12077,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12120,7 +12121,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12294,7 +12295,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12309,7 +12310,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12455,7 +12456,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12516,7 +12517,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12531,7 +12532,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12560,7 +12561,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12617,7 +12618,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12662,7 +12663,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12732,7 +12733,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12789,7 +12790,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12804,7 +12805,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12819,7 +12820,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12848,7 +12849,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12878,7 +12879,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12922,7 +12923,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12964,7 +12965,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -12994,7 +12995,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13038,7 +13039,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13111,7 +13112,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13329,7 +13330,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13445,7 +13446,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13487,7 +13488,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13502,7 +13503,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13676,7 +13677,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13691,7 +13692,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13793,7 +13794,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -13997,7 +13998,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14100,7 +14101,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14144,7 +14145,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14247,7 +14248,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14289,7 +14290,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14438,7 +14439,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14512,7 +14513,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14541,7 +14542,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14556,7 +14557,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14585,7 +14586,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14614,7 +14615,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14629,7 +14630,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14644,7 +14645,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14673,7 +14674,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14717,7 +14718,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14747,7 +14748,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -14993,7 +14994,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15037,7 +15038,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15052,7 +15053,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15181,7 +15182,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15211,7 +15212,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15226,7 +15227,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15298,7 +15299,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15313,7 +15314,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15371,7 +15372,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15386,7 +15387,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15578,7 +15579,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15695,7 +15696,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15710,7 +15711,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15901,7 +15902,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -15930,7 +15931,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16017,7 +16018,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16046,7 +16047,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16061,7 +16062,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16076,7 +16077,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16120,7 +16121,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16135,7 +16136,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16179,7 +16180,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16194,7 +16195,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16223,7 +16224,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16252,7 +16253,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16296,7 +16297,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16325,7 +16326,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16340,7 +16341,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16355,7 +16356,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16470,7 +16471,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16500,7 +16501,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16529,7 +16530,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16588,7 +16589,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16849,7 +16850,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16878,7 +16879,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -16893,7 +16894,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17036,7 +17037,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17109,7 +17110,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17168,7 +17169,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17198,7 +17199,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17240,7 +17241,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17358,7 +17359,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17415,7 +17416,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17430,7 +17431,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17489,7 +17490,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17563,7 +17564,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17635,7 +17636,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17808,7 +17809,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17838,7 +17839,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -17882,7 +17883,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18000,7 +18001,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18073,7 +18074,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18088,7 +18089,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18103,7 +18104,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18233,7 +18234,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18380,7 +18381,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18483,7 +18484,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18629,7 +18630,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18674,7 +18675,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18775,7 +18776,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18790,7 +18791,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18805,7 +18806,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18863,7 +18864,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18893,7 +18894,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -18952,7 +18953,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19009,7 +19010,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19141,7 +19142,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19170,7 +19171,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19374,7 +19375,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19490,7 +19491,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19696,7 +19697,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19725,7 +19726,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19786,7 +19787,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19860,7 +19861,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19889,7 +19890,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19918,7 +19919,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -19933,7 +19934,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20036,7 +20037,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20095,7 +20096,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20125,7 +20126,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20140,7 +20141,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20169,7 +20170,7 @@
       },
       "surfacePlants": {
         "Plant0": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20184,7 +20185,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20199,7 +20200,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20271,7 +20272,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20315,7 +20316,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20330,7 +20331,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20447,7 +20448,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20462,7 +20463,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20638,7 +20639,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20653,7 +20654,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20668,7 +20669,7 @@
           "water": 3.0
         },
         "Plant3": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20740,7 +20741,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20784,7 +20785,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20886,7 +20887,7 @@
           "water": 3.0
         },
         "Plant1": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,
@@ -20901,7 +20902,7 @@
           "water": 3.0
         },
         "Plant2": {
-          "config": "plantConfig0",
+          "config": "PlantConfig0",
           "rootMass": 3.0,
           "height": 2.0,
           "energyLevel": 10.0,

@@ -62,22 +62,15 @@ public class MapGeneratorJSON : NetworkBehaviour
         _soilConfigs = new Dictionary<string, SoilConfig>();
         // _name2Plant = new Dictionary<string, GameObject>();
         _configJObject = JObject.Parse(configJSON.text);
-
         JObject towerJObject = JObject.Parse(towerJSON.text);
-        int width = (int)towerJObject["Tower"]["width"];
-        int depth = (int)towerJObject["Tower"]["depth"];
-        int height = (int)towerJObject["Tower"]["height"];
+        _width = (int)towerJObject["Tower"]["width"];
+        _depth = (int)towerJObject["Tower"]["depth"];
+        _height = (int)towerJObject["Tower"]["height"];
 
-        _width = width;
-        _depth = depth;
-        _height = height;
-
-        Debug.Log("height: " + height + " width: " + width + " depth: " + depth);
-        floorIDs = new NetworkId[height];
-        gridCellIDs = new NetworkId[height, width, depth];
-        plantIDs = new NetworkId[height, width, depth, 5];
-
-
+        Debug.Log("height: " + _height + " width: " + _width + " depth: " + _depth);
+        floorIDs = new NetworkId[_height];
+        gridCellIDs = new NetworkId[_height, _width, _depth];
+        plantIDs = new NetworkId[_height, _width, _depth, 5];
     }
 
     private void Start()
@@ -251,14 +244,18 @@ public class MapGeneratorJSON : NetworkBehaviour
     [System.Serializable]
     public class PlantConfigDTO
     {
-        public float[] capacities;
-        public float[] uptakeRate;
+        public float capacities;
+        public float uptakeRate;
         public float[] metabolismNeeds;
+        public float metabolismWaterNeeds;
         public float[] metabolismFactor;
         public float[] growthConsumptionRateLimit;
         public float[] growthFactor;
         public float rootHeightTransition;
         public float growthToleranceThreshold;
+        public float leachingEnergyThreshold;
+        public float[] leachingFactor;
+        public bool onWaterCallbackBypass;
         public List<string> spriteBase64; // Serialized sprite data in base64 format
     }
 
@@ -266,8 +263,7 @@ public class MapGeneratorJSON : NetworkBehaviour
     public class SoilConfigDTO
     {
         public float drainTime;
-        public float[] nutrientCapacities;
-        public float waterCapacity;
+        public float capacities;
     }
 
     public void SendConfigData(PlayerRef player)
@@ -293,14 +289,18 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp => kvp.Key,
             kvp => new PlantConfigDTO
             {
-                capacities = ConvertToFloatArray(kvp.Value.capacities),
-                uptakeRate = ConvertToFloatArray(kvp.Value.uptakeRate),
+                capacities = kvp.Value.capacities,
+                uptakeRate = kvp.Value.uptakeRate,
                 metabolismNeeds = ConvertToFloatArray(kvp.Value.metabolismNeeds),
+                metabolismWaterNeeds = kvp.Value.metabolismWaterNeeds,
                 metabolismFactor = ConvertToFloatArray(kvp.Value.metabolismFactor),
                 growthConsumptionRateLimit = ConvertToFloatArray(kvp.Value.growthConsumptionRateLimit),
                 growthFactor = ConvertToFloatArray(kvp.Value.growthFactor),
                 rootHeightTransition = kvp.Value.rootHeightTransition,
                 growthToleranceThreshold = kvp.Value.growthToleranceThreshold,
+                leachingEnergyThreshold = kvp.Value.leachingEnergyThreshold,
+                leachingFactor = ConvertToFloatArray(kvp.Value.leachingFactor),
+                onWaterCallbackBypass = kvp.Value.onWaterCallbackBypass,
                 spriteBase64 = kvp.Value.plantSprites.Select(SpriteToBase64).ToList()
             }
         );
@@ -315,8 +315,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp => new SoilConfigDTO
             {
                 drainTime = kvp.Value.drainTime,
-                nutrientCapacities = ConvertToFloatArray(kvp.Value.capacities.nutrients),
-                waterCapacity = kvp.Value.capacities.water
+                capacities = kvp.Value.capacities
             }
         );
 
@@ -333,14 +332,18 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp =>
             {
                 var config = ScriptableObject.CreateInstance<PlantConfig>();
-                config.capacities = ConvertToVector4(kvp.Value.capacities);
-                config.uptakeRate = ConvertToVector4(kvp.Value.uptakeRate);
+                config.capacities = kvp.Value.capacities;
+                config.uptakeRate = kvp.Value.uptakeRate;
                 config.metabolismNeeds = ConvertToVector4(kvp.Value.metabolismNeeds);
+                config.metabolismWaterNeeds = kvp.Value.metabolismWaterNeeds;
                 config.metabolismFactor = ConvertToVector4(kvp.Value.metabolismFactor);
                 config.growthConsumptionRateLimit = ConvertToVector4(kvp.Value.growthConsumptionRateLimit);
                 config.growthFactor = ConvertToVector4(kvp.Value.growthFactor);
                 config.rootHeightTransition = kvp.Value.rootHeightTransition;
                 config.growthToleranceThreshold = kvp.Value.growthToleranceThreshold;
+                config.leachingEnergyThreshold = kvp.Value.leachingEnergyThreshold;
+                config.leachingFactor = ConvertToVector4(kvp.Value.leachingFactor);
+                config.onWaterCallbackBypass = kvp.Value.onWaterCallbackBypass;
                 config.plantSprites = kvp.Value.spriteBase64.Select(Base64ToSprite).ToList();
 
 
@@ -389,7 +392,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             {
                 var config = ScriptableObject.CreateInstance<SoilConfig>();
                 config.drainTime = kvp.Value.drainTime;
-                config.capacities = new NutrientSolution(kvp.Value.waterCapacity, ConvertToVector4(kvp.Value.nutrientCapacities));
+                config.capacities = kvp.Value.capacities;
                 return config;
             }
         );
@@ -534,17 +537,16 @@ public class MapGeneratorJSON : NetworkBehaviour
         nGrid.NutrientLevels = nutrientSolution;
         
         // add all plants
-        nGrid.rootedPlants = new List<PlantBehavior>();
-        nGrid.surfacePlants = new List<PlantBehavior>();
+        nGrid.plants = new List<PlantBehavior>();
         int plantIdx = 0;
         Transform plantsSlot = gridObj.transform.GetChild(1);
-        JToken surfacePlants = gridJObject["surfacePlants"];
-        if (surfacePlants is JObject surfacePlantsObj)
+        JToken plants = gridJObject["Plants"];
+        if (plants is JObject plantsObj)
         {
-            foreach (var property in surfacePlantsObj.Properties())
+            foreach (var property in plantsObj.Properties())
             {
                 JToken plantJToken = property.Value;
-                CreatePlant(plantJToken, nGrid, plantsSlot.GetChild(plantIdx), true, plantIdx);
+                CreatePlant(plantJToken, nGrid, plantsSlot.GetChild(plantIdx), plantIdx);
                 plantIdx++;
             }
         }
@@ -552,7 +554,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         parentFloor.Cells[x, z] = nGrid;
     }
 
-    private void CreatePlant(JToken plantJToken, GridCellBehavior parentGrid, Transform plantSlot, bool isSurfacePlant, int plantIdx)
+    private void CreatePlant(JToken plantJToken, GridCellBehavior parentGrid, Transform plantSlot, int plantIdx)
     {
         string plantConfigName = (string)plantJToken["config"];
         if (!_plantConfigs.ContainsKey(plantConfigName)) {
@@ -599,32 +601,32 @@ public class MapGeneratorJSON : NetworkBehaviour
         nPlant.GetComponent<SpriteRenderer>().sprite = nPlant.config.plantSprites[0];
         nPlant.parentCell = parentGrid;
 
-        if (isSurfacePlant) parentGrid.surfacePlants.Add(nPlant);
-        else parentGrid.rootedPlants.Add(nPlant);
+        parentGrid.plants.Add(nPlant);
     }
 
     private void CreatePlantConfig(string configName)
     {
         JToken planConfigJToken = _configJObject[configName];
-        Vector4 capacities = Vector4FromJTokenList(planConfigJToken["capacities"].ToList());
-        Vector4 uptakeRate = Vector4FromJTokenList(planConfigJToken["uptakeRate"].ToList());
-        Vector4 metabolismNeeds = Vector4FromJTokenList(planConfigJToken["metabolismNeeds"].ToList());
-        Vector4 metabolismFactor = Vector4FromJTokenList(planConfigJToken["metabolismFactor"].ToList());
-        Vector4 growthConsumptionRateLimit = Vector4FromJTokenList(planConfigJToken["growthConsumptionRateLimit"].ToList());
-        Vector4 growthFactor = Vector4FromJTokenList(planConfigJToken["growthFactor"].ToList());
-        float rootHeightTransition = (float)planConfigJToken["rootHeightTransition"];
-        float growthToleranceThreshold = (float)planConfigJToken["growthToleranceThreshold"];
-
+        if (planConfigJToken == null)
+        {
+            Debug.LogError($"MapGenerator tries to retrieve config:{configName} but it does not exist");
+            return;
+        }
+        
         PlantConfig plantConfig = ScriptableObject.CreateInstance<PlantConfig>();
-        plantConfig.capacities = capacities;
-        plantConfig.uptakeRate = uptakeRate;
-        plantConfig.metabolismNeeds = metabolismNeeds;
-        plantConfig.metabolismFactor = metabolismFactor;
-        plantConfig.growthConsumptionRateLimit = growthConsumptionRateLimit;
-        plantConfig.growthFactor = growthFactor;
-        plantConfig.rootHeightTransition = rootHeightTransition;
-        plantConfig.growthToleranceThreshold = growthToleranceThreshold;
 
+        plantConfig.capacities = (float)planConfigJToken["capacities"];
+        plantConfig.uptakeRate = (float)planConfigJToken["uptakeRate"];
+        plantConfig.metabolismNeeds = Vector4FromJTokenList(planConfigJToken["metabolismNeeds"].ToList());
+        plantConfig.metabolismWaterNeeds = (float)planConfigJToken["metabolismWaterNeeds"];
+        plantConfig.metabolismFactor = Vector4FromJTokenList(planConfigJToken["metabolismFactor"].ToList());
+        plantConfig.growthConsumptionRateLimit = Vector4FromJTokenList(planConfigJToken["growthConsumptionRateLimit"].ToList());
+        plantConfig.growthFactor = Vector4FromJTokenList(planConfigJToken["growthFactor"].ToList());
+        plantConfig.rootHeightTransition = (float)planConfigJToken["rootHeightTransition"];
+        plantConfig.growthToleranceThreshold = (float)planConfigJToken["growthToleranceThreshold"];
+        plantConfig.leachingEnergyThreshold = (float)planConfigJToken["leachingEnergyThreshold"];
+        plantConfig.leachingFactor = Vector4FromJTokenList(planConfigJToken["leachingFactor"].ToList());
+        plantConfig.onWaterCallbackBypass = Convert.ToBoolean((int)planConfigJToken["onWaterCallbackBypass"]);
         plantConfig.plantSprites = PlantToSpriteCapturer.Instance.CaptureAllStagesAtOnce();
         _plantConfigs[configName] = plantConfig;
     }
@@ -632,14 +634,11 @@ public class MapGeneratorJSON : NetworkBehaviour
     private void CreateSoilConfig(string configName)
     {
         JToken soilConfigJToken = _configJObject[configName];
-        List<JToken> nutrientsList = soilConfigJToken["capacities"]["nutrients"].ToList();
-        Vector4 nutrients = Vector4FromJTokenList(nutrientsList);
-        float water = (float)soilConfigJToken["capacities"]["water"];
-        NutrientSolution nutrientSolution = new NutrientSolution(water, nutrients);
+        float water = (float)soilConfigJToken["capacities"];
 
         SoilConfig nSoilConfig = ScriptableObject.CreateInstance<SoilConfig>();
         nSoilConfig.drainTime = (float)soilConfigJToken["drainTime"];
-        nSoilConfig.capacities = nutrientSolution;
+        nSoilConfig.capacities = water;
 
         _soilConfigs[configName] = nSoilConfig;
     }

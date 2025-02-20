@@ -94,6 +94,14 @@ public struct NutrientSolution : INetworkStruct
         public static bool operator <(NutrientSolution a, NutrientSolution b) {
             return a.water < b.water;
         }
+        
+        public static bool operator >(float a, NutrientSolution b) {
+            return a > b.water;
+        }
+        
+        public static bool operator <(float a, NutrientSolution b) {
+            return a < b.water;
+        }
 
         public static NutrientSolution Clamp0(NutrientSolution a) {
             NutrientSolution result = new NutrientSolution();

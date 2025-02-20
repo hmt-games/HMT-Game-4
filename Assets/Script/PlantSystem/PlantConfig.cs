@@ -9,13 +9,13 @@ public class PlantConfig : ScriptableObject {
     /// How much of each compound can the plan store
     /// This should be in the range 0 to positiveInfinity
     /// </summary>
-    public Vector4 capacities;
+    public float capacities;
     /// <summary>
     /// The rate at which the plant can uptake each compound from the soil
     /// This is a percentage in the range 0 to 1
     /// This represents how efficiently the plant can absorb each compound type
     /// </summary>
-    public Vector4 uptakeRate;
+    public float uptakeRate;
     /// <summary>
     ///// The rate at which the plant can leech each compound back into the soil
     ///// This is a percentage in the range 0 to 1
@@ -26,6 +26,7 @@ public class PlantConfig : ScriptableObject {
     /// The amount of each compound per tick needed to maintain the plant's health
     /// </summary>
     public Vector4 metabolismNeeds;
+    public float metabolismWaterNeeds;
 
 
     /// <summary>
@@ -54,6 +55,17 @@ public class PlantConfig : ScriptableObject {
     /// The minimum amount of health necessary in a tick to grow
     /// </summary>
     public float growthToleranceThreshold;
+
+    /// <summary>
+    /// The threshold energy upon reaching will leach threshold * leachingFactor nutrients
+    /// </summary>
+    public float leachingEnergyThreshold;
+    public Vector4 leachingFactor;
+
+    /// <summary>
+    /// Special plants that do not receive water should set this to true
+    /// </summary>
+    public bool onWaterCallbackBypass;
 
     public List<Sprite> plantSprites;
 

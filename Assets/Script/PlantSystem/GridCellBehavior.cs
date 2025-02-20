@@ -24,17 +24,8 @@ public class GridCellBehavior : NetworkBehaviour
     [Networked]
     public int gridZ { get; set; }
 
-
-    /// <summary>
-    /// The plants that have roots in the tile's soil. Realistically they probably won't be fully public
-    /// </summary>
-    public List<PlantBehavior> rootedPlants;
     
-    /// <summary>
-    /// Plants that are on the tile above the surface.
-    /// The basic distinction is that surface plants don't get the water events.
-    /// </summary>
-    public List<PlantBehavior> surfacePlants;
+    public List<PlantBehavior> plants;
 
     /// <summary>
     /// Soil configurations will contain stull like water capacity and maybe implications for nutrient levels.
@@ -57,13 +48,12 @@ public class GridCellBehavior : NetworkBehaviour
     public ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
 
     private void Awake() {
-        rootedPlants = new List<PlantBehavior>();
         //NutrientLevels = NutrientSolution.Empty;
     }
 
     public float RemainingWaterCapacity {
         get {
-            return soilConfig.capacities.water - NutrientLevels.water;
+            return soilConfig.capacities - NutrientLevels.water;
         }
     }
 
@@ -75,25 +65,15 @@ public class GridCellBehavior : NetworkBehaviour
         ///Reconile Excess Water
     
         float rootTotal = 0;
-        foreach(PlantBehavior plant in rootedPlants) {
+        foreach(PlantBehavior plant in plants) {
             rootTotal += plant.RootMass;
         }
         ///Doll out nutrients / water volunme based on the relative root mass of each plant.
         NutrientSolution aggregate = NutrientSolution.Empty;
-        foreach(PlantBehavior plant in rootedPlants) {
+        foreach(PlantBehavior plant in plants) {
            aggregate += plant.OnTick(NutrientLevels * (plant.RootMass / rootTotal));
         }
-        
-        rootTotal = 0;
-        
-        foreach(PlantBehavior plant in surfacePlants) {
-            rootTotal += plant.RootMass;
-        }
-        
-        foreach(PlantBehavior plant in surfacePlants) {
-            aggregate += plant.OnTick(NutrientLevels * (plant.RootMass / rootTotal));
-        }
-        
+
         if (aggregate.water > 0) {
             //If there is room in the soil for the water, add it all but you need to check that there is capacity for the nutrients.
             if (soilConfig.capacities > aggregate + NutrientLevels) {
@@ -132,7 +112,7 @@ public class GridCellBehavior : NetworkBehaviour
     /// </summary>
     /// <param name="waterVolume"></param>
     public NutrientSolution OnWater(NutrientSolution waterVolume) {
-        foreach(PlantBehavior plant in surfacePlants.OrderByDescending(p => p.Height)) {
+        foreach(PlantBehavior plant in plants.OrderByDescending(p => p.Height)) {
             waterVolume = plant.OnWater(waterVolume);
         }
         if (waterVolume.water > 0) {
@@ -149,11 +129,8 @@ public class GridCellBehavior : NetworkBehaviour
             NutrientLevels -= excess;
             return excess;
         }
-        else {
-            return NutrientSolution.Empty;
-        }
 
-            
+        return NutrientSolution.Empty;
     }
 
     // Start is called before the first frame update
