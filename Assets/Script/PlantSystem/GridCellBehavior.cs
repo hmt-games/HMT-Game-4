@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Fusion;
+using GameConstant;
 
 public class GridCellBehavior : NetworkBehaviour
 {
@@ -35,14 +36,7 @@ public class GridCellBehavior : NetworkBehaviour
     /// </summary>
     public SoilConfig soilConfig;
 
-    /// <summary>
-    /// How much water is in the cell's soil.
-    /// </summary>
-    //public float waterLevel;
-
-    //public float[] compoundLevels;
-
-    //public NutrientSolution NutrientLevels;
+    public bool[] plantSlotOccupation = new bool[GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE];
 
     [Networked]
     public ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));

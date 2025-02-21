@@ -9,6 +9,7 @@ using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System.Text;
+using GameConstant;
 
 public class MapGeneratorJSON : NetworkBehaviour
 {
@@ -70,7 +71,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         Debug.Log("height: " + _height + " width: " + _width + " depth: " + _depth);
         floorIDs = new NetworkId[_height];
         gridCellIDs = new NetworkId[_height, _width, _depth];
-        plantIDs = new NetworkId[_height, _width, _depth, 5];
+        plantIDs = new NetworkId[_height, _width, _depth, GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE];
     }
 
     private void Start()
@@ -537,8 +538,8 @@ public class MapGeneratorJSON : NetworkBehaviour
         nGrid.NutrientLevels = nutrientSolution;
         
         // add all plants
-        nGrid.plants = new List<PlantBehavior>();
         int plantIdx = 0;
+        nGrid.plants = new List<PlantBehavior>();
         Transform plantsSlot = gridObj.transform.GetChild(1);
         JToken plants = gridJObject["Plants"];
         if (plants is JObject plantsObj)
