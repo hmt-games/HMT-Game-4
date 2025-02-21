@@ -4,6 +4,7 @@ using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 using Fusion;
+using GameConstant;
 
 
 public class PlantBehavior : NetworkBehaviour
@@ -86,20 +87,19 @@ public class PlantBehavior : NetworkBehaviour
         private float healthTotal = 0;
         private Queue<float> healthHistory;
 
-        public void SetInitialProperties(float rootMass, float height, float energyLevel, float health, float age,
-            Vector4 nutrients, float water)
+        public void SetInitialProperties(PlantInitInfo plantInitInfo)
         {
-            _rootMass = rootMass;
-            _height = height;
-            EnergyLevel = energyLevel;
+            _rootMass = plantInitInfo.RootMass;
+            _height = plantInitInfo.Height;
+            EnergyLevel = plantInitInfo.EnergyLevel;
             healthHistory = new Queue<float>();
             for (int i = 0; i < maxHealthHistory; i++)
             {
-                healthHistory.Enqueue(health);
+                healthHistory.Enqueue(plantInitInfo.Health);
             }
 
-            Age = age;
-            NutrientLevels = new NutrientSolution(water, nutrients);
+            Age = plantInitInfo.Age;
+            NutrientLevels = new NutrientSolution(plantInitInfo.Water, plantInitInfo.Nutrient);
         }
         
         public NutrientSolution OnTick(NutrientSolution allocation) {
@@ -115,6 +115,8 @@ public class PlantBehavior : NetworkBehaviour
             var metabolismConsumption = Vector4.Min(NutrientLevels.nutrients, config.metabolismNeeds);
             EnergyLevel += Vector4.Dot(config.metabolismFactor, metabolismConsumption);
             NutrientLevels.nutrients -= metabolismConsumption;
+            //TODO: insufficient water consumption should have some sort of consequence
+            NutrientLevels.water -= Mathf.Min(config.metabolismWaterNeeds, NutrientLevels.water);
             
             //TODO: add plant deteriorating and dying based on energy level
 
@@ -154,6 +156,14 @@ public class PlantBehavior : NetworkBehaviour
             //    CompoundLevels[compound] -= leech;?";[]=----p['
             //    allocation.nutrients[compound] += leech;
             //}
+            if (EnergyLevel >= config.leachingEnergyThreshold)
+            {
+                allocation.nutrients += EnergyLevel * config.leachingFactor;
+                EnergyLevel = 0;
+            }
+
+            Age++;
+            
             return allocation;
             }
 
