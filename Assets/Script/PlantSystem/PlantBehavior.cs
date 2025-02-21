@@ -111,7 +111,8 @@ public class PlantBehavior : NetworkBehaviour
             allocation -= uptake;
 
             /// METABOLISM
-            /// Uses the uptake nutrients to contribute to maintaining the plant and converting to energy      
+            /// Uses the uptake nutrients to contribute to maintaining the plant and converting to energy
+            /// TODO: metabolismNeeds * some factor * surfacemass, tune this
             var metabolismConsumption = Vector4.Min(NutrientLevels.nutrients, config.metabolismNeeds);
             EnergyLevel += Vector4.Dot(config.metabolismFactor, metabolismConsumption);
             NutrientLevels.nutrients -= metabolismConsumption;
@@ -122,10 +123,18 @@ public class PlantBehavior : NetworkBehaviour
 
             /// HEALTH
             /// The health calculation is a sliding window average of the metabolism rate
+            /// TODO: maybe just a array & pointer
             if (healthHistory.Count >= maxHealthHistory) {
                 healthHistory.Dequeue();
             }
             healthHistory.Enqueue(metabolismConsumption.Sum() / config.metabolismNeeds.Sum());
+            //update health value
+            healthTotal = 0;
+            foreach (float f in healthHistory)
+            {
+                healthTotal += f;
+            }
+            Health = healthTotal / healthHistory.Count;
 
             if (Health > config.growthToleranceThreshold) {
                 /// GROWTH / Consumption
@@ -138,14 +147,6 @@ public class PlantBehavior : NetworkBehaviour
             }
 
             PlantNextStage();
-
-            //update health value
-            healthTotal = 0;
-            foreach (float f in healthHistory)
-            {
-                healthTotal += f;
-            }
-            Health = healthTotal / healthHistory.Count;
 
             /// LEECH
             /// Originally I was thinking of having plants leech somehting back into the soil but realized it was more complicated.
@@ -163,6 +164,7 @@ public class PlantBehavior : NetworkBehaviour
             }
 
             Age++;
+            //TODO: current tick - tick planted
             
             return allocation;
             }

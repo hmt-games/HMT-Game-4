@@ -14,6 +14,7 @@ public class GameActionGoldenFinger : MonoBehaviour
     [SerializeField] private Transform actionWheel;
     [SerializeField] private Transform GF_Config;
     [SerializeField] private Transform GF_Info;
+    [SerializeField] private LayerMask gridLayerMask;
     private TMP_Text _infoText;
 
     private GridCellBehavior _selectedGrid;
@@ -123,23 +124,8 @@ public class GameActionGoldenFinger : MonoBehaviour
     /// </summary>
     void GetGridObjectAtMouse()
     {
-        //int gridLayerMask = 1 << LayerMask.NameToLayer("Grid");
-        LayerMask gridLayerMask = LayerMask.NameToLayer("Grid");
-        Debug.Log((int)gridLayerMask);
-
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = Mathf.Abs(Camera.main.transform.position.z);
-        Vector3 origin = Camera.main.ScreenToWorldPoint(mousePos);
-        Debug.Log(origin);
-        origin.z -= 0.5f;
-        Vector3 direction = new Vector3(0.0f, 0.0f, 1.0f);
-        Debug.Log(mousePos);
-
-        Ray ray = new Ray(origin, direction);
-        Debug.DrawRay(origin, direction, Color.red, 3.0f);
-
-        RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, gridLayerMask);
-        //RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
+        //RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, gridLayerMask);
+        RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, gridLayerMask);
 
         if (hit.collider != null)
         {

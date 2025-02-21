@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: 7134725830656282439}
   - component: {fileID: 1683917860028085507}
   - component: {fileID: 202361429011498538}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 2DGridTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -2277,6 +2277,9 @@ MonoBehaviour:
   actionWheel: {fileID: 1146426004}
   GF_Config: {fileID: 391594692}
   GF_Info: {fileID: 1656576220}
+  gridLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &384480108
 GameObject:
   m_ObjectHideFlags: 0
@@ -7821,6 +7824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantPrefab: {fileID: 8738970323915121554, guid: 3fcab9bb57d9349d2b78c1cdce737480,
     type: 3}
+  inventory: []
 --- !u!4 &1464501393
 Transform:
   m_ObjectHideFlags: 0

@@ -69,6 +69,7 @@ public class PlantConfig : ScriptableObject {
 
     public List<Sprite> plantSprites;
 
+    //TODO: maybe cap at < 100%
     public float PercentToRoots(float age) {
         if (rootHeightTransition < 1) {
             return 1;
