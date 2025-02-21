@@ -1,0 +1,661 @@
+﻿{
+  "Tower": {
+    "width": 5,
+    "depth": 5,
+    "height": 2
+  },
+  "Floor0": [
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    }
+  ],
+  "Floor1": [
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    },
+    {
+      "soilConfig": "SoilConfig0",
+      "NutrientLevels": {
+        "water": 1000,
+        "nutrients": [
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "Plants": {}
+    }
+  ]
+}

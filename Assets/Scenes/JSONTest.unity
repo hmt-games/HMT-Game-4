@@ -249,8 +249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa39593c53264294a9f6eeba97af5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configJSON: {fileID: 4900000, guid: 376ab4992cf24bbbb2b1746a0f617b7a, type: 3}
-  towerJSON: {fileID: 4900000, guid: 972c3314ca284d7692111aa11713491f, type: 3}
+  configJSON: {fileID: 4900000, guid: 2874a7f83d514353b7f25dcfa7fb36ef, type: 3}
+  towerJSON: {fileID: 4900000, guid: 216d1c12db89477aaa41eefc090e77bf, type: 3}
   tilePrefab: {fileID: 2505949527415372711, guid: b0d9a3063d2cf4f0c9d81c821a9dfac1,
     type: 3}
   grid2DTheme: {fileID: 11400000, guid: 52a33883be6c542ad90e696c33757c1e, type: 2}
@@ -259,6 +259,8 @@ MonoBehaviour:
   towerPrefab: {fileID: 3185236326791254520, guid: 588012f4e331c434ebbd64fad6f04471,
     type: 3}
   floorPrefab: {fileID: 4019688216618479052, guid: 51a3ee820b1dfc140aee919ff6742688,
+    type: 3}
+  floorCamPrefab: {fileID: 7140242510176389619, guid: 882f377052e7ba7418c676951b5f7f71,
     type: 3}
   _width: 0
   _depth: 0
@@ -475,6 +477,7 @@ MonoBehaviour:
   _gridZ: 0
   plants: []
   soilConfig: {fileID: 0}
+  plantSlotOccupation: 
 --- !u!212 &71072981
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -617,6 +620,7 @@ MonoBehaviour:
   _gridZ: 0
   plants: []
   soilConfig: {fileID: 0}
+  plantSlotOccupation: 
 --- !u!212 &71365964
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -973,6 +977,7 @@ MonoBehaviour:
   _gridZ: 0
   plants: []
   soilConfig: {fileID: 0}
+  plantSlotOccupation: 
 --- !u!212 &113290642
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2135,7 +2140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &309505108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5467,6 +5472,7 @@ MonoBehaviour:
   _gridZ: 0
   plants: []
   soilConfig: {fileID: 0}
+  plantSlotOccupation: 
 --- !u!212 &1083869937
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7324,6 +7330,7 @@ MonoBehaviour:
   _gridZ: 0
   plants: []
   soilConfig: {fileID: 0}
+  plantSlotOccupation: 
 --- !u!212 &1450755965
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8931,6 +8938,7 @@ MonoBehaviour:
   _gridZ: 0
   plants: []
   soilConfig: {fileID: 0}
+  plantSlotOccupation: 
 --- !u!212 &1696911679
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9070,6 +9078,7 @@ MonoBehaviour:
   plants:
   - {fileID: 1923280449}
   soilConfig: {fileID: 0}
+  plantSlotOccupation: 
 --- !u!114 &1743290967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10368,6 +10377,8 @@ GameObject:
   - component: {fileID: 1952401379}
   - component: {fileID: 1952401378}
   - component: {fileID: 1952401381}
+  - component: {fileID: 1952401382}
+  - component: {fileID: 1952401383}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -10443,7 +10454,7 @@ Transform:
   m_GameObject: {fileID: 1952401377}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1, z: -10}
+  m_LocalPosition: {x: -1.4814233, y: 4.3889165, z: -14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10493,6 +10504,53 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1952401382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952401377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowDebugText: 0
+  m_ShowCameraFrustum: 1
+  m_IgnoreTimeScale: 0
+  m_WorldUpOverride: {fileID: 0}
+  m_UpdateMethod: 2
+  m_BlendUpdateMethod: 1
+  m_DefaultBlend:
+    m_Style: 1
+    m_Time: 2
+    m_CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_CustomBlends: {fileID: 0}
+  m_CameraCutEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CameraActivatedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1952401383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952401377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7045ebf1a8932a0479ea9512f5e8c301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorCams: []
 --- !u!1 &1957410743
 GameObject:
   m_ObjectHideFlags: 0
@@ -11190,6 +11248,7 @@ MonoBehaviour:
   plants:
   - {fileID: 1286409527}
   soilConfig: {fileID: 0}
+  plantSlotOccupation: 
 --- !u!114 &2063944617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11442,6 +11501,74 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2053811995}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1788614097354635507
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7140242510176389619, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_Name
+      value: FloorCamPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.4814233
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.3889165
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -14
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544625269886936808, guid: 882f377052e7ba7418c676951b5f7f71,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 882f377052e7ba7418c676951b5f7f71, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -11463,3 +11590,4 @@ SceneRoots:
   - {fileID: 1579258187}
   - {fileID: 309505111}
   - {fileID: 1146426004}
+  - {fileID: 1788614097354635507}

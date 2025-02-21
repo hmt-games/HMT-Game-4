@@ -9,6 +9,7 @@ using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System.Text;
+using Cinemachine;
 using GameConstant;
 
 public class MapGeneratorJSON : NetworkBehaviour
@@ -20,6 +21,7 @@ public class MapGeneratorJSON : NetworkBehaviour
     [SerializeField] private GameObject plantPrefab;
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private GameObject floorPrefab;
+    [SerializeField] private GameObject floorCamPrefab;
 
 
     private Dictionary<string, PlantConfig> _plantConfigs;
@@ -52,9 +54,7 @@ public class MapGeneratorJSON : NetworkBehaviour
     public bool plantIDsReceived;
     public bool soilConfigReceived;
     public bool plantConfigReceived;
-
-
-
+    
     private void Awake()
     {
         if (Instance) Destroy(this.gameObject);
@@ -400,6 +400,14 @@ public class MapGeneratorJSON : NetworkBehaviour
     }
 
 
+    private void CreateConfigs()
+    {
+        foreach (var config in _configJObject.Properties())
+        {
+            if (config.Name.ToLower().Contains("plant")) CreatePlantConfig(config.Name);
+            else CreateSoilConfig(config.Name);
+        }
+    } 
 
     public void CreateTower()
     {
@@ -415,7 +423,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         {
             towerObj = BasicSpawner._runner.Spawn(towerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
             towerID = towerObj.Id;
-
+            CreateConfigs();
         }
         //if this is not server instance, extract information from server
         else
@@ -486,12 +494,21 @@ public class MapGeneratorJSON : NetworkBehaviour
         }
 
         parentTower.floors[floorIdx] = nFloor;
+        
+        // create virtual camera for this floor
+        GameObject nCam = Instantiate(floorCamPrefab,
+            new Vector3((_width - 1.0f) / 2, (_depth + 1) * floorIdx + (_depth - 1.0f) / 2, -14.0f),
+            quaternion.identity);
+        CinemachineVirtualCamera virtualCamera = nCam.GetComponent<CinemachineVirtualCamera>();
+        if (floorIdx == 0) virtualCamera.m_Priority = 100;
+        else virtualCamera.m_Priority = 0;
+        CameraManager.Instance.floorCams.Add(virtualCamera);
     }
 
     private void CreateGrid(JToken gridJObject, int gridIdx, Floor parentFloor)
     {
         int x = gridIdx % _width;
-        //is this the y in the old version?
+        //is this the y in the old version? yes - ziyu
         int z = gridIdx / _width;
         
         int floorOffsetY = parentFloor.floorNumber * (_depth + 1);
