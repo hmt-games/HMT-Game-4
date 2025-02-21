@@ -78,6 +78,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         // Now that all data is received, create the tower and initialize the map
         MapGeneratorJSON.Instance.CreateTower();
         DataVisualization.Instance.Init();
+        GameActionGoldenFinger.Instance.Init();
         //StartCoroutine(RepeatedlyUpdateHeatmap());
     }
 

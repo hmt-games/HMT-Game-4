@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameConstant
 {
@@ -36,6 +37,28 @@ namespace GameConstant
 
             int randomIndex = UnityEngine.Random.Range(0, falseIndices.Count);
             return falseIndices[randomIndex];
+        }
+    }
+
+    public struct PlantInitInfo
+    {
+        public float RootMass {get;}
+        public float Height {get;}
+        public float EnergyLevel {get;}
+        public float Health {get;}
+        public float Age {get;}
+        public float Water {get;}
+        public Vector4 Nutrient {get;}
+
+        public PlantInitInfo(float rootMass, float height, float energyLevel, float health, float age, float water, Vector4 nutrient)
+        {
+            RootMass = rootMass;
+            Height = height;
+            EnergyLevel = energyLevel;
+            Health = health;
+            Age = age;
+            Water = water;
+            Nutrient = nutrient;
         }
     }
 }

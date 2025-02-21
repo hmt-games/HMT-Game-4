@@ -11,6 +11,7 @@ using Fusion.Sockets;
 using System.Text;
 using Cinemachine;
 using GameConstant;
+using UnityEngine.Serialization;
 
 public class MapGeneratorJSON : NetworkBehaviour
 {
@@ -24,7 +25,8 @@ public class MapGeneratorJSON : NetworkBehaviour
     [SerializeField] private GameObject floorCamPrefab;
 
 
-    private Dictionary<string, PlantConfig> _plantConfigs;
+    [FormerlySerializedAs("_plantConfigs")] 
+    public Dictionary<string, PlantConfig> plantConfigs;
     private Dictionary<string, SoilConfig> _soilConfigs;
     // private Dictionary<string, GameObject> _name2Plant;
 
@@ -59,7 +61,7 @@ public class MapGeneratorJSON : NetworkBehaviour
     {
         if (Instance) Destroy(this.gameObject);
         else Instance = this;
-        _plantConfigs = new Dictionary<string, PlantConfig>();
+        plantConfigs = new Dictionary<string, PlantConfig>();
         _soilConfigs = new Dictionary<string, SoilConfig>();
         // _name2Plant = new Dictionary<string, GameObject>();
         _configJObject = JObject.Parse(configJSON.text);
@@ -286,7 +288,7 @@ public class MapGeneratorJSON : NetworkBehaviour
 
     public byte[] SerializePlantConfigs()
     {
-        var dtoDictionary = _plantConfigs.ToDictionary(
+        var dtoDictionary = plantConfigs.ToDictionary(
             kvp => kvp.Key,
             kvp => new PlantConfigDTO
             {
@@ -328,7 +330,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         var json = Encoding.UTF8.GetString(data);
         var dtoDictionary = JsonConvert.DeserializeObject<Dictionary<string, PlantConfigDTO>>(json);
 
-        _plantConfigs = dtoDictionary.ToDictionary(
+        plantConfigs = dtoDictionary.ToDictionary(
             kvp => kvp.Key,
             kvp =>
             {
@@ -566,6 +568,7 @@ public class MapGeneratorJSON : NetworkBehaviour
                 JToken plantJToken = property.Value;
                 CreatePlant(plantJToken, nGrid, plantsSlot.GetChild(plantIdx), plantIdx);
                 plantIdx++;
+                nGrid.plantCount++;
             }
         }
 
@@ -575,7 +578,7 @@ public class MapGeneratorJSON : NetworkBehaviour
     private void CreatePlant(JToken plantJToken, GridCellBehavior parentGrid, Transform plantSlot, int plantIdx)
     {
         string plantConfigName = (string)plantJToken["config"];
-        if (!_plantConfigs.ContainsKey(plantConfigName)) {
+        if (!plantConfigs.ContainsKey(plantConfigName)) {
             if (!BasicSpawner._runner.IsServer)
             {
                 Debug.LogError("Error: Client didn't get the required sprite");
@@ -605,15 +608,15 @@ public class MapGeneratorJSON : NetworkBehaviour
         }
         plantObj.transform.SetParent(plantSlot);
         PlantBehavior nPlant = plantObj.GetComponent<PlantBehavior>();
-        nPlant.config = _plantConfigs[plantConfigName];
-        nPlant.SetInitialProperties(
+        nPlant.config = plantConfigs[plantConfigName];
+        nPlant.SetInitialProperties(new PlantInitInfo(
             (float)plantJToken["rootMass"],
             (float)plantJToken["height"],
             (float)plantJToken["energyLevel"],
             (float)plantJToken["health"],
             (float)plantJToken["age"],
-            Vector4FromJTokenList(plantJToken["nutrient"].ToList()),
-            (float)plantJToken["water"]);
+            (float)plantJToken["water"],
+            Vector4FromJTokenList(plantJToken["nutrient"].ToList())));
         //DisplayReceivedSprite(nPlant.config.plantSprites[0]);
 
         nPlant.GetComponent<SpriteRenderer>().sprite = nPlant.config.plantSprites[0];
@@ -646,7 +649,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         plantConfig.leachingFactor = Vector4FromJTokenList(planConfigJToken["leachingFactor"].ToList());
         plantConfig.onWaterCallbackBypass = Convert.ToBoolean((int)planConfigJToken["onWaterCallbackBypass"]);
         plantConfig.plantSprites = PlantToSpriteCapturer.Instance.CaptureAllStagesAtOnce();
-        _plantConfigs[configName] = plantConfig;
+        plantConfigs[configName] = plantConfig;
     }
 
     private void CreateSoilConfig(string configName)

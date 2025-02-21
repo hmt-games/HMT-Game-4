@@ -77,5 +77,15 @@ public class PlantConfig : ScriptableObject {
             return 1 - Mathf.Clamp01((float)age / rootHeightTransition);
         }
     }
+    
+    public override string ToString()
+    {
+        return $"Capacity: {capacities}\n" +
+               $"UptakeRate: {uptakeRate}\n" +
+               $"MetabolismWaterNeeds: {metabolismWaterNeeds}" +
+               $"MetabolismNeed: {metabolismNeeds}\n" +
+               $"MetabolismFactor: {metabolismFactor}\n" +
+               $"growthConsumptionRateLimit: {growthConsumptionRateLimit}";
+    }
 
 }

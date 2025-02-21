@@ -36,6 +36,8 @@ public class GridCellBehavior : NetworkBehaviour
     /// </summary>
     public SoilConfig soilConfig;
 
+    public int plantCount = 0;
+    //TODO: use this
     public bool[] plantSlotOccupation = new bool[GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE];
 
     [Networked]
