@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Fusion;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -62,8 +63,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject puppetBot;
     public void SpawnPuppetBot()
     {
-        GameObject nBotObj = Instantiate(puppetBot, parentTower.floors[0].Cells[0, 0].transform.position, Quaternion.identity);
+        int x = Random.Range(0, parentTower.floors[0].Cells.GetLength(0));
+        int y = Random.Range(0, parentTower.floors[0].Cells.GetLength(1));
+        GameObject nBotObj = Instantiate(puppetBot, parentTower.floors[0].Cells[x, y].transform.position, Quaternion.identity);
         DefaultPuppetBot nBot = nBotObj.GetComponent<DefaultPuppetBot>();
-        nBot.InitBot(0, 0, 0);
+        nBot.InitBot(0, x, y);
     }
 }
