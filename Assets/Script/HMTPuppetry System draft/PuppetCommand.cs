@@ -86,6 +86,7 @@ namespace HMT.Puppetry {
         public AgentServiceConfig AgentConfig { get; private set; }
         public string TargetPuppet { get { return AgentConfig.PuppetId; } }
         public byte Priority { get { return AgentConfig.CommandPriority; } }
+        public JObject Params { get return json.TryGetDefault("params", null); }
         public JObject json { get; private set; }
         public bool Responded { get; private set; }
         private HMTPuppetService originService;
@@ -100,13 +101,29 @@ namespace HMT.Puppetry {
             Responded = false;
         }
 
-        public PuppetCommand(string puppet_id, string action, byte priority = 128) {
+        public PuppetCommand(string puppet_id, string action, JObject Params = null, byte priority = 128) {
             AgentConfig = new AgentServiceConfig(puppet_id, priority);
             Command = PuppetCommandType.EXECUTE_ACTION;
             this.Action = action;
             json = new JObject();
+            if (Params != null)
+            {
+                json["params"] = Params;
+            }
             originService = null;
             Responded = false;
+        }
+
+        public T GetParam<T>(string name, T defaultValue)
+        {
+            if(Params != null)
+            {
+                return Params.TryGetDefault(name, defaultValue);
+            }
+            else
+            {
+                throw Exception("no Params in Puppet Command");
+            }
         }
 
         /// <summary>
