@@ -75,4 +75,26 @@ public abstract class PuppetBehavior : MonoBehaviour, IPuppet {
     public abstract JObject GetState(PuppetCommand command);
 
     #endregion
+    
+    public enum BotType
+    {
+        Normal,
+        Harvest,
+        Pluck,
+        Till,
+        Spray,
+        Sample,
+        Plant
+    }
+    
+    protected struct BotInfo
+    {
+        public int FloorIdx;
+        public int X;
+        public int Y;
+        public GridCellBehavior[,] CellsOnFloor;
+        public int MaxX;
+        public int MaxY;
+        public BotType CurrentBotType;
+    }
 }

@@ -453,7 +453,8 @@ public class MapGeneratorJSON : NetworkBehaviour
         }
         
         Debug.LogWarning("Map generation for host should be done?");
-        GameManager.Instance.SpawnBot();
+        //GameManager.Instance.SpawnBot();
+        GameManager.Instance.SpawnPuppetBot();
     }
 
     private void CreateFloor(JToken floorJObject, int floorIdx, Tower parentTower)

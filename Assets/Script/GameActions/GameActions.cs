@@ -121,7 +121,7 @@ public class GameActions : MonoBehaviour
         
     }
 
-    IEnumerator Move()
+    IEnumerator Move(string direction)
     {
         
         yield return null;

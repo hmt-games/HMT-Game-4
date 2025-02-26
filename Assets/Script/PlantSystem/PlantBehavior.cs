@@ -80,6 +80,8 @@ public class PlantBehavior : NetworkBehaviour
 
             Age = plantInitInfo.Age;
             NutrientLevels = new NutrientSolution(plantInitInfo.Water, plantInitInfo.Nutrient);
+
+            PlantNextStage();
         }
         
         public NutrientSolution OnTick(NutrientSolution allocation) {
@@ -164,14 +166,17 @@ public class PlantBehavior : NetworkBehaviour
             private void PlantNextStage()
             {
                 if (plantCurrentStage == _plantMaxStage) return;
-                
+
                 while (Height >= _stageTransitionThreshold[plantCurrentStage + 1])
                 {
                     plantCurrentStage++;
                     if (plantCurrentStage == _plantMaxStage) break;
                 }
                 
-                GetComponent<SpriteRenderer>().sprite = config.plantSprites[plantCurrentStage];
+                BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
+                SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+                spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
+                boxCollider2D.size = spriteRenderer.sprite.bounds.size;
                 if (plantCurrentStage == _plantMaxStage)
                 {
                     hasFruit = true;

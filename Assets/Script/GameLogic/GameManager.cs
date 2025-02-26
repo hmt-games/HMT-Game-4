@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public Tower parentTower;
     public long currentTick = 0;
+    public float secondPerTick = 1.0f;
 
     private void Awake()
     {
@@ -58,4 +59,11 @@ public class GameManager : MonoBehaviour
         Instantiate(bot, parentTower.floors[0].Cells[0, 0].transform.position, Quaternion.identity);
     }
 
+    [SerializeField] private GameObject puppetBot;
+    public void SpawnPuppetBot()
+    {
+        GameObject nBotObj = Instantiate(puppetBot, parentTower.floors[0].Cells[0, 0].transform.position, Quaternion.identity);
+        DefaultPuppetBot nBot = nBotObj.GetComponent<DefaultPuppetBot>();
+        nBot.InitBot(0, 0, 0);
+    }
 }
