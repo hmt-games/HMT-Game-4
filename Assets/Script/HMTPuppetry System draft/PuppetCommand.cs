@@ -17,11 +17,13 @@ namespace HMT.Puppetry {
         GamePaused = 1002,
 
         CommandAcknowleged = 2000,
-        ReturnedState = 2001,
+        StateRetrieved = 2001,
         GameOver = 2999,
 
         IllegalAction = 4000,
         InsufficientPriority = 4001,
+        MissingParameters = 4002,
+        BadParameters = 4003,
 
         CommandParseError = 5000,
         APIKeyMismatch = 5001,
@@ -86,7 +88,7 @@ namespace HMT.Puppetry {
         public AgentServiceConfig AgentConfig { get; private set; }
         public string TargetPuppet { get { return AgentConfig.PuppetId; } }
         public byte Priority { get { return AgentConfig.CommandPriority; } }
-        public JObject Params { get return json.TryGetDefault("params", null); }
+        public JObject Params { get { return json.TryGetDefault("params", new JObject()); } }
         public JObject json { get; private set; }
         public bool Responded { get; private set; }
         private HMTPuppetService originService;
@@ -94,10 +96,10 @@ namespace HMT.Puppetry {
         public PuppetCommand(JObject json, HMTPuppetService originService) {
             AgentConfig = originService.ServiceConfig;
             this.originService = originService;
-            
+
             Command = ParseCommandType(json.TryGetDefault("Command", string.Empty));
             Action = json.TryGetDefault("Action", NO_ACTION).ToLower();
-            this.json = json;            
+            this.json = json;
             Responded = false;
         }
 
@@ -116,13 +118,13 @@ namespace HMT.Puppetry {
 
         public T GetParam<T>(string name, T defaultValue)
         {
-            if(Params != null)
+            if (Params != null)
             {
                 return Params.TryGetDefault(name, defaultValue);
             }
             else
             {
-                throw Exception("no Params in Puppet Command");
+                throw new System.Exception("no Params in Puppet Command");
             }
         }
 
@@ -157,7 +159,7 @@ namespace HMT.Puppetry {
         }
 
         private void FormatAndSendResponse(int code, string message, string content = "{}") {
-            if(originService == null || Responded) {
+            if (originService == null || Responded) {
                 return;
             }
 
@@ -165,6 +167,8 @@ namespace HMT.Puppetry {
             originService.Context.WebSocket.Send(mess);
             Responded = true;
         }
+
+        #region RESEND (1000s) Responses
 
         public void SendGameInitializingResponse() {
             FormatAndSendResponse((int)PuppetResponseCode.GameIntializing, "Game Initializing");
@@ -178,6 +182,10 @@ namespace HMT.Puppetry {
             FormatAndSendResponse((int)PuppetResponseCode.GamePaused, "Game Paused");
         }
 
+        #endregion
+
+        #region OK (2000s) Responses
+
         public void SendAcknowledgeResponse() {
             FormatAndSendResponse((int)PuppetResponseCode.CommandAcknowleged, "Command Acknowledged");
         }
@@ -187,25 +195,12 @@ namespace HMT.Puppetry {
         }
 
         public void SendStateResponse(JObject state) {
-            FormatAndSendResponse((int)PuppetResponseCode.ReturnedState, "State Retrieved", state.ToString());
+            FormatAndSendResponse((int)PuppetResponseCode.StateRetrieved, "State Retrieved", state.ToString());
         }
 
-        public void SendAPIKeyMismatchResponse() {
-            FormatAndSendResponse((int)PuppetResponseCode.APIKeyMismatch, "API Key Mismatch");
-        }
+        #endregion
 
-        public void SendCommandNotRecognizedResposne() {
-            JObject content = new JObject();
-            content["valid_commands"] = JArray.FromObject(VALID_COMMANDS);
-            FormatAndSendResponse((int)PuppetResponseCode.CommandNotRecognized, "Command Not Recognized", content.ToString());
-        }
-
-        public void SendActionNotSupportedResponse(IEnumerable<string> supportedActions) {
-            JObject content = new JObject {
-                ["action_set"] = JArray.FromObject(supportedActions)
-            };
-            FormatAndSendResponse((int)PuppetResponseCode.ActionNotSupportedByPuppet, "Action Not Supported By Puppet", content.ToString());
-        }
+        #region ILLEGAL (4000s) Responses
 
         public void SendIllegalActionResponse() {
             FormatAndSendResponse((int)PuppetResponseCode.IllegalAction, "Illegal Action");
@@ -214,5 +209,45 @@ namespace HMT.Puppetry {
         public void SendInsufficientPriorityResponse() {
             FormatAndSendResponse((int)PuppetResponseCode.InsufficientPriority, "Insufficient Priority");
         }
+
+        public void SendMissingParametersResponse(JObject requiredParams) {
+            JObject content = new JObject {
+                {"requiredParams", requiredParams }
+            };
+            FormatAndSendResponse((int)PuppetResponseCode.MissingParameters, "Missing Parameters", content.ToString());
+        }
+
+        public void SendBadParametersResponse(JObject badParameters, JObject requiredParams) {
+            JObject content = new JObject {
+                {"badParams", badParameters },
+                {"requiredParams", requiredParams }
+            };
+            FormatAndSendResponse((int)PuppetResponseCode.BadParameters, "Bad Parameters", content.ToString());
+        }
+
+        #endregion
+
+        #region ERROR (5000s) Responses
+
+        public void SendAPIKeyMismatchResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.APIKeyMismatch, "API Key Mismatch");
+        }
+
+
+
+        public void SendCommandNotRecognizedResposne() {
+            JObject content = new JObject();
+            content["valid_commands"] = JArray.FromObject(VALID_COMMANDS);
+            FormatAndSendResponse((int)PuppetResponseCode.CommandNotRecognized, "Command Not Recognized", content.ToString());
+        }
+
+        public void SendActionNotSupportedResponse(IEnumerable<string> supportedActions) {
+            JObject content = new JObject();
+            content["action_set"] = JArray.FromObject(supportedActions);
+            FormatAndSendResponse((int)PuppetResponseCode.ActionNotSupportedByPuppet, "Action Not Supported By Puppet", content.ToString());
+        }
+
+        #endregion
+
     }
 }
