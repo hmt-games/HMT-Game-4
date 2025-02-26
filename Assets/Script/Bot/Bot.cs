@@ -54,8 +54,6 @@ public class Bot : MonoBehaviour
         
         Walk();
         
-        Transform();
-        
         if (Input.GetKeyDown(KeyCode.Space)) _animator.SetTrigger("PerformAction");
     }
 
@@ -109,6 +107,11 @@ public class Bot : MonoBehaviour
                 _botInfo.X += 1;
             }
         }
+    }
+
+    private void Action()
+    {
+        GameActionGoldenFinger.Instance.ShowActionWheel(transform.position);
     }
 
     private void Transform()

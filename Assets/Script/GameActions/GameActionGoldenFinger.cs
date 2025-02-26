@@ -131,9 +131,14 @@ public class GameActionGoldenFinger : MonoBehaviour
         {
             Debug.Log(hit.transform.gameObject.name);
             _selectedGrid = hit.collider.gameObject.GetComponent<GridCellBehavior>();
-            actionWheel.position = _selectedGrid.transform.position;
-            actionWheel.gameObject.SetActive(true);
+            ShowActionWheel(_selectedGrid.transform.position);
         }
+    }
+
+    public void ShowActionWheel(Vector3 pos)
+    {
+        actionWheel.position = pos;
+        actionWheel.gameObject.SetActive(true);
     }
 
     #endregion

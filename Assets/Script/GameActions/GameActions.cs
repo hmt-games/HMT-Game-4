@@ -22,6 +22,72 @@ public class GameActions : MonoBehaviour
         inventory = new List<GameObject>();
     }
 
+    /// <summary>
+    /// Fruits are removed and added to actors inventory.
+    /// Target plant must bear fruit. Plants go back to mature stage.
+    /// </summary>
+    /// /// <param name="targetPlant"></param>
+    public void Pick(PlantBehavior targetPlant)
+    {
+        
+    }
+
+    /// <summary>
+    /// Plant is removed from its tile and added to actors inventory
+    /// Target plant must have surface mass
+    /// </summary>
+    /// <param name="targetPlant"></param>
+    public void Harvest(PlantBehavior targetPlant)
+    {
+        //TODO: implement some sort of OnHarvest behavior for plants
+        //TODO: this should take some ticks to perform, while showing a progress bar
+        GridCellBehavior plantGrid = targetPlant.parentCell;
+        plantGrid.plants.Remove(targetPlant);
+        plantGrid.plantCount--;
+
+        targetPlant.transform.SetParent(transform);
+        inventory.Add(targetPlant.gameObject);
+        targetPlant.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// distribute nutrient solution based on relative surface mass of plants
+    /// </summary>
+    /// <param name="targetGrid"></param>
+    /// <param name="nutrientSolution"></param>
+    public void Spray(GridCellBehavior targetGrid, NutrientSolution nutrientSolution)
+    {
+        
+    }
+    
+    /// <summary>
+    /// plant takes up nutrient solution
+    /// 
+    /// </summary>
+    /// <param name="targetPlant"></param>
+    /// <param name="nutrientSolution"></param>
+    public void Spray(PlantBehavior targetPlant, NutrientSolution nutrientSolution)
+    {
+        
+    }
+
+    /// <summary>
+    /// Add seed level plants to the tile
+    /// </summary>
+    /// <param name="species"></param>
+    /// <param name="targetGrid"></param>
+    public void Plant(PlantConfig species, GridCellBehavior targetGrid)
+    {
+        
+    }
+    
+    /// <summary>
+    /// An overload of the normal plant action. Plant plant with specific parameters.
+    /// This overload should only be used in golden finger (internal play testing)
+    /// </summary>
+    /// <param name="species"></param>
+    /// <param name="plantInitInfo"></param>
+    /// <param name="targetGrid"></param>
     public void Plant(PlantConfig species, PlantInitInfo plantInitInfo, GridCellBehavior targetGrid)
     {
         int plantSlotIdx = targetGrid.plantCount;
@@ -45,16 +111,19 @@ public class GameActions : MonoBehaviour
         plantObj.transform.localScale = Vector3.one;
     }
 
-    public void Harvest(PlantBehavior targetPlant)
+    public void Sample(PlantBehavior targetPlant)
     {
-        //TODO: implement some sort of OnHarvest behavior for plants
-        //TODO: this should take some ticks to perform, while showing a progress bar
-        GridCellBehavior plantGrid = targetPlant.parentCell;
-        plantGrid.plants.Remove(targetPlant);
-        plantGrid.plantCount--;
+        
+    }
 
-        targetPlant.transform.SetParent(transform);
-        inventory.Add(targetPlant.gameObject);
-        targetPlant.gameObject.SetActive(false);
+    public void Sample(GridCellBehavior targetGrid)
+    {
+        
+    }
+
+    IEnumerator Move()
+    {
+        
+        yield return null;
     }
 }

@@ -54,7 +54,7 @@ public abstract class PuppetBehavior : MonoBehaviour, IPuppet {
         for(int i = 0; i < currentPlan.Count; i++) {
             ExecuteAction(currentPlan[i]);
             while(ExecutingAction) {
-                yield return null;
+                yield return null;  
             }
             if(!ExecutingPlan) {
                 break;

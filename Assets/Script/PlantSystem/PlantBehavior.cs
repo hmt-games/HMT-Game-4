@@ -45,32 +45,12 @@ public class PlantBehavior : NetworkBehaviour
         [Networked]
         public float EnergyLevel { get; private set; } = 0;
 
-
         [Networked]
         public float Health { get; private set; } = 0;
-        /// <summary>
-        /// Health Level of the Plant is a sliding window average changes in EnergyLevel.
-        /// 
-        /// Ideally this would be normalzied to a range of -1 to 1 but will need to figure out the math.
-        /// </summary>
-        /*
-        public float Health { 
-            get {
-                healthTotal = 0;
-                foreach (float f in healthHistory) {
-                    healthTotal += f;
-                }
-                return healthTotal / healthHistory.Count;
-            }
-        }
-        */
 
         [Networked]
         public float Age { get; private set; } = 0;
 
-        //public float[] CompoundLevels { get; private set; } = new float[System.Enum.GetValues(typeof(NutrientType)).Length];
-
-        //private NutrientSolution NutrientLevels;
         [Networked]
         public ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
 

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public Tower parentTower;
+    public long currentTick = 0;
 
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
         }
 
         //HeatMapSwicher.S.SwitchOnHeatMap();
+        currentTick++;
     }
     
     // golden finger for testing
