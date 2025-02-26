@@ -1,5 +1,6 @@
 ﻿import requests
 from json import loads
+from json import dumps
 from pprint import pprint
 import random
 import time
@@ -19,8 +20,11 @@ class UnityWebSocket:
         if session_id is not None:
             data["session_id"] = session_id
 
-        resp = requests.post(root_url + '/register_agent', json=data)
+        resp = requests.post('http://' +root_url + '/register_agent', json=data)
         resp_json = resp.json()
+
+        print('Register Agent Response')
+        pprint(resp_json)
 
         self.service_target = resp_json['service_target']
         self.session_id = resp_json['session_id']
@@ -52,14 +56,17 @@ class UnityWebSocket:
         return self.send(str(plan_command))
 
     def get_state(self):
-        return self.send('{"command":"get_state"}')
+        command = {"command":"get_state"}
+        return self.send(dumps(command))
 
     def send(self, message):
         if self.connection is None:
             return None
         else:
             self.connection.send(message)
-            return loads(self.connection.recv())
+            resp = self.connection.recv()
+            print(resp)
+            return loads(resp)
 
 
 def test_random_walk(socket, waitTime=1, iterations=None ):
@@ -68,12 +75,12 @@ def test_random_walk(socket, waitTime=1, iterations=None ):
     if iterations is None:
         iterations = float('inf')
     it = 0
-    while i < iterations:
+    while it < iterations:
         print('Interation: ',it)
         state = socket.get_state()
         pprint(state)
         direct = random.choice(directions)
-        resp = socket.execute_action("move", {"directon":direct})
+        resp = socket.execute_action("move", {"direction":direct})
         pprint(resp)
         time.sleep(waitTime)
 
@@ -84,22 +91,33 @@ if __name__ == "__main__":
         description='A simple agent for testing the HMT Agent Interface')
 
     parser.add_argument('root_url', help='The root url for the agent service. likely localhost:4649/hmt')
-    parser.add_argument('puppet_id', help='The puppet_id to register actions on')
+    parser.add_argument('-p', '--puppet_id', help='The puppet_id to register actions on')
+    parser.add_argument('-a', '--agent_id', default='TEST', help='The agent id to register, can be any string')
     parser.add_argument('-l', '--list_puppets', action='store_true', help='Overrides other params and calls the list_puppets target')
-    parser.add_argument('-p','--priority', type=int, default=128, help='The priorty the agent should perform actions with')
+    parser.add_argument('-r','--priority', type=int, default=128, help='The priorty the agent should perform actions with')
     parser.add_argument('-s', '--style', choices=['random-walk','random'],default='random-walk', help='What kinds of actions do you want the agnet to test')
     parser.add_argument('-w', '--waitTime', type=float, default=1.0, help='How long to wait between sending actions')
-    parser.add_argument('-i', '--terations', type=int, default=None, help='How many iterations of actions to send. Default is to loop infinitely')
+    parser.add_argument('-i', '--iterations', type=int, default=None, help='How many iterations of actions to send. Default is to loop infinitely')
 
     args=parser.parse_args()
 
 
     if args.list_puppets:
         resp = requests.get('http://'+args.root_url + '/list_puppets')
-        print(resp.json())
-        # resp_json = resp.json()
-        # pprint(resp_json)
+        try:
+            resp_json = resp.json()
+            for puppet in resp_json['puppets']:
+                pprint(puppet)
+        except:
+            print('Response Format is Bad')
+            print(resp)
+    else :
+        socket = UnityWebSocket(args.root_url, args.agent_id, args.puppet_id, args.priority)
 
+        if args.style =='random-walk':
+            test_random_walk(socket, args.waitTime, args.iterations)
+        elif args.stype =='random':
+            pass
 
 """
 

@@ -29,7 +29,9 @@ namespace HMT.Puppetry {
                     ServiceConfig.PuppetId, 
                     (int)PuppetResponseCode.CommandParseError, 
                     "Command Parse Error", 
-                    JsonConvert.ToString(e.Data)));
+                    new JObject {
+                        { "original", JsonConvert.ToString(e.Data) }
+                    }));
                 return;
             }
 
@@ -69,15 +71,15 @@ namespace HMT.Puppetry {
         }
 
         protected override void OnOpen() {
-            Debug.LogFormat("[HMTPuppetService] /{0} Client Connected.", ServiceConfig.ServiceTarget);
+            Debug.LogFormat("[HMTPuppetService] {0} Client Connected.", ServiceConfig.ServiceTarget);
         }
 
         protected override void OnClose(CloseEventArgs e) {
-            Debug.LogFormat("[HMTPuppetService] /{0} Cliend Disconnected.", ServiceConfig.ServiceTarget);
+            Debug.LogFormat("[HMTPuppetService] {0} Cliend Disconnected.", ServiceConfig.ServiceTarget);
         }
 
         protected override void OnError(ErrorEventArgs e) {
-            Debug.LogErrorFormat("[HMTPuppetService] /{0} Error: {1}", ServiceConfig.ServiceTarget, e.Message);
+            Debug.LogErrorFormat("[HMTPuppetService] {0} Error: {1}", ServiceConfig.ServiceTarget, e.Message);
             Debug.LogException(e.Exception);
         }
     }

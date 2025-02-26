@@ -119,11 +119,12 @@ namespace HMT.Puppetry {
         }
 
         private void Server_OnPost(object sender, HttpRequestEventArgs e) {
-            var path = e.Request.RawUrl;
+            string[] full_path = e.Request.RawUrl.Split('/');
+            string path = full_path[full_path.Length - 1];
             Debug.LogFormat("[HMTPuppetManager] POST Request recieved at {0}", path);
 
             switch (path) {
-                case "/register_agent":
+                case "register_agent":
                     JObject postData = e.GetJsonPostData();
                     string agentId = postData["agent_id"].ToString();
                     string puppetId = postData["puppet_id"].ToString();
@@ -139,7 +140,8 @@ namespace HMT.Puppetry {
                     AgentServiceConfig config = LaunchNewServiceTarget(agentId, puppetId, priority);
 
                     JObject response = new JObject {
-                        { "service_target", string.Format("ws://localhost:{0}/{1}/{2}", socketPort, rootService, config.ServiceTarget) },
+                        //{ "service_target", string.Format("ws://localhost:{0}/{1}/{2}", socketPort, rootService, config.ServiceTarget) },
+                        { "service_target", string.Format("ws://localhost:{0}/{1}", socketPort, config.ServiceTarget) },
                         { "session_id", sessionID },
                         { "agent_id", agentId },
                         { "puppet_id", puppetId },
@@ -151,7 +153,7 @@ namespace HMT.Puppetry {
                     }
                     e.SendJsonResponse(response);
                     break;
-                case "/list_puppets":
+                case "list_puppets":
                     e.SendJsonResponse(ListPuppets());
                     break;
                 default:
@@ -161,12 +163,13 @@ namespace HMT.Puppetry {
         }
 
         private void Server_OnGet(object sender, HttpRequestEventArgs e) {
-            var path = e.Request.RawUrl;
+            string[] full_path = e.Request.RawUrl.Split('/');
+            string path = full_path[full_path.Length - 1];
             Debug.LogFormat("[HMTPuppetManager] GET Request recieved {0}", path);
 
             switch (path) {
                 //TODO we should just pull the relevant piece off the end of the URL this is a short term hack
-                case "/hmt/list_puppets":
+                case "list_puppets":
                     e.SendJsonResponse(ListPuppets());
                     break;
                 default:
@@ -204,6 +207,8 @@ namespace HMT.Puppetry {
                 s.ServiceConfig = record;
                 s.ActionSet = PuppetIndex[puppet_id].SupportedActions;
             });
+
+            Debug.LogFormat("[HMTPuppetManager] Launched Service target {0}, {1}, {2}, {3}", newServiceTarget, agent_id, puppet_id, apiKey);
 
             if (!configsByAgent.ContainsKey(record.AgentId)) {
                 configsByAgent[record.AgentId] = new HashSet<AgentServiceConfig>();

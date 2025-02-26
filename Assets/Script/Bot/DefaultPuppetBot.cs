@@ -30,16 +30,17 @@ public class DefaultPuppetBot : PuppetBehavior
     public override HashSet<string> SupportedActions =>
         new()
         {
-            "Pick", "Harvest", "Spray", "Plant",
-            "Sample", "Move", "MoveTo"
+            "pick", "harvest", "spray", "plant",
+            "sample", "move", "moveto"
         };
 
     public override void ExecuteAction(PuppetCommand command)
     {
         CurrentCommand = command;
+        Debug.LogFormat("Default Puppet Bot Execute Action:{0}", command.json.ToString());
         switch (command.Action)
         {
-            case "Move":
+            case "move":
                 Move();
                 break;
         }
@@ -124,7 +125,7 @@ public class DefaultPuppetBot : PuppetBehavior
 
     public override JObject GetState(PuppetCommand command)
     {
-        throw new System.NotImplementedException();
+        return new JObject();
     }
     
     private bool ValidTargetPosition(int x, int y)

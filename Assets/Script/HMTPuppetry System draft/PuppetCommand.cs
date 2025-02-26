@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace HMT.Puppetry {
     public enum PuppetCommandType {
@@ -33,7 +34,7 @@ namespace HMT.Puppetry {
 
 
     public class PuppetCommand {
-        private const string RESPONSE_FORMAT = "{{\"command\":\"{0}\", \"puppet_id\":{1}  \"code\":{2}, \"status\":\"{3}\", \"message\":\"{4}\", \"content\":{5} }}";
+        
         private const string NO_ACTION = "no_action";
 
         public static string ResponseCodeToStatus(int code) {
@@ -60,8 +61,22 @@ namespace HMT.Puppetry {
             };
         }
 
-        public static string FormatResponse(PuppetCommandType command, string puppetId, int code, string message, string content = "{}") {
-            return string.Format(RESPONSE_FORMAT, CommandTypeToString(command), puppetId, code, ResponseCodeToStatus(code), message, content);
+        public static string FormatResponse(PuppetCommandType command, string puppetId, int code, string message, JObject content = null) {
+
+            if(content == null)
+            {
+                content = new JObject();
+            }
+            JObject resp = new JObject
+            {
+                {"command", CommandTypeToString(command)},
+                {"puppe_id", puppetId },
+                { "code", code },
+                {"status", ResponseCodeToStatus(code)  },
+                {"message", message },
+                {"content", content }
+            };
+            return resp.ToString();
         }
 
         private static PuppetCommandType ParseCommandType(string commandString) {
@@ -88,7 +103,7 @@ namespace HMT.Puppetry {
         public AgentServiceConfig AgentConfig { get; private set; }
         public string TargetPuppet { get { return AgentConfig.PuppetId; } }
         public byte Priority { get { return AgentConfig.CommandPriority; } }
-        public JObject Params { get { return json.TryGetDefault("params", new JObject()); } }
+        public JObject Params { get; private set; }
         public JObject json { get; private set; }
         public bool Responded { get; private set; }
         private HMTPuppetService originService;
@@ -97,8 +112,11 @@ namespace HMT.Puppetry {
             AgentConfig = originService.ServiceConfig;
             this.originService = originService;
 
-            Command = ParseCommandType(json.TryGetDefault("Command", string.Empty));
-            Action = json.TryGetDefault("Action", NO_ACTION).ToLower();
+            Command = ParseCommandType(json.TryGetDefault("command", string.Empty));
+            Action = json.TryGetDefault("action", NO_ACTION).ToLower();
+            Debug.LogFormat("<color=red>PARSE</color> json[\"params\"]: {0}  json.ToString(): {1}", json["params"], json.ToString());
+
+            Params = json.TryGetDefault("params", new JObject());
             this.json = json;
             Responded = false;
         }
@@ -108,10 +126,7 @@ namespace HMT.Puppetry {
             Command = PuppetCommandType.EXECUTE_ACTION;
             this.Action = action;
             json = new JObject();
-            if (Params != null)
-            {
-                json["params"] = Params;
-            }
+            this.Params = Params;
             originService = null;
             Responded = false;
         }
@@ -158,12 +173,30 @@ namespace HMT.Puppetry {
             }
         }
 
-        private void FormatAndSendResponse(int code, string message, string content = "{}") {
+        //private const string RESPONSE_FORMAT = "{{\"command\":\"{0}\", \"puppet_id\":{1},  \"code\":{2}, \"status\":\"{3}\", \"message\":\"{4}\", \"content\":{5} }}";
+        private void FormatAndSendResponse(int code, string message, JObject content = null) {
             if (originService == null || Responded) {
                 return;
             }
 
-            string mess = string.Format(RESPONSE_FORMAT, Command, TargetPuppet, code, message, content);
+            if (content == null)
+            {
+                content = new JObject();
+            }
+
+            JObject resp = new JObject
+            {
+                {"command",  CommandTypeToString(Command)},
+                {"puppet_id", TargetPuppet },
+                { "code", code },
+                {"status", ResponseCodeToStatus(code)  },
+                {"message", message },
+                {"content", content }
+            };
+
+
+            string mess = resp.ToString();
+            Debug.LogFormat("Puppet Response: {0}", mess);
             originService.Context.WebSocket.Send(mess);
             Responded = true;
         }
@@ -195,7 +228,7 @@ namespace HMT.Puppetry {
         }
 
         public void SendStateResponse(JObject state) {
-            FormatAndSendResponse((int)PuppetResponseCode.StateRetrieved, "State Retrieved", state.ToString());
+            FormatAndSendResponse((int)PuppetResponseCode.StateRetrieved, "State Retrieved", state);
         }
 
         #endregion
@@ -214,7 +247,7 @@ namespace HMT.Puppetry {
             JObject content = new JObject {
                 {"requiredParams", requiredParams }
             };
-            FormatAndSendResponse((int)PuppetResponseCode.MissingParameters, "Missing Parameters", content.ToString());
+            FormatAndSendResponse((int)PuppetResponseCode.MissingParameters, "Missing Parameters", content);
         }
 
         public void SendBadParametersResponse(JObject badParameters, JObject requiredParams) {
@@ -222,7 +255,7 @@ namespace HMT.Puppetry {
                 {"badParams", badParameters },
                 {"requiredParams", requiredParams }
             };
-            FormatAndSendResponse((int)PuppetResponseCode.BadParameters, "Bad Parameters", content.ToString());
+            FormatAndSendResponse((int)PuppetResponseCode.BadParameters, "Bad Parameters", content);
         }
 
         #endregion
@@ -238,13 +271,13 @@ namespace HMT.Puppetry {
         public void SendCommandNotRecognizedResposne() {
             JObject content = new JObject();
             content["valid_commands"] = JArray.FromObject(VALID_COMMANDS);
-            FormatAndSendResponse((int)PuppetResponseCode.CommandNotRecognized, "Command Not Recognized", content.ToString());
+            FormatAndSendResponse((int)PuppetResponseCode.CommandNotRecognized, "Command Not Recognized", content);
         }
 
         public void SendActionNotSupportedResponse(IEnumerable<string> supportedActions) {
             JObject content = new JObject();
             content["action_set"] = JArray.FromObject(supportedActions);
-            FormatAndSendResponse((int)PuppetResponseCode.ActionNotSupportedByPuppet, "Action Not Supported By Puppet", content.ToString());
+            FormatAndSendResponse((int)PuppetResponseCode.ActionNotSupportedByPuppet, "Action Not Supported By Puppet", content);
         }
 
         #endregion
