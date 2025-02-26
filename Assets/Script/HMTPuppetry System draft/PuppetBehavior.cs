@@ -19,14 +19,10 @@ public abstract class PuppetBehavior : MonoBehaviour, IPuppet {
 
     public virtual bool ExecutingPlan { get { return currentPlan != null; } }
 
-    public List<string> apiTarget = new List<string>();
-
     // Start is called before the first frame update
     protected virtual void Start() {
         PuppetID = IPuppet.GenerateUniquePuppetID(puppetIDPrefix);
-        foreach(string target in apiTarget) {
-            HMTPuppetManager.Instance.AddPuppet(this);
-        }
+        HMTPuppetManager.Instance.AddPuppet(this);
         CurrentCommand = null;
         currentPlan = null;
     }

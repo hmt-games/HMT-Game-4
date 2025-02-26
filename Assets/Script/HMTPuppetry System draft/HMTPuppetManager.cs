@@ -113,11 +113,14 @@ namespace HMT.Puppetry {
             server.OnPost += Server_OnPost;
             server.Start();
 
+            Debug.LogFormat("[HMTPuppetManager] Server Started {0}", server.DocumentRootPath);
+
             Status = PuppetryStatus.Running;
         }
 
         private void Server_OnPost(object sender, HttpRequestEventArgs e) {
             var path = e.Request.RawUrl;
+            Debug.LogFormat("[HMTPuppetManager] POST Request recieved at {0}", path);
 
             switch (path) {
                 case "/register_agent":
@@ -159,8 +162,11 @@ namespace HMT.Puppetry {
 
         private void Server_OnGet(object sender, HttpRequestEventArgs e) {
             var path = e.Request.RawUrl;
+            Debug.LogFormat("[HMTPuppetManager] GET Request recieved {0}", path);
+
             switch (path) {
-                case "/list_puppets":
+                //TODO we should just pull the relevant piece off the end of the URL this is a short term hack
+                case "/hmt/list_puppets":
                     e.SendJsonResponse(ListPuppets());
                     break;
                 default:
@@ -260,6 +266,7 @@ namespace HMT.Puppetry {
         /// <param name="puppet"></param>
         /// <returns></returns>
         public void AddPuppet(IPuppet puppet) {
+            Debug.LogFormat("[HMTPuppetManager] Adding Puppet: {0}", puppet.PuppetID);
             PuppetIndex[puppet.PuppetID] = puppet;
         }
 

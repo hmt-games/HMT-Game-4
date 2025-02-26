@@ -2080,6 +2080,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &334721583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 334721585}
+  - component: {fileID: 334721584}
+  m_Layer: 0
+  m_Name: PuppetryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &334721584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334721583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2faeb65c0c8f0ef4cad6afef966c1d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartServerOnStart: 1
+  socketPort: 4649
+  rootService: hmt
+  useSequentialServiceTargets: 0
+  useAPIKeys: 1
+  autoResponseThreshold: 3
+  defaultCommandPriority: 128
+--- !u!4 &334721585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334721583}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &340318931
 GameObject:
   m_ObjectHideFlags: 0
@@ -7923,7 +7974,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentTower: {fileID: 0}
+  currentTick: 0
+  secondPerTick: 1
   bot: {fileID: 1553247983956851260, guid: 38a38a5b619c04ad7bcff75e127ad6a7, type: 3}
+  puppetBot: {fileID: 1553247983956851260, guid: f935a8a64fcf82341943d639cdcfe001,
+    type: 3}
 --- !u!4 &1518213130
 Transform:
   m_ObjectHideFlags: 0
@@ -11260,3 +11315,4 @@ SceneRoots:
   - {fileID: 1579258187}
   - {fileID: 1146426004}
   - {fileID: 1788614097354635507}
+  - {fileID: 334721585}

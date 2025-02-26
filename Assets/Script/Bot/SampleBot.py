@@ -1,5 +1,9 @@
 ﻿import requests
 from json import loads
+from pprint import pprint
+import random
+import time
+import argparse
 from websockets.sync.client import connect
 
 
@@ -29,10 +33,16 @@ class UnityWebSocket:
         self.connection = connect(self.service_target,
                                   open_timeout=None, close_timeout=None)
 
-    def execute_action(self, action):
+    def execute_action(self, action, params=None):
         # Command to send to Game env
-        action_command = {"command": "execute_action",
-                          "action": action}
+        if params is None:
+            action_command = {"command": "execute_action",
+                              "action": action}
+        else:
+            action_command = {"command": "execute_action",
+                              "action": action,
+                              "params":params}
+        
         return self.send(str(action_command))
 
     def execute_plan(self, plan):
@@ -50,6 +60,45 @@ class UnityWebSocket:
         else:
             self.connection.send(message)
             return loads(self.connection.recv())
+
+
+def test_random_walk(socket, waitTime=1, iterations=None ):
+    directions = ["up", "down","left","right"]
+
+    if iterations is None:
+        iterations = float('inf')
+    it = 0
+    while i < iterations:
+        print('Interation: ',it)
+        state = socket.get_state()
+        pprint(state)
+        direct = random.choice(directions)
+        resp = socket.execute_action("move", {"directon":direct})
+        pprint(resp)
+        time.sleep(waitTime)
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(
+        prog='Test Agent',
+        description='A simple agent for testing the HMT Agent Interface')
+
+    parser.add_argument('root_url', help='The root url for the agent service. likely localhost:4649/hmt')
+    parser.add_argument('puppet_id', help='The puppet_id to register actions on')
+    parser.add_argument('-l', '--list_puppets', action='store_true', help='Overrides other params and calls the list_puppets target')
+    parser.add_argument('-p','--priority', type=int, default=128, help='The priorty the agent should perform actions with')
+    parser.add_argument('-s', '--style', choices=['random-walk','random'],default='random-walk', help='What kinds of actions do you want the agnet to test')
+    parser.add_argument('-w', '--waitTime', type=float, default=1.0, help='How long to wait between sending actions')
+    parser.add_argument('-i', '--terations', type=int, default=None, help='How many iterations of actions to send. Default is to loop infinitely')
+
+    args=parser.parse_args()
+
+
+    if args.list_puppets:
+        resp = requests.get('http://'+args.root_url + '/list_puppets')
+        print(resp.json())
+        # resp_json = resp.json()
+        # pprint(resp_json)
 
 
 """
