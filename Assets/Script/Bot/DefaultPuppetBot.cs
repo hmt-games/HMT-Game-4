@@ -43,6 +43,9 @@ public class DefaultPuppetBot : PuppetBehavior
             case "move":
                 Move();
                 break;
+            default:
+                command.SendIllegalActionResponse();
+                break;
         }
     }
 

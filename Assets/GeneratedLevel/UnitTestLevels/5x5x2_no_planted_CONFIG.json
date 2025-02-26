@@ -28,7 +28,7 @@
       5.431388
     ],
     "rootHeightTransition": 4.0581007,
-    "growthToleranceThreshold": 1.54525018,
+    "growthToleranceThreshold": 0.8,
     "leachingEnergyThreshold": 10,
     "leachingFactor": [
       0.25,
@@ -67,7 +67,7 @@
       5.431388
     ],
     "rootHeightTransition": 4.0581007,
-    "growthToleranceThreshold": 1.54525018,
+    "growthToleranceThreshold": 0.9,
     "leachingEnergyThreshold": 10,
     "leachingFactor": [
       0.0,
