@@ -101,6 +101,12 @@ namespace HMT.Puppetry {
             }
         }
 
+        private void OnDestroy() {
+            if (server != null) {
+                server.Stop();
+            }
+        }
+
         public void StartHMTServer() {
             socketPort = Args.GetArgValue("hmtsocketport", socketPort);
 

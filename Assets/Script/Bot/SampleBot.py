@@ -5,6 +5,7 @@ from pprint import pprint
 import random
 import time
 import argparse
+import sys
 from websockets.sync.client import connect
 
 
@@ -113,65 +114,32 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.list_puppets:
-        resp = requests.get('http://' + args.root_url + '/list_puppets')
+        print('Calling /list_puppets API')
         try:
-            resp_json = resp.json()
-            print('Retrieved Puppets:')
-            for puppet in resp_json['puppets']:
-
-                print(puppet['puppet_id'])
-                print('\t Supported Actions:' + str(puppet['action_set']))
-                print()
+            resp = requests.get('http://' + args.root_url + '/list_puppets')
         except:
-            print('Response Format is Bad')
-            print(resp)
+            print('Error on request, server is probably not running.')
+            sys.exit()
+
+        if resp.status_code == 200:
+            try:
+                resp_json = resp.json()
+                print('Retrieved Puppets:')
+                for puppet in resp_json['puppets']:
+
+                    print(' - '+puppet['puppet_id'])
+                    print('     - actions:' + str(puppet['action_set']))
+            except JSONDecodeError:
+                print('Response Format is Bad')
+                print(resp)
+        else:
+            print('Response Status:', resp.status_code)
     else:
         socket = UnityWebSocket(args.root_url, args.agent_id,
                                 args.puppet_id, args.priority)
 
         if args.style == 'random-walk':
+            print('Launching random walk agent')
             test_random_walk(socket, args.waitTime, args.iterations)
         elif args.stype == 'random':
             pass
-
-"""
-
-def test_get_state(players, save_to_file=False):
-    for p in players:
-        skt = UnityWebSocket(url=f"ws://localhost:4649/hmt/{p}")
-        state = skt.get_state(version='fog')
-        print(f'State for character ({p}): {state}')
-        if save_to_file:
-            with open(f"test-state-{p}.json", "w") as file:
-                file.write(dumps(state, indent=2))
-
-
-def test_pinging():
-    action_list = [
-        ("giant", ["up", "up", "pinga", "submit"]),
-        ("human", ["down", "down", "pingb", "submit"]),
-        ("dwarf", ["right", "pingc"]),
-        ("dwarf", ["left", "left", "pingd", "submit"])
-    ]
-    for char, actions in action_list:
-        skt = UnityWebSocket(url=f"ws://localhost:4649/hmt/{char}")
-        for action in actions:
-            skt.execute_action(action)
-            
-
-def test_action_planning(players):
-    for p in players:
-        skt = UnityWebSocket(url=f"ws://localhost:4649/hmt/{p}")
-        actions = ['left', 'down', 'right', 'up']
-        skt.execute_action(choice(actions))
-        # Auto submit
-        skt.execute_action('submit')
-
-players = ['dwarf', 'giant', 'human']
-# Test Get State
-test_get_state(players)
-# Test Get State
-test_pinging()
-# Test Execute Action
-test_execute_action(players)
-"""
