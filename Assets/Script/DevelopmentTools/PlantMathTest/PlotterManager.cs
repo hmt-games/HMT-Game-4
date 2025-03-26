@@ -37,6 +37,10 @@ public class PlotterManager : MonoBehaviour
         {
             PlotPlantGraph();
         }
+        else
+        {
+            PlotSoilGraph();
+        }
     }
 
     private void Awake()
@@ -61,7 +65,6 @@ public class PlotterManager : MonoBehaviour
         }
         gridIdxSelect.AddOptions(gridIdxOptions);
         gridIdxSelect.onValueChanged.AddListener(delegate { OnGridIdxSelectChanged(gridIdxSelect); });
-        _selectedSoil = PlantMathTestManager.Instance.simulatedGrid[0];
         OnGridIdxSelectChanged(gridIdxSelect);
         
         // plantIdxSelect
@@ -100,6 +103,7 @@ public class PlotterManager : MonoBehaviour
     public void OnGridIdxSelectChanged(TMP_Dropdown change)
     {
         plantIdxSelect.options = new List<TMP_Dropdown.OptionData>();
+        _selectedSoil = PlantMathTestManager.Instance.simulatedGrid[change.value];
         _selectedPlants = _selectedSoil.plants;
 
         List<string> plantIdxOptions = new List<string>();
@@ -128,6 +132,7 @@ public class PlotterManager : MonoBehaviour
             plantSelect.SetActive(false);
             _plottingPlant = false;
             soilDataSelect.GameObject().SetActive(true);
+            PlotSoilGraph();
         }
     }
 
@@ -168,5 +173,25 @@ public class PlotterManager : MonoBehaviour
             if (dataPoints.Count < 1) return;
             _grapher.ShowGraph(dataPoints, maxVisibleValueAmount, i => $"t{i}", f => $"{f:F1}");
         }
+    }
+
+    private void PlotSoilGraph()
+    {
+        List<float> dataPoints = PlantMathDataLogger.Instance.GetSoilData(_selectedSoil, PlantMathDataLogger.TrackedSoilDataType.Water);
+        if (dataPoints.Count < 1) return;
+        List<float> dataPointsA = PlantMathDataLogger.Instance.GetSoilData(_selectedSoil, PlantMathDataLogger.TrackedSoilDataType.NutrientA);
+        List<float> dataPointsB = PlantMathDataLogger.Instance.GetSoilData(_selectedSoil, PlantMathDataLogger.TrackedSoilDataType.NutrientB);
+        List<float> dataPointsC = PlantMathDataLogger.Instance.GetSoilData(_selectedSoil, PlantMathDataLogger.TrackedSoilDataType.NutrientC);
+        List<float> dataPointsD = PlantMathDataLogger.Instance.GetSoilData(_selectedSoil, PlantMathDataLogger.TrackedSoilDataType.NutrientD);
+        
+        var combined =
+            new[] { dataPoints, dataPointsA, dataPointsB, dataPointsC, dataPointsD }.SelectMany(list => list);
+        float maxValue = combined.Max();
+        float minValue = combined.Min();
+        _grapher.ShowGraph(dataPoints, maxVisibleValueAmount, i => $"t{i}", f => $"{f:F1}", minValue, maxValue);
+        _grapher.ShowGraphOnTop(dataPointsA, maxVisibleValueAmount, minValue, maxValue);
+        _grapher.ShowGraphOnTop(dataPointsB, maxVisibleValueAmount, minValue, maxValue);
+        _grapher.ShowGraphOnTop(dataPointsC, maxVisibleValueAmount, minValue, maxValue);
+        _grapher.ShowGraphOnTop(dataPointsD, maxVisibleValueAmount, minValue, maxValue);
     }
 }
