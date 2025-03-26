@@ -16,7 +16,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Credit: https://unitycodemonkey.com/video.php?v=4nwAtbhsLEg
+// modified from Code Monkey's basic line plotter
+// Credit (original code): https://unitycodemonkey.com/video.php?v=4nwAtbhsLEg
 public class Window_Graph : MonoBehaviour {
 
     [SerializeField] private Sprite circleSprite;
@@ -27,23 +28,26 @@ public class Window_Graph : MonoBehaviour {
     private RectTransform dashTemplateY;
     private List<GameObject> gameObjectList;
 
+    public static Window_Graph Instance;
+    
     private void Awake()
     {
+        Instance = this;
+        
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
-        /*labelTemplateX = graphContainer.Find("labelTemplateX").GetComponent<RectTransform>();
+        labelTemplateX = graphContainer.Find("labelTemplateX").GetComponent<RectTransform>();
         labelTemplateY = graphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
         dashTemplateX = graphContainer.Find("dashTemplateX").GetComponent<RectTransform>();
         dashTemplateY = graphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
 
         gameObjectList = new List<GameObject>();
 
-        List<int> valueList = new List<int>() { 5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33, 50, 30, 60, 50, 40, 20, 5, 20, 10, 50, 30, 20, 11 };
-        ShowGraph(valueList, -1, (int _i) => "Day " + (_i + 1), (float _f) => "$" + Mathf.RoundToInt(_f));*/
-
-        CreateCircle(new Vector2(200, 200));
+        //List<int> valueList = new List<int>() { 5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33, 50, 30, 60, 50, 40, 20, 5, 20, 10, 50, 30, 20, 11 };
+        //List<float> valueList = new List<float>() { 5};
+        //ShowGraph(valueList, -1, (int _i) => "Day " + (_i + 1), (float _f) => "$" + Mathf.RoundToInt(_f));
     }
 
-    private void ShowGraph(List<int> valueList, int maxVisibleValueAmount = -1, Func<int, string> getAxisLabelX = null, Func<float, string> getAxisLabelY = null) {
+    public void ShowGraph(List<float> valueList, int maxVisibleValueAmount = -1, Func<int, string> getAxisLabelX = null, Func<float, string> getAxisLabelY = null) {
         if (getAxisLabelX == null) {
             getAxisLabelX = delegate (int _i) { return _i.ToString(); };
         }
@@ -67,7 +71,7 @@ public class Window_Graph : MonoBehaviour {
         float yMinimum = valueList[0];
         
         for (int i = Mathf.Max(valueList.Count - maxVisibleValueAmount, 0); i < valueList.Count; i++) {
-            int value = valueList[i];
+            float value = valueList[i];
             if (value > yMaximum) {
                 yMaximum = value;
             }
@@ -80,8 +84,8 @@ public class Window_Graph : MonoBehaviour {
         if (yDifference <= 0) {
             yDifference = 5f;
         }
-        yMaximum = yMaximum + (yDifference * 0.2f);
-        yMinimum = yMinimum - (yDifference * 0.2f);
+        yMaximum += (yDifference * 0.2f);
+        yMinimum -= (yDifference * 0.2f);
 
         yMinimum = 0f; // Start the graph at zero
 
@@ -104,7 +108,7 @@ public class Window_Graph : MonoBehaviour {
             RectTransform labelX = Instantiate(labelTemplateX);
             labelX.SetParent(graphContainer, false);
             labelX.gameObject.SetActive(true);
-            labelX.anchoredPosition = new Vector2(xPosition, -7f);
+            labelX.anchoredPosition = new Vector2(xPosition, -15f);
             labelX.GetComponent<Text>().text = getAxisLabelX(i);
             gameObjectList.Add(labelX.gameObject);
 
@@ -141,7 +145,7 @@ public class Window_Graph : MonoBehaviour {
         gameObject.GetComponent<Image>().sprite = circleSprite;
         RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPosition;
-        rectTransform.sizeDelta = new Vector2(11, 11);
+        rectTransform.sizeDelta = new Vector2(30, 30);
         rectTransform.anchorMin = new Vector2(0, 0);
         rectTransform.anchorMax = new Vector2(0, 0);
         return gameObject;
