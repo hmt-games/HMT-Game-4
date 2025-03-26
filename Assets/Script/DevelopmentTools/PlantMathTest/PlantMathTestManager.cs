@@ -65,4 +65,9 @@ public class PlantMathTestManager : MonoBehaviour
         
         PlantMathDataLogger.Instance.OnTick();
     }
+
+    public void Retract()
+    {
+        PlantMathDataLogger.Instance.Retract();
+    }
 }
