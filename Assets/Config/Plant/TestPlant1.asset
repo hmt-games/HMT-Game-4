@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capacities: 50
   uptakeRate: 20
-  metabolismNeeds: {x: 5, y: 5, z: 5, w: 5}
+  metabolismNeeds: {x: 5, y: 4, z: 3, w: 2}
   metabolismWaterNeeds: 5
   metabolismFactor: {x: 0.25, y: 0.25, z: 0.25, w: 0.25}
-  growthConsumptionRateLimit: {x: 5, y: 5, z: 5, w: 5}
+  growthConsumptionRateLimit: {x: 5, y: 4, z: 3, w: 2}
   growthFactor: {x: 0.25, y: 0.25, z: 0.25, w: 0.25}
   rootHeightTransition: 3
   growthToleranceThreshold: 0.45

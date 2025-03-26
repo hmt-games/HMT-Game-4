@@ -23,7 +23,11 @@ public class PlantMathDataLogger : MonoBehaviour
 
     public enum TrackedSoilDataType
     {
-        
+        Water,
+        NutrientA,
+        NutrientB,
+        NutrientC,
+        NutrientD,
     }
     
     private List<PlantBehaviorLocalTest> _trackedPlants;
@@ -39,6 +43,18 @@ public class PlantMathDataLogger : MonoBehaviour
         
         _trackedPlants = new List<PlantBehaviorLocalTest>();
         _plantDataBanks = new Dictionary<PlantBehaviorLocalTest, Dictionary<TrackedPlantDataType, List<float>>>();
+        _trackedSoil = new List<GridBehaviorLocalTest>();
+        _soilDataBanks = new Dictionary<GridBehaviorLocalTest, Dictionary<TrackedSoilDataType, List<float>>>();
+    }
+
+    public List<float> GetPlantData(PlantBehaviorLocalTest plant, TrackedPlantDataType data)
+    {
+        return _plantDataBanks[plant][data];
+    }
+
+    public List<float> GetSoilData(GridBehaviorLocalTest soil, TrackedSoilDataType data)
+    {
+        return _soilDataBanks[soil][data];
     }
 
     public void AddPlantToTrackList(PlantBehaviorLocalTest plant)
@@ -49,6 +65,16 @@ public class PlantMathDataLogger : MonoBehaviour
         foreach (TrackedPlantDataType type in (TrackedPlantDataType[]) Enum.GetValues(typeof(TrackedPlantDataType)))
         {
             _plantDataBanks[plant][type] = new List<float>();
+        }
+    }
+
+    public void AddSoilToTrackedList(GridBehaviorLocalTest soil)
+    {
+        _trackedSoil.Add(soil);
+        _soilDataBanks[soil] = new Dictionary<TrackedSoilDataType, List<float>>();
+        foreach (TrackedSoilDataType type in (TrackedSoilDataType[]) Enum.GetValues(typeof(TrackedSoilDataType)))
+        {
+            _soilDataBanks[soil][type] = new List<float>();
         }
     }
 
@@ -66,8 +92,15 @@ public class PlantMathDataLogger : MonoBehaviour
             _plantDataBanks[plant][TrackedPlantDataType.NutrientC].Add(plant.NutrientLevels.nutrients.z);
             _plantDataBanks[plant][TrackedPlantDataType.NutrientD].Add(plant.NutrientLevels.nutrients.w);
             _plantDataBanks[plant][TrackedPlantDataType.Age].Add(plant.Age);
+        }
 
-            Window_Graph.Instance.ShowGraph(_plantDataBanks[plant][TrackedPlantDataType.Energy], -1, i => $"tick{i}", f => $"{f}");
+        foreach (GridBehaviorLocalTest soil in _trackedSoil)
+        {
+            _soilDataBanks[soil][TrackedSoilDataType.Water].Add(soil.NutrientLevels.water);
+            _soilDataBanks[soil][TrackedSoilDataType.NutrientA].Add(soil.NutrientLevels.nutrients.x);
+            _soilDataBanks[soil][TrackedSoilDataType.NutrientB].Add(soil.NutrientLevels.nutrients.y);
+            _soilDataBanks[soil][TrackedSoilDataType.NutrientC].Add(soil.NutrientLevels.nutrients.z);
+            _soilDataBanks[soil][TrackedSoilDataType.NutrientD].Add(soil.NutrientLevels.nutrients.w);
         }
     }
 
@@ -90,8 +123,18 @@ public class PlantMathDataLogger : MonoBehaviour
                     dataBank[TrackedPlantDataType.NutrientC].RemoveLastReturnNewLast(), 
                     dataBank[TrackedPlantDataType.NutrientD].RemoveLastReturnNewLast())
             ));
-            
-            Window_Graph.Instance.ShowGraph(_plantDataBanks[plant][TrackedPlantDataType.Energy], -1, i => $"tick{i}", f => $"{f}");
+        }
+
+        foreach (GridBehaviorLocalTest soil in _trackedSoil)
+        {
+            soil.NutrientLevels = new NutrientSolution(
+                _soilDataBanks[soil][TrackedSoilDataType.Water].RemoveLastReturnNewLast(),
+                new Vector4(
+                    _soilDataBanks[soil][TrackedSoilDataType.NutrientA].RemoveLastReturnNewLast(),
+                    _soilDataBanks[soil][TrackedSoilDataType.NutrientB].RemoveLastReturnNewLast(),
+                    _soilDataBanks[soil][TrackedSoilDataType.NutrientC].RemoveLastReturnNewLast(),
+                    _soilDataBanks[soil][TrackedSoilDataType.NutrientD].RemoveLastReturnNewLast())
+            );
         }
     }
 }

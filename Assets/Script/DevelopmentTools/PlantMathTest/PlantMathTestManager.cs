@@ -7,14 +7,20 @@ public class PlantMathTestManager : MonoBehaviour
 {
     private TestConfig _testConfig;
 
-    private List<GridBehaviorLocalTest> _simulatedGrid;
+    public List<GridBehaviorLocalTest> simulatedGrid;
+
+    public static PlantMathTestManager Instance;
+
+    private List<PlotterManager> _plotterManagers;
 
     private void Awake()
     {
-        _simulatedGrid = new List<GridBehaviorLocalTest>();
+        Instance = this;
+        simulatedGrid = new List<GridBehaviorLocalTest>();
+        _plotterManagers = new List<PlotterManager>();
     }
 
-    private void Start()
+    IEnumerator Start()
     {
         _testConfig = TestConfig.Instance;
 
@@ -38,7 +44,16 @@ public class PlantMathTestManager : MonoBehaviour
             }
 
             plantCount = 0;
-            _simulatedGrid.Add(nGrid);
+            simulatedGrid.Add(nGrid);
+            PlantMathDataLogger.Instance.AddSoilToTrackedList(nGrid);
+        }
+
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        PlantMathDataLogger.Instance.OnTick();
+        foreach (var plotter in _plotterManagers)
+        {
+            plotter.OnTick();
         }
     }
 
@@ -56,18 +71,32 @@ public class PlantMathTestManager : MonoBehaviour
         PlantMathDataLogger.Instance.AddPlantToTrackList(nPlant);
     }
 
+    public void AddPlotter(PlotterManager plotterManager)
+    {
+        _plotterManagers.Add(plotterManager);
+    }
+
     public void OnTick()
     {
-        foreach (GridBehaviorLocalTest grid in _simulatedGrid)
+        foreach (GridBehaviorLocalTest grid in simulatedGrid)
         {
             grid.OnTick();
         }
         
         PlantMathDataLogger.Instance.OnTick();
+
+        foreach (var plotter in _plotterManagers)
+        {
+            plotter.OnTick();
+        }
     }
 
     public void Retract()
     {
         PlantMathDataLogger.Instance.Retract();
+        foreach (var plotter in _plotterManagers)
+        {
+            plotter.OnTick();
+        }
     }
 }
