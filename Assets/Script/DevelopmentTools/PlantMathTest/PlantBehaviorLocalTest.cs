@@ -88,7 +88,7 @@ public class PlantBehaviorLocalTest : MonoBehaviour
         /// UPTAKE
         /// The moves an amount of each compound from the soil to the plant based on the uptake rate and the amount of the compound in the soil.
         /// either it moves the amount based on its uptake rate OR up to the ammount it can contain if it's full
-        float uptake = Mathf.Min(allocation.water, Mathf.Min(config.capacities - NutrientLevels.water, config.uptakeRate));
+        float uptake = Mathf.Min(allocation.water, Mathf.Min(config.waterCapacity - NutrientLevels.water, config.uptakeRate));
         NutrientLevels += allocation * (uptake / allocation.water);
         allocation -= uptake;
 

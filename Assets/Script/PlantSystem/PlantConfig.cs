@@ -9,13 +9,19 @@ public class PlantConfig : ScriptableObject {
     /// How much of each compound can the plan store
     /// This should be in the range 0 to positiveInfinity
     /// </summary>
-    public float capacities;
+    public float waterCapacity;
     /// <summary>
     /// The rate at which the plant can uptake each compound from the soil
     /// This is a percentage in the range 0 to 1
     /// This represents how efficiently the plant can absorb each compound type
     /// </summary>
     public float uptakeRate;
+
+    /// <summary>
+    /// The rate at which the plant draws nutrient solution from it's internal stores for metabolism
+    /// </summary>
+    public float metabolismRate;
+
     /// <summary>
     ///// The rate at which the plant can leech each compound back into the soil
     ///// This is a percentage in the range 0 to 1
@@ -81,7 +87,7 @@ public class PlantConfig : ScriptableObject {
     
     public override string ToString()
     {
-        return $"Capacity: {capacities}\n" +
+        return $"Capacity: {waterCapacity}\n" +
                $"UptakeRate: {uptakeRate}\n" +
                $"MetabolismWaterNeeds: {metabolismWaterNeeds}" +
                $"MetabolismNeed: {metabolismNeeds}\n" +
