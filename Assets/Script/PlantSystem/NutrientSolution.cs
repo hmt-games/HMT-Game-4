@@ -3,6 +3,7 @@ using UnityEngine;
 using GameConstant;
 using Fusion;
 
+[Serializable]
 public struct NutrientSolution : INetworkStruct
 {
 
