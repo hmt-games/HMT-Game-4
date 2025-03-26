@@ -7,6 +7,13 @@ public class PlantMathTestManager : MonoBehaviour
 {
     private TestConfig _testConfig;
 
+    private List<GridBehaviorLocalTest> _simulatedGrid;
+
+    private void Awake()
+    {
+        _simulatedGrid = new List<GridBehaviorLocalTest>();
+    }
+
     private void Start()
     {
         _testConfig = TestConfig.Instance;
@@ -27,17 +34,35 @@ public class PlantMathTestManager : MonoBehaviour
 
             foreach (PlantInitConfig plant in soil.plants)
             {
-                if (!plant.enable) continue;
-                GameObject nPlantObj = new GameObject($"Plant{plantCount}");
-                PlantBehaviorLocalTest nPlant = nPlantObj.AddComponent<PlantBehaviorLocalTest>();
-                nPlant.config = plant.plantConfig;
-                nPlant.SetInitialProperties(plant.plantInitInfo);
-                
-                nGrid.plants.Add(nPlant);
-                nPlantObj.transform.SetParent(nSoilObj.transform);
+                CreatePlant(plant, plantCount, nGrid);
             }
 
             plantCount = 0;
+            _simulatedGrid.Add(nGrid);
         }
+    }
+
+    private void CreatePlant(PlantInitConfig plant, int plantCount, GridBehaviorLocalTest parentSoil)
+    {
+        if (!plant.enable) return;
+        GameObject nPlantObj = new GameObject($"Plant{plantCount}");
+        PlantBehaviorLocalTest nPlant = nPlantObj.AddComponent<PlantBehaviorLocalTest>();
+        nPlant.config = plant.plantConfig;
+        nPlant.SetInitialProperties(plant.plantInitInfo);
+                
+        parentSoil.plants.Add(nPlant);
+        nPlantObj.transform.SetParent(parentSoil.transform);
+        
+        PlantMathDataLogger.Instance.AddPlantToTrackList(nPlant);
+    }
+
+    public void OnTick()
+    {
+        foreach (GridBehaviorLocalTest grid in _simulatedGrid)
+        {
+            grid.OnTick();
+        }
+        
+        PlantMathDataLogger.Instance.OnTick();
     }
 }

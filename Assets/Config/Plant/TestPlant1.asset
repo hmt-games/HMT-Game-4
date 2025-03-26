@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: TestPlant1
   m_EditorClassIdentifier: 
   capacities: 50
-  uptakeRate: 0
-  metabolismNeeds: {x: 0, y: 0, z: 0, w: 0}
-  metabolismWaterNeeds: 0
-  metabolismFactor: {x: 0, y: 0, z: 0, w: 0}
-  growthConsumptionRateLimit: {x: 0, y: 0, z: 0, w: 0}
-  growthFactor: {x: 0, y: 0, z: 0, w: 0}
-  rootHeightTransition: 0
-  growthToleranceThreshold: 0
-  leachingEnergyThreshold: 0
-  leachingFactor: {x: 0, y: 0, z: 0, w: 0}
+  uptakeRate: 20
+  metabolismNeeds: {x: 5, y: 5, z: 5, w: 5}
+  metabolismWaterNeeds: 5
+  metabolismFactor: {x: 0.25, y: 0.25, z: 0.25, w: 0.25}
+  growthConsumptionRateLimit: {x: 5, y: 5, z: 5, w: 5}
+  growthFactor: {x: 0.25, y: 0.25, z: 0.25, w: 0.25}
+  rootHeightTransition: 3
+  growthToleranceThreshold: 0.45
+  leachingEnergyThreshold: 100
+  leachingFactor: {x: 0.25, y: 0.25, z: 0.25, w: 0.25}
   onWaterCallbackBypass: 0
   plantSprites:
   - {fileID: 0}
