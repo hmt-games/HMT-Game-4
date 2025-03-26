@@ -116,6 +116,7 @@ public class PlotterManager : MonoBehaviour
     
     public void OnPlantIdxSelectChange(TMP_Dropdown change)
     {
+        if (_selectedPlants.Count == 0) return;
         _selectedPlant = _selectedPlants[plantIdxSelect.value];
     }
 
@@ -144,6 +145,8 @@ public class PlotterManager : MonoBehaviour
 
     private void PlotPlantGraph()
     {
+        if (_selectedPlants.Count == 0 || _selectedPlant == null) return;
+        
         if (_selectedPlantData == PlantMathDataLogger.TrackedPlantDataType.Water
             || _selectedPlantData == PlantMathDataLogger.TrackedPlantDataType.NutrientA
             || _selectedPlantData == PlantMathDataLogger.TrackedPlantDataType.NutrientB
