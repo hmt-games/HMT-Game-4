@@ -292,7 +292,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp => kvp.Key,
             kvp => new PlantConfigDTO
             {
-                capacities = kvp.Value.capacities,
+                capacities = kvp.Value.waterCapacity,
                 uptakeRate = kvp.Value.uptakeRate,
                 metabolismNeeds = ConvertToFloatArray(kvp.Value.metabolismNeeds),
                 metabolismWaterNeeds = kvp.Value.metabolismWaterNeeds,
@@ -335,7 +335,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp =>
             {
                 var config = ScriptableObject.CreateInstance<PlantConfig>();
-                config.capacities = kvp.Value.capacities;
+                config.waterCapacity = kvp.Value.capacities;
                 config.uptakeRate = kvp.Value.uptakeRate;
                 config.metabolismNeeds = ConvertToVector4(kvp.Value.metabolismNeeds);
                 config.metabolismWaterNeeds = kvp.Value.metabolismWaterNeeds;
@@ -638,7 +638,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         
         PlantConfig plantConfig = ScriptableObject.CreateInstance<PlantConfig>();
 
-        plantConfig.capacities = (float)planConfigJToken["capacities"];
+        plantConfig.waterCapacity = (float)planConfigJToken["capacities"];
         plantConfig.uptakeRate = (float)planConfigJToken["uptakeRate"];
         plantConfig.metabolismNeeds = Vector4FromJTokenList(planConfigJToken["metabolismNeeds"].ToList());
         plantConfig.metabolismWaterNeeds = (float)planConfigJToken["metabolismWaterNeeds"];
