@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using Fusion;
@@ -49,7 +50,7 @@ public class PlantBehaviorLocalTest : MonoBehaviour
     }
     public float EnergyLevel { get; private set; } = 0;
 
-    public float Health { get; private set; } = 0;
+    public float Health { get; set; } = 0;
 
     public float Age { get; private set; } = 0;
 
@@ -63,6 +64,7 @@ public class PlantBehaviorLocalTest : MonoBehaviour
     private List<float> _stageTransitionThreshold = new List<float> { 0.0f, 1.5f, 3.0f, 5.3f };
     public bool hasFruit = false;
 
+    //TODO: move to plant config
     public int maxHealthHistory = 10;
 
     private float healthTotal = 0;
@@ -78,6 +80,7 @@ public class PlantBehaviorLocalTest : MonoBehaviour
         {
             healthHistory.Enqueue(plantInitInfo.Health);
         }
+        Health = healthHistory.Sum() / healthHistory.Count;
 
         Age = plantInitInfo.Age;
         NutrientLevels = new NutrientSolution(plantInitInfo.Water, plantInitInfo.Nutrient);
@@ -85,6 +88,44 @@ public class PlantBehaviorLocalTest : MonoBehaviour
     }
     
     public NutrientSolution OnTick(NutrientSolution allocation) {
+        // UPTAKE
+        float uptakeVolume = Mathf.Min(config.waterCapacity - NutrientLevels.water, config.uptakeRate);
+        NutrientLevels += allocation.DrawOff(uptakeVolume);
+
+        //METABOLISM
+        NutrientSolution metabolismDraw = NutrientLevels.DrawOff(config.metabolismRate);
+        float tick_energy = Vector4.Dot(metabolismDraw.nutrients, config.metabolismFactor);
+        Vector4 idealDraw = Vector4.one * config.metabolismRate;
+        float tick_health = Mathf.Clamp01(tick_energy / Vector4.Dot(config.metabolismFactor.Positives(), idealDraw));
+        
+        //HEALTH
+        if (healthHistory.Count == maxHealthHistory) healthHistory.Dequeue();
+        healthHistory.Enqueue(tick_health);
+        Health = healthHistory.Sum() / healthHistory.Count;
+
+        //GROWTH
+        if (Health > config.growthToleranceThreshold)
+        {
+            float growth = Mathf.Max(0.0f, tick_energy);
+            RootMass += growth * config.PercentToRoots(Age);
+            Height += growth * (1 - config.PercentToRoots(Age));
+        }
+
+        //LEECH
+        EnergyLevel += tick_energy;
+        if (EnergyLevel >= config.leachingEnergyThreshold)
+        {
+            allocation.nutrients += EnergyLevel * config.leachingFactor;
+            EnergyLevel = 0;
+        }
+
+        Age++;
+
+        Debug.Log(allocation);
+        return allocation;
+    }
+    
+    public NutrientSolution OnTick2(NutrientSolution allocation) {
         /// UPTAKE
         /// The moves an amount of each compound from the soil to the plant based on the uptake rate and the amount of the compound in the soil.
         /// either it moves the amount based on its uptake rate OR up to the ammount it can contain if it's full

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,8 +32,8 @@ public class PlantConfig : ScriptableObject {
     /// <summary>
     /// The amount of each compound per tick needed to maintain the plant's health
     /// </summary>
-    public Vector4 metabolismNeeds;
-    public float metabolismWaterNeeds;
+    [Obsolete] public Vector4 metabolismNeeds;
+    [Obsolete] public float metabolismWaterNeeds;
 
 
     /// <summary>
@@ -43,13 +44,13 @@ public class PlantConfig : ScriptableObject {
     /// <summary>
     /// The amount pulled from the plant's reserves to grow
     /// This is a real value used in a clamp function
-    public Vector4 growthConsumptionRateLimit;
+    [Obsolete] public Vector4 growthConsumptionRateLimit;
     
     /// <summary>
     /// The coefficients for the effect of each compound on the plant's growth if they are negtaive they inhibit growth
     /// This is a real value
     /// </summary>
-    public Vector4 growthFactor;
+    [Obsolete] public Vector4 growthFactor;
 
     /// <summary>
     /// The point at which the plan transitions from growing root mass to growing height

@@ -4126,8 +4126,8 @@ MonoBehaviour:
     soilInitConfig:
       soilConfig: {fileID: 11400000, guid: 0d0d57d7a78a3f1418e32294216e0b43, type: 2}
       nutrientSolution:
-        water: 100
-        nutrients: {x: 100, y: 100, z: 100, w: 100}
+        water: 0
+        nutrients: {x: 0, y: 0, z: 0, w: 0}
     plants:
     - enable: 1
       plantConfig: {fileID: 11400000, guid: 315b703582087aa48b6abaeabf70718d, type: 2}
@@ -4137,8 +4137,8 @@ MonoBehaviour:
         EnergyLevel: 0
         Health: 1
         Age: 0
-        Water: 50
-        Nutrient: {x: 50, y: 50, z: 50, w: 50}
+        Water: 64
+        Nutrient: {x: 0, y: 64, z: 64, w: 64}
 --- !u!4 &362776611
 Transform:
   m_ObjectHideFlags: 0
@@ -5848,6 +5848,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSoilUnits:
+  - enable: 1
+    soilInitConfig:
+      soilConfig: {fileID: 11400000, guid: 0d0d57d7a78a3f1418e32294216e0b43, type: 2}
+      nutrientSolution:
+        water: 100
+        nutrients: {x: 0, y: 0, z: 0, w: 0}
+    plants:
+    - enable: 0
+      plantConfig: {fileID: 11400000, guid: 315b703582087aa48b6abaeabf70718d, type: 2}
+      plantInitInfo:
+        RootMass: 1
+        Height: 0
+        EnergyLevel: 0
+        Health: 1
+        Age: 0
+        Water: 50
+        Nutrient: {x: 50, y: 50, z: 50, w: 50}
   - enable: 1
     soilInitConfig:
       soilConfig: {fileID: 11400000, guid: 0d0d57d7a78a3f1418e32294216e0b43, type: 2}

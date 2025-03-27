@@ -49,7 +49,7 @@ public class GridCellBehavior : NetworkBehaviour
 
     public float RemainingWaterCapacity {
         get {
-            return soilConfig.capacities - NutrientLevels.water;
+            return soilConfig.waterCapacity - NutrientLevels.water;
         }
     }
 
@@ -72,7 +72,7 @@ public class GridCellBehavior : NetworkBehaviour
 
         if (aggregate.water > 0) {
             //If there is room in the soil for the water, add it all but you need to check that there is capacity for the nutrients.
-            if (soilConfig.capacities > aggregate + NutrientLevels) {
+            if (soilConfig.waterCapacity > aggregate + NutrientLevels) {
                 NutrientLevels += aggregate;
             }
             //If there is not room in the soil for the water, split the water and add the portion that fits.
@@ -80,7 +80,7 @@ public class GridCellBehavior : NetworkBehaviour
                 NutrientLevels += (aggregate - RemainingWaterCapacity);
             }
     
-            NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.capacities);
+            NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.waterCapacity);
             NutrientLevels -= excess;
             StartCoroutine(Drain(excess));
         }
@@ -98,7 +98,7 @@ public class GridCellBehavior : NetworkBehaviour
     /// <param name="excess"></param>
     /// <returns></returns>
     private IEnumerator Drain(NutrientSolution excess) {
-        yield return new WaitForSeconds(soilConfig.drainTime);
+        yield return new WaitForSeconds(soilConfig.drainRate);
         
     }
 
@@ -113,7 +113,7 @@ public class GridCellBehavior : NetworkBehaviour
         }
         if (waterVolume.water > 0) {
             //If there is room in the soil for the water, add it all but you need to check that there is capacity for the nutrients.
-            if (soilConfig.capacities > waterVolume + NutrientLevels) {
+            if (soilConfig.waterCapacity > waterVolume + NutrientLevels) {
                 NutrientLevels += waterVolume;
             }
             //If there is not room in the soil for the water, split the water and add the portion that fits.
@@ -121,7 +121,7 @@ public class GridCellBehavior : NetworkBehaviour
                 NutrientLevels += (waterVolume - RemainingWaterCapacity);
             }
 
-            NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.capacities);
+            NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.waterCapacity);
             NutrientLevels -= excess;
             return excess;
         }

@@ -41,10 +41,11 @@ public class GridBehaviorLocalTest : MonoBehaviour
     public bool[] plantSlotOccupation = new bool[GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE];
 
     public NutrientSolution NutrientLevels;
+
     
     public float RemainingWaterCapacity {
         get {
-            return soilConfig.capacities - NutrientLevels.water;
+            return soilConfig.waterCapacity - NutrientLevels.water;
         }
     }
 
@@ -60,26 +61,23 @@ public class GridBehaviorLocalTest : MonoBehaviour
             rootTotal += plant.RootMass;
         }
         ///Doll out nutrients / water volunme based on the relative root mass of each plant.
-        NutrientSolution aggregate = NutrientSolution.Empty;
+        NutrientSolution aggregate = 
+            NutrientLevels.water > soilConfig.waterCapacity 
+                ? NutrientLevels.DrawOff(NutrientLevels.water - soilConfig.waterCapacity) 
+                : NutrientSolution.Empty;
         foreach(PlantBehaviorLocalTest plant in plants) {
            aggregate += plant.OnTick(NutrientLevels * (plant.RootMass / rootTotal));
         }
 
-        if (aggregate.water > 0) {
-            //If there is room in the soil for the water, add it all but you need to check that there is capacity for the nutrients.
-            if (soilConfig.capacities > aggregate + NutrientLevels) {
-                NutrientLevels += aggregate;
-            }
-            //If there is not room in the soil for the water, split the water and add the portion that fits.
-            else {
-                NutrientLevels += (aggregate - RemainingWaterCapacity);
-            }
-    
-            NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.capacities);
-            NutrientLevels -= excess;
-            StartCoroutine(Drain(excess));
+        NutrientLevels = aggregate;
+
+        if (NutrientLevels.water > soilConfig.waterCapacity)
+        {
+            NutrientSolution excess =
+                NutrientLevels.DrawOff(Mathf.Min(soilConfig.drainRate, NutrientLevels.water - soilConfig.waterCapacity));
+            //TODO
         }
-    
+
         ///Reconcile the aggregate with the capacities.
         ///If there is excess, pass it down the farm (or do you pass it out?)
     }
@@ -93,7 +91,7 @@ public class GridBehaviorLocalTest : MonoBehaviour
     /// <param name="excess"></param>
     /// <returns></returns>
     private IEnumerator Drain(NutrientSolution excess) {
-        yield return new WaitForSeconds(soilConfig.drainTime);
+        yield return new WaitForSeconds(soilConfig.drainRate);
         
     }
 
@@ -108,7 +106,7 @@ public class GridBehaviorLocalTest : MonoBehaviour
         }
         if (waterVolume.water > 0) {
             //If there is room in the soil for the water, add it all but you need to check that there is capacity for the nutrients.
-            if (soilConfig.capacities > waterVolume + NutrientLevels) {
+            if (soilConfig.waterCapacity > waterVolume + NutrientLevels) {
                 NutrientLevels += waterVolume;
             }
             //If there is not room in the soil for the water, split the water and add the portion that fits.
@@ -116,7 +114,7 @@ public class GridBehaviorLocalTest : MonoBehaviour
                 NutrientLevels += (waterVolume - RemainingWaterCapacity);
             }
 
-            NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.capacities);
+            NutrientSolution excess = NutrientSolution.Clamp0(NutrientLevels - soilConfig.waterCapacity);
             NutrientLevels -= excess;
             return excess;
         }
