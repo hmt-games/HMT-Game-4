@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(menuName = "Config/Soil")]
 public class SoilConfig: ScriptableObject {
@@ -8,7 +9,7 @@ public class SoilConfig: ScriptableObject {
     /// 
     /// TODO we need to make a custom property drawer for NutrientSolutions
     /// </summary>
-    public float capacities;
+    [FormerlySerializedAs("capacities")] public float waterCapacity;
 
-    public float drainTime;
+    [FormerlySerializedAs("drainTime")] public float drainRate;
 }

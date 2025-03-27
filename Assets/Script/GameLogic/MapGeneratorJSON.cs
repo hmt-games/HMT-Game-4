@@ -317,8 +317,8 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp => kvp.Key,
             kvp => new SoilConfigDTO
             {
-                drainTime = kvp.Value.drainTime,
-                capacities = kvp.Value.capacities
+                drainTime = kvp.Value.drainRate,
+                capacities = kvp.Value.waterCapacity
             }
         );
 
@@ -394,8 +394,8 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp =>
             {
                 var config = ScriptableObject.CreateInstance<SoilConfig>();
-                config.drainTime = kvp.Value.drainTime;
-                config.capacities = kvp.Value.capacities;
+                config.drainRate = kvp.Value.drainTime;
+                config.waterCapacity = kvp.Value.capacities;
                 return config;
             }
         );
@@ -660,8 +660,8 @@ public class MapGeneratorJSON : NetworkBehaviour
         float water = (float)soilConfigJToken["capacities"];
 
         SoilConfig nSoilConfig = ScriptableObject.CreateInstance<SoilConfig>();
-        nSoilConfig.drainTime = (float)soilConfigJToken["drainTime"];
-        nSoilConfig.capacities = water;
+        nSoilConfig.drainRate = (float)soilConfigJToken["drainTime"];
+        nSoilConfig.waterCapacity = water;
 
         _soilConfigs[configName] = nSoilConfig;
     }

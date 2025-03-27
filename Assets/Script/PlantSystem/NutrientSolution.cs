@@ -15,7 +15,7 @@ public struct NutrientSolution : INetworkStruct {
     /// </summary>
     public Vector4 nutrients;
 
-    public static NutrientSolution Empty = new NutrientSolution(0);
+    public static NutrientSolution Empty => new(0);
 
     public NutrientSolution(float water) {
         this.water = water;
@@ -146,12 +146,28 @@ public struct NutrientSolution : INetworkStruct {
         return (portion, remainder);
     }
 
-    public NutrientSolution DrawOff(float portionSize) {
+    public NutrientSolution DrawOff(float portionSize)
+    {
+        if (portionSize <= 0.0f || water <= 0) return Empty;
         NutrientSolution result = new NutrientSolution();
         result.water = Mathf.Min(water, portionSize);
         result.nutrients = nutrients * (result.water / water);
         water -= result.water;
         nutrients -= result.nutrients;
         return result;
+    }
+
+    public NutrientSolution DrawOffPercentage(float percent)
+    {
+        if (percent < 0.0 || percent > 1.0) throw new ArgumentException("Invalid percentage");
+        NutrientSolution result = this * percent;
+        water -= result.water;
+        nutrients -= result.nutrients;
+        return result;
+    }
+
+    public override string ToString()
+    {
+        return $"{water}, {nutrients.x}, {nutrients.y}, {nutrients.z}, {nutrients.w}";
     }
 }
