@@ -7,6 +7,26 @@ using WebSocketSharp;
 
 public class DefaultPuppetBot : PuppetBehavior
 {
+    public enum BotType {
+        Normal,
+        Harvest,
+        Pluck,
+        Till,
+        Spray,
+        Sample,
+        Plant
+    }
+
+    protected struct BotInfo {
+        public int FloorIdx;
+        public int X;
+        public int Y;
+        public GridCellBehavior[,] CellsOnFloor;
+        public int MaxX;
+        public int MaxY;
+        public BotType CurrentBotType;
+    }
+
     private BotInfo _botInfo;
     private bool _walking = false;
     private Vector3 _targetPos = Vector3.zero;
@@ -130,7 +150,24 @@ public class DefaultPuppetBot : PuppetBehavior
     {
         return new JObject();
     }
-    
+
+    public override JObject HMTStateRep(HMTStateLevelOfDetail level) {
+        switch (level) {
+            case HMTStateLevelOfDetail.None:
+                return new JObject();
+            case HMTStateLevelOfDetail.Unseen:
+                return new JObject();
+            case HMTStateLevelOfDetail.Seen:
+                return new JObject();
+            case HMTStateLevelOfDetail.Visible:
+                return new JObject();
+            case HMTStateLevelOfDetail.Full:
+                return new JObject();
+            default:
+                return new JObject();
+        }
+    }
+
     private bool ValidTargetPosition(int x, int y)
     {
         bool ret = x < _botInfo.MaxX && y < _botInfo.MaxY && x >= 0 && y >= 0;

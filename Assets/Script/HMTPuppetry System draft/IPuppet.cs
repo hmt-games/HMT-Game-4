@@ -2,7 +2,6 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace HMT.Puppetry {
-
     /// <summary>
     /// This is an interface that will be used internally in the PupperManager system.
     /// 
@@ -76,9 +75,6 @@ namespace HMT.Puppetry {
         /// <param name="command"></param>
         /// <returns></returns>
         public JObject GetState(PuppetCommand command);
-
-
-
     }
 
 }

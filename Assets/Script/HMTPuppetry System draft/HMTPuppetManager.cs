@@ -134,8 +134,8 @@ namespace HMT.Puppetry {
                     JObject postData = e.GetJsonPostData();
                     string agentId = postData["agent_id"].ToString();
                     string puppetId = postData["puppet_id"].ToString();
-                    string sessionID = postData.TryGetDefault<string>("session_id", System.Guid.NewGuid().ToString());
-                    byte priority = postData.TryGetDefault<byte>("priority", (byte)defaultCommandPriority);
+                    string sessionID = postData.TryGetDefault("session_id", System.Guid.NewGuid().ToString());
+                    byte priority = postData.TryGetDefault("priority", (byte)defaultCommandPriority);
                     
                     if(!PuppetIndex.ContainsKey(puppetId)) {
                         Debug.LogWarning("Puppet ID not found in Puppet Index");

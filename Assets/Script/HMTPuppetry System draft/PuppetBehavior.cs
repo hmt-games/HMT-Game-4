@@ -1,96 +1,79 @@
-using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PuppetBehavior : MonoBehaviour, IPuppet {
+namespace HMT.Puppetry {
 
-    public virtual string PuppetID { get; protected set; }
+    public abstract class PuppetBehavior : MonoBehaviour, IPuppet, IPuppetPerceivable {
 
-    public string puppetIDPrefix = "puppet";
+        public virtual string ObjectID { get { return PuppetID; } }
+        public virtual string PuppetID { get; protected set; }
 
-    public PuppetCommand CurrentCommand { get; protected set; }
+        public string puppetIDPrefix = "puppet";
 
-    public IList<PuppetCommand> CurrentPlan => currentPlan;
-    private IList<PuppetCommand> currentPlan = null;
+        public PuppetCommand CurrentCommand { get; protected set; }
 
-    public virtual bool ExecutingAction { get { return CurrentCommand != null; } }
+        public IList<PuppetCommand> CurrentPlan => currentPlan;
+        private IList<PuppetCommand> currentPlan = null;
 
-    public virtual bool ExecutingPlan { get { return currentPlan != null; } }
+        public virtual bool ExecutingAction { get { return CurrentCommand != null; } }
 
-    // Start is called before the first frame update
-    protected virtual void Start() {
-        PuppetID = IPuppet.GenerateUniquePuppetID(puppetIDPrefix);
-        HMTPuppetManager.Instance.AddPuppet(this);
-        CurrentCommand = null;
-        currentPlan = null;
-    }
+        public virtual bool ExecutingPlan { get { return currentPlan != null; } }
 
-    // Update is called once per frame
-    protected virtual void Update() {
-        
-    }
-
-    public virtual void ExecutePlan(PuppetCommand command) { 
-        if (command.Command != PuppetCommandType.EXECUTE_PLAN) {
-            throw new System.ArgumentException("Command does not have a plan.");
+        // Start is called before the first frame update
+        protected virtual void Start() {
+            PuppetID = IPuppet.GenerateUniquePuppetID(puppetIDPrefix);
+            HMTPuppetManager.Instance.AddPuppet(this);
+            CurrentCommand = null;
+            currentPlan = null;
         }
-        if((CurrentCommand == null && command.Priority <= PuppetCommand.IDLE_PRIORITY) || command.Priority <= CurrentCommand.Priority) {
-            CurrentCommand = command;
-            StartCoroutine(ExecutePlanCoroutine(command));
-        }
-        else {
-            command.SendInsufficientPriorityResponse();
-        }
-    }
 
-    IEnumerator ExecutePlanCoroutine(PuppetCommand puppetCommand) {
-        currentPlan = CurrentCommand.GetPlan();
-        for(int i = 0; i < currentPlan.Count; i++) {
-            ExecuteAction(currentPlan[i]);
-            while(ExecutingAction) {
-                yield return null;  
+        // Update is called once per frame
+        protected virtual void Update() {
+
+        }
+
+        public virtual void ExecutePlan(PuppetCommand command) {
+            if (command.Command != PuppetCommandType.EXECUTE_PLAN) {
+                throw new System.ArgumentException("Command does not have a plan.");
             }
-            if(!ExecutingPlan) {
-                break;
+            if ((CurrentCommand == null && command.Priority <= PuppetCommand.IDLE_PRIORITY) || command.Priority <= CurrentCommand.Priority) {
+                CurrentCommand = command;
+                StartCoroutine(ExecutePlanCoroutine(command));
+            }
+            else {
+                command.SendInsufficientPriorityResponse();
             }
         }
-        CurrentCommand = null;
-        yield break;
-    }
 
-    #region Abstract Elements
+        IEnumerator ExecutePlanCoroutine(PuppetCommand puppetCommand) {
+            currentPlan = CurrentCommand.GetPlan();
+            for (int i = 0; i < currentPlan.Count; i++) {
+                ExecuteAction(currentPlan[i]);
+                while (ExecutingAction) {
+                    yield return null;
+                }
+                if (!ExecutingPlan) {
+                    break;
+                }
+            }
+            CurrentCommand = null;
+            yield break;
+        }
 
-    public abstract HashSet<string> SupportedActions { get; }
+        #region Abstract Elements
 
-    public abstract void ExecuteAction(PuppetCommand command);
+        public abstract HashSet<string> SupportedActions { get; }
 
-    public abstract void ExecuteCommunicate(PuppetCommand command);
+        public abstract void ExecuteAction(PuppetCommand command);
 
-    public abstract JObject GetState(PuppetCommand command);
+        public abstract void ExecuteCommunicate(PuppetCommand command);
 
-    #endregion
-    
-    public enum BotType
-    {
-        Normal,
-        Harvest,
-        Pluck,
-        Till,
-        Spray,
-        Sample,
-        Plant
-    }
-    
-    protected struct BotInfo
-    {
-        public int FloorIdx;
-        public int X;
-        public int Y;
-        public GridCellBehavior[,] CellsOnFloor;
-        public int MaxX;
-        public int MaxY;
-        public BotType CurrentBotType;
+        public abstract JObject GetState(PuppetCommand command);
+
+        public abstract JObject HMTStateRep(HMTStateLevelOfDetail level);
+
+        #endregion
     }
 }

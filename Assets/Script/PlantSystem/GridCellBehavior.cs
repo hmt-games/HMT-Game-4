@@ -5,10 +5,11 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Fusion;
 using GameConstant;
+using Newtonsoft.Json.Linq;
+using HMT.Puppetry;
 
-public class GridCellBehavior : NetworkBehaviour
+public class GridCellBehavior : NetworkBehaviour, IPuppetPerceivable
 {
-
 
     /// <summary>
     /// The floor of a tower that this cell is on. 
@@ -127,6 +128,33 @@ public class GridCellBehavior : NetworkBehaviour
         }
 
         return NutrientSolution.Empty;
+    }
+
+    public string ObjectID => $"cell_{parentFloor.floorNumber}_{gridX}_{gridZ}";
+
+    public JObject HMTStateRep(HMTStateLevelOfDetail lod) {
+        JObject rep = new JObject();
+        rep["gridX"] = gridX;
+        rep["gridY"] = gridZ;
+        switch (lod) {
+            case HMTStateLevelOfDetail.Visible:
+                rep["saturation"] = NutrientLevels.water / soilConfig.capacities;
+                rep["plantCount"] = plantCount;
+                rep["plants"] = new JArray(plants.Select(p => p.HMTStateRep(lod)));
+                break;
+            case HMTStateLevelOfDetail.Full:
+                rep["soil_capacity"] = soilConfig.capacities;
+                rep["soil_drain_time"] = soilConfig.drainTime;
+                rep["water"] = NutrientLevels.water;
+                rep["nutrient_a"] = NutrientLevels.nutrients[0];
+                rep["nutrient_b"] = NutrientLevels.nutrients[1];
+                rep["nutrient_c"] = NutrientLevels.nutrients[2];
+                rep["nutrient_d"] = NutrientLevels.nutrients[3];
+                rep["plantCount"] = plantCount;
+                rep["plants"] = new JArray(plants.Select(p => p.HMTStateRep(lod)));
+                break;
+        }
+        return rep;
     }
 
     // Start is called before the first frame update

@@ -1,3 +1,5 @@
+using HMT.Puppetry;
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -128,6 +130,17 @@ namespace ErikDraft {
         /// <returns></returns>
         public NutrientSolution OnWater(NutrientSolution waterVolume) {
             return waterVolume;
+        }
+
+        public JObject HMTStateRep(HMTStateLevelOfDetail lod) {
+            JObject state = new JObject();
+            state["RootMass"] = RootMass;
+            state["Height"] = Height;
+            state["WaterLevel"] = WaterLevel;
+            state["EnergyLevel"] = EnergyLevel;
+            state["Health"] = Health;
+            state["Age"] = Age;
+            return state;
         }
     }
 
