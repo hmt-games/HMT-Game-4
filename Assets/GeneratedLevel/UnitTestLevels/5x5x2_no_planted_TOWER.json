@@ -6,7 +6,8 @@
   },
   "Floor0": [
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -19,7 +20,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -32,7 +34,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -45,7 +48,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -58,7 +62,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -71,7 +76,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -84,7 +90,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -97,7 +104,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -110,7 +118,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -123,7 +132,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -136,7 +146,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -149,7 +160,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -162,7 +174,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -175,7 +188,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -188,7 +202,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -201,7 +216,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -214,7 +230,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -227,7 +244,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -240,7 +258,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -253,7 +272,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -266,7 +286,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -279,7 +300,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -292,7 +314,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -305,7 +328,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -318,7 +342,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -333,7 +358,8 @@
   ],
   "Floor1": [
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -346,7 +372,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -359,7 +386,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -372,7 +400,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -385,7 +414,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -398,7 +428,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -411,7 +442,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -424,7 +456,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -437,7 +470,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -450,7 +484,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -463,7 +498,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -476,7 +512,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -489,7 +526,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -502,7 +540,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -515,7 +554,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -528,7 +568,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -541,7 +582,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -554,7 +596,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -567,7 +610,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -580,7 +624,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -593,7 +638,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -606,7 +652,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -619,7 +666,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -632,7 +680,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [
@@ -645,7 +694,8 @@
       "Plants": {}
     },
     {
-      "soilConfig": "SoilConfig0",
+      "GridType" : "Soil",
+      "SoilConfig": "SoilConfig0",
       "NutrientLevels": {
         "water": 1000,
         "nutrients": [

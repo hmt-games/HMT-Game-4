@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+#if false
 public class MapGenerator : MonoBehaviour
 {
     /*
@@ -134,3 +135,5 @@ public class MapGenerator : MonoBehaviour
         return nGrid;
     }
 }
+
+#endif

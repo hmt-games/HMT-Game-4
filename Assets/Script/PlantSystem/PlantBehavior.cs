@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using Fusion;
@@ -15,7 +16,7 @@ public class PlantBehavior : NetworkBehaviour {
     /// <summary>
     /// Plants can in principle reach to multiple cells to draw resources from, but need to figure out the best way to represent this
     /// </summary>
-    public GridCellBehavior parentCell;
+    public SoilCellBehavior parentCell;
 
     public string ObjectID { get; private set; } = IPuppet.GenerateUniquePuppetID("plant");
 
@@ -32,13 +33,13 @@ public class PlantBehavior : NetworkBehaviour {
 
 
     [Networked]
-    private float _height { get; set; } = 0;
-    public float Height {
+    private float _surfaceMass { get; set; } = 0;
+    public float SurfaceMass {
         get {
-            return _height;
+            return _surfaceMass;
         }
         private set {
-            _height = Mathf.Max(0, value);
+            _surfaceMass = Mathf.Max(0, value);
         }
     }
     public float WaterLevel {
@@ -73,7 +74,7 @@ public class PlantBehavior : NetworkBehaviour {
 
     public void SetInitialProperties(PlantInitInfo plantInitInfo) {
         _rootMass = plantInitInfo.RootMass;
-        _height = plantInitInfo.Height;
+        _surfaceMass = plantInitInfo.Height;
         EnergyLevel = plantInitInfo.EnergyLevel;
         healthHistory = new Queue<float>();
         for (int i = 0; i < maxHealthHistory; i++) {
@@ -86,90 +87,44 @@ public class PlantBehavior : NetworkBehaviour {
         PlantNextStage();
     }
 
-    public NutrientSolution OnTick2(NutrientSolution allocation) {
+
+
+    public NutrientSolution OnTick(NutrientSolution allocation) {
         // UPTAKE
         float uptakeVolume = Mathf.Min(config.waterCapacity - NutrientLevels.water, config.uptakeRate);
         NutrientLevels += allocation.DrawOff(uptakeVolume);
 
         //METABOLISM
         NutrientSolution metabolismDraw = NutrientLevels.DrawOff(config.metabolismRate);
-        float metabolized = 0;
-
-
+        float tick_energy = Vector4.Dot(metabolismDraw.nutrients, config.metabolismFactor);
+        Vector4 idealDraw = Vector4.one * config.metabolismRate;
+        float tick_health = Mathf.Clamp01(tick_energy / Vector4.Dot(config.metabolismFactor.Positives(), idealDraw));
+        
         //HEALTH
+        if (healthHistory.Count == maxHealthHistory) healthHistory.Dequeue();
+        healthHistory.Enqueue(tick_health);
+        Health = healthHistory.Sum() / healthHistory.Count;
 
         //GROWTH
+        //TODO: height cap stop grow
+        if (Health > config.growthToleranceThreshold)
+        {
+            float growth = Mathf.Max(0.0f, tick_energy);
+            RootMass += growth * config.PercentToRoots(Age);
+            SurfaceMass += growth * (1 - config.PercentToRoots(Age));
+        }
 
         //LEECH
-
-        return allocation;
-    }
-
-
-
-
-    public NutrientSolution OnTick(NutrientSolution allocation) {
-        /// UPTAKE
-        /// The moves an amount of each compound from the soil to the plant based on the uptake rate and the amount of the compound in the soil.
-        /// either it moves the amount based on its uptake rate OR up to the ammount it can contain if it's full
-        float uptake = Mathf.Min(allocation.water, Mathf.Min(config.waterCapacity - NutrientLevels.water, config.uptakeRate));
-        NutrientLevels += allocation * (uptake / allocation.water);
-        allocation -= uptake;
-
-        /// METABOLISM
-        /// Uses the uptake nutrients to contribute to maintaining the plant and converting to energy
-        /// TODO: metabolismNeeds * some factor * surfacemass, tune this
-        var metabolismConsumption = Vector4.Min(NutrientLevels.nutrients, config.metabolismNeeds);
-        EnergyLevel += Vector4.Dot(config.metabolismFactor, metabolismConsumption);
-        NutrientLevels.nutrients -= metabolismConsumption;
-        //TODO: insufficient water consumption should have some sort of consequence
-        NutrientLevels.water -= Mathf.Min(config.metabolismWaterNeeds, NutrientLevels.water);
-
-        //TODO: add plant deteriorating and dying based on energy level
-
-        /// HEALTH
-        /// The health calculation is a sliding window average of the metabolism rate
-        /// TODO: maybe just a array & pointer
-        if (healthHistory.Count >= maxHealthHistory) {
-            healthHistory.Dequeue();
-        }
-        healthHistory.Enqueue(metabolismConsumption.Sum() / config.metabolismNeeds.Sum());
-        //update health value
-        healthTotal = 0;
-        foreach (float f in healthHistory) {
-            healthTotal += f;
-        }
-        Health = healthTotal / healthHistory.Count;
-
-        if (Health > config.growthToleranceThreshold) {
-            /// GROWTH / Consumption
-            /// This consumes compunds to contribute to growth
-            var growthConsumption = Vector4.Min(NutrientLevels.nutrients, config.growthConsumptionRateLimit);
-            var growth = Vector4.Dot(config.growthFactor, growthConsumption);
-            NutrientLevels.nutrients -= growthConsumption;
-            RootMass += growth * config.PercentToRoots(Age);
-            Height += growth * (1 - config.PercentToRoots(Age));
-        }
-
-        PlantNextStage();
-
-        /// LEECH
-        /// Originally I was thinking of having plants leech somehting back into the soil but realized it was more complicated.
-        /// This should probably be a trait but it also might be something we could use for when a plant is dead.
-        /// leeches some amount of each compound back into the soil
-        //for(int compound = 0; compound < CompoundLevels.Length; compound++) {
-        //    var leech = Mathf.Min(config.leechRate[compound] * CompoundLevels[compound], parentCell.soilConfig.compoundCapacities[compound] - allocation.nutrients[compound]);
-        //    CompoundLevels[compound] -= leech;?";[]=----p['
-        //    allocation.nutrients[compound] += leech;
-        //}
-        if (EnergyLevel >= config.leachingEnergyThreshold) {
+        EnergyLevel += tick_energy;
+        if (EnergyLevel >= config.leachingEnergyThreshold)
+        {
             allocation.nutrients += EnergyLevel * config.leachingFactor;
             EnergyLevel = 0;
         }
 
         Age++;
-        //TODO: current tick - tick planted
 
+        Debug.Log(allocation);
         return allocation;
     }
 
@@ -188,7 +143,7 @@ public class PlantBehavior : NetworkBehaviour {
     private void PlantNextStage() {
         if (plantCurrentStage == _plantMaxStage) return;
 
-        while (Height >= _stageTransitionThreshold[plantCurrentStage + 1]) {
+        while (SurfaceMass >= _stageTransitionThreshold[plantCurrentStage + 1]) {
             plantCurrentStage++;
             if (plantCurrentStage == _plantMaxStage) break;
         }

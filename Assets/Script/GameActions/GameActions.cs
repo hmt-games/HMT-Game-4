@@ -41,7 +41,7 @@ public class GameActions : MonoBehaviour
     {
         //TODO: implement some sort of OnHarvest behavior for plants
         //TODO: this should take some ticks to perform, while showing a progress bar
-        GridCellBehavior plantGrid = targetPlant.parentCell;
+        SoilCellBehavior plantGrid = targetPlant.parentCell;
         plantGrid.plants.Remove(targetPlant);
         plantGrid.plantCount--;
 
@@ -88,7 +88,7 @@ public class GameActions : MonoBehaviour
     /// <param name="species"></param>
     /// <param name="plantInitInfo"></param>
     /// <param name="targetGrid"></param>
-    public void Plant(PlantConfig species, PlantInitInfo plantInitInfo, GridCellBehavior targetGrid)
+    public void Plant(PlantConfig species, PlantInitInfo plantInitInfo, SoilCellBehavior targetGrid)
     {
         int plantSlotIdx = targetGrid.plantCount;
         if (plantSlotIdx >= GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE)

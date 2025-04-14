@@ -51,6 +51,9 @@ public class GameActionGoldenFinger : MonoBehaviour
 
     public void PlantSubmit()
     {
+        SoilCellBehavior _selectedSoil = _selectedGrid as SoilCellBehavior;
+        if (_selectedSoil == null) return;
+        
         PlantConfig species = MapGeneratorJSON.Instance.plantConfigs[_speciesSelect.options[_speciesSelect.value].text];
         PlantInitInfo plantInitInfo = new PlantInitInfo(
             float.Parse(_rootMass.text),
@@ -61,7 +64,7 @@ public class GameActionGoldenFinger : MonoBehaviour
             float.Parse(_water.text),
             String2Vector4(_nutrients.text));
         
-        GameActions.Instance.Plant(species, plantInitInfo, _selectedGrid);
+        GameActions.Instance.Plant(species, plantInitInfo, _selectedSoil);
         
         _plantConfig.gameObject.SetActive(false);
         GF_Info.gameObject.SetActive(false);
