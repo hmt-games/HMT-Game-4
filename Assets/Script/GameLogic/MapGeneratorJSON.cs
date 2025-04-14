@@ -17,7 +17,7 @@ public class MapGeneratorJSON : NetworkBehaviour
 {
     [SerializeField] private TextAsset configJSON;
     [SerializeField] private TextAsset towerJSON;
-    [SerializeField] private GameObject tilePrefab;
+    [FormerlySerializedAs("tilePrefab")] [SerializeField] private GameObject soilPrefab;
     [SerializeField] private GridTheme grid2DTheme;
     [SerializeField] private GameObject plantPrefab;
     [SerializeField] private GameObject towerPrefab;
@@ -521,7 +521,16 @@ public class MapGeneratorJSON : NetworkBehaviour
         NetworkObject gridObj;
         if (BasicSpawner._runner.IsServer)
         {
-            gridObj = BasicSpawner._runner.Spawn(tilePrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
+            switch (gridJObject["GridType"].ToString())
+            {
+                case "Soil":
+                    gridObj = BasicSpawner._runner.Spawn(soilPrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
+                    break;
+                default:
+                    gridObj = BasicSpawner._runner.Spawn(soilPrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
+                    break;
+            }
+            
             gridCellIDs[parentFloor.floorNumber, x, z] = gridObj.Id;
         }
         else
@@ -540,13 +549,13 @@ public class MapGeneratorJSON : NetworkBehaviour
         gridObj.transform.parent = parentFloor.gameObject.transform;
 
         //GridCellBehavior nGrid = gridObj.AddComponent<GridCellBehavior>();
-        GridCellBehavior nGrid = gridObj.GetComponent<GridCellBehavior>();
+        SoilCellBehavior nGrid = gridObj.GetComponent<SoilCellBehavior>();
         nGrid.parentFloor = parentFloor;
         nGrid.gridX = x;
         nGrid.gridZ = z;
         
         // add soil config
-        string soilConfig = (string)gridJObject["soilConfig"];
+        string soilConfig = (string)gridJObject["SoilConfig"];
         if (!_soilConfigs.ContainsKey(soilConfig)) CreateSoilConfig(soilConfig);
         nGrid.soilConfig = _soilConfigs[soilConfig];
         
@@ -577,7 +586,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         parentFloor.Cells[x, z] = nGrid;
     }
 
-    private void CreatePlant(JToken plantJToken, GridCellBehavior parentGrid, Transform plantSlot, int plantIdx)
+    private void CreatePlant(JToken plantJToken, SoilCellBehavior parentGrid, Transform plantSlot, int plantIdx)
     {
         string plantConfigName = (string)plantJToken["config"];
         if (!plantConfigs.ContainsKey(plantConfigName)) {
