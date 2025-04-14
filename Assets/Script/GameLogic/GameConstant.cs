@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,15 +41,16 @@ namespace GameConstant
         }
     }
 
+    [Serializable]
     public struct PlantInitInfo
     {
-        public float RootMass {get;}
-        public float Height {get;}
-        public float EnergyLevel {get;}
-        public float Health {get;}
-        public float Age {get;}
-        public float Water {get;}
-        public Vector4 Nutrient {get;}
+        public float RootMass;
+        public float Height;
+        public float EnergyLevel;
+        public float Health;
+        public float Age;
+        public float Water;
+        public Vector4 Nutrient;
 
         public PlantInitInfo(float rootMass, float height, float energyLevel, float health, float age, float water, Vector4 nutrient)
         {

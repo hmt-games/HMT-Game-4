@@ -17,7 +17,7 @@ public class MapGeneratorJSON : NetworkBehaviour
 {
     [SerializeField] private TextAsset configJSON;
     [SerializeField] private TextAsset towerJSON;
-    [SerializeField] private GameObject tilePrefab;
+    [FormerlySerializedAs("tilePrefab")] [SerializeField] private GameObject soilPrefab;
     [SerializeField] private GridTheme grid2DTheme;
     [SerializeField] private GameObject plantPrefab;
     [SerializeField] private GameObject towerPrefab;
@@ -292,7 +292,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp => kvp.Key,
             kvp => new PlantConfigDTO
             {
-                capacities = kvp.Value.capacities,
+                capacities = kvp.Value.waterCapacity,
                 uptakeRate = kvp.Value.uptakeRate,
                 metabolismNeeds = ConvertToFloatArray(kvp.Value.metabolismNeeds),
                 metabolismWaterNeeds = kvp.Value.metabolismWaterNeeds,
@@ -317,8 +317,8 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp => kvp.Key,
             kvp => new SoilConfigDTO
             {
-                drainTime = kvp.Value.drainTime,
-                capacities = kvp.Value.capacities
+                drainTime = kvp.Value.drainRate,
+                capacities = kvp.Value.waterCapacity
             }
         );
 
@@ -335,7 +335,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp =>
             {
                 var config = ScriptableObject.CreateInstance<PlantConfig>();
-                config.capacities = kvp.Value.capacities;
+                config.waterCapacity = kvp.Value.capacities;
                 config.uptakeRate = kvp.Value.uptakeRate;
                 config.metabolismNeeds = ConvertToVector4(kvp.Value.metabolismNeeds);
                 config.metabolismWaterNeeds = kvp.Value.metabolismWaterNeeds;
@@ -394,8 +394,8 @@ public class MapGeneratorJSON : NetworkBehaviour
             kvp =>
             {
                 var config = ScriptableObject.CreateInstance<SoilConfig>();
-                config.drainTime = kvp.Value.drainTime;
-                config.capacities = kvp.Value.capacities;
+                config.drainRate = kvp.Value.drainTime;
+                config.waterCapacity = kvp.Value.capacities;
                 return config;
             }
         );
@@ -521,7 +521,16 @@ public class MapGeneratorJSON : NetworkBehaviour
         NetworkObject gridObj;
         if (BasicSpawner._runner.IsServer)
         {
-            gridObj = BasicSpawner._runner.Spawn(tilePrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
+            switch (gridJObject["GridType"].ToString())
+            {
+                case "Soil":
+                    gridObj = BasicSpawner._runner.Spawn(soilPrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
+                    break;
+                default:
+                    gridObj = BasicSpawner._runner.Spawn(soilPrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
+                    break;
+            }
+            
             gridCellIDs[parentFloor.floorNumber, x, z] = gridObj.Id;
         }
         else
@@ -540,13 +549,13 @@ public class MapGeneratorJSON : NetworkBehaviour
         gridObj.transform.parent = parentFloor.gameObject.transform;
 
         //GridCellBehavior nGrid = gridObj.AddComponent<GridCellBehavior>();
-        GridCellBehavior nGrid = gridObj.GetComponent<GridCellBehavior>();
+        SoilCellBehavior nGrid = gridObj.GetComponent<SoilCellBehavior>();
         nGrid.parentFloor = parentFloor;
         nGrid.gridX = x;
         nGrid.gridZ = z;
         
         // add soil config
-        string soilConfig = (string)gridJObject["soilConfig"];
+        string soilConfig = (string)gridJObject["SoilConfig"];
         if (!_soilConfigs.ContainsKey(soilConfig)) CreateSoilConfig(soilConfig);
         nGrid.soilConfig = _soilConfigs[soilConfig];
         
@@ -577,7 +586,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         parentFloor.Cells[x, z] = nGrid;
     }
 
-    private void CreatePlant(JToken plantJToken, GridCellBehavior parentGrid, Transform plantSlot, int plantIdx)
+    private void CreatePlant(JToken plantJToken, SoilCellBehavior parentGrid, Transform plantSlot, int plantIdx)
     {
         string plantConfigName = (string)plantJToken["config"];
         if (!plantConfigs.ContainsKey(plantConfigName)) {
@@ -638,7 +647,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         
         PlantConfig plantConfig = ScriptableObject.CreateInstance<PlantConfig>();
 
-        plantConfig.capacities = (float)planConfigJToken["capacities"];
+        plantConfig.waterCapacity = (float)planConfigJToken["capacities"];
         plantConfig.uptakeRate = (float)planConfigJToken["uptakeRate"];
         plantConfig.metabolismNeeds = Vector4FromJTokenList(planConfigJToken["metabolismNeeds"].ToList());
         plantConfig.metabolismWaterNeeds = (float)planConfigJToken["metabolismWaterNeeds"];
@@ -660,8 +669,8 @@ public class MapGeneratorJSON : NetworkBehaviour
         float water = (float)soilConfigJToken["capacities"];
 
         SoilConfig nSoilConfig = ScriptableObject.CreateInstance<SoilConfig>();
-        nSoilConfig.drainTime = (float)soilConfigJToken["drainTime"];
-        nSoilConfig.capacities = water;
+        nSoilConfig.drainRate = (float)soilConfigJToken["drainTime"];
+        nSoilConfig.waterCapacity = water;
 
         _soilConfigs[configName] = nSoilConfig;
     }

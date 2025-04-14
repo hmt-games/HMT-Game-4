@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if false
 public class HeatMapSwicher : MonoBehaviour
 {
     private bool _heatMapOn = false;
@@ -67,8 +68,8 @@ public class HeatMapSwicher : MonoBehaviour
                     {
                         PlantBehavior plant = floor.Cells[x, y].plants[z];
                         Vector4 nutrients = plant.NutrientLevels.nutrients;
-                        Debug.Log("Plant index: " + x + "," + "y," + "z, " + "Root Mass: " + plant.RootMass + ", Height: " + plant.Height + ", WaterLevel: " + plant.WaterLevel
-                            + ", EnergyLevel: " + plant.EnergyLevel + ", Health: " + plant.Health + ", Age: " + plant.Age + ", NutrientLevels: " + nutrients.x + "," + nutrients.y + "," + nutrients.z);
+                        Debug.Log("Plant index: " + x + "," + "y," + "z, " + "Root Mass: " + plant.RootMass + ", Height: " + plant.SurfaceMass + ", WaterLevel: " + plant.WaterLevel
+                                  + ", EnergyLevel: " + plant.EnergyLevel + ", Health: " + plant.Health + ", Age: " + plant.Age + ", NutrientLevels: " + nutrients.x + "," + nutrients.y + "," + nutrients.z);
                     }
                 }
             }
@@ -139,3 +140,4 @@ public class HeatMapSwicher : MonoBehaviour
         _heatMapOn = true;
     }
 }
+#endif

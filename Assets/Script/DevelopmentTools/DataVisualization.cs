@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if false
 public class DataVisualization : MonoBehaviour
 {
     [SerializeField] private GameObject toggleParent;
@@ -101,3 +102,4 @@ public class DataVisualization : MonoBehaviour
         }
     }
 }
+#endif

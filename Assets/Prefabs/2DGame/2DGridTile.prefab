@@ -350,10 +350,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2505949527415372709}
   - component: {fileID: 2505949527415372710}
-  - component: {fileID: 3316745357754041207}
   - component: {fileID: 7134725830656282439}
   - component: {fileID: 1683917860028085507}
   - component: {fileID: 202361429011498538}
+  - component: {fileID: -7170111954412572750}
   m_Layer: 3
   m_Name: 2DGridTile
   m_TagString: Untagged
@@ -431,25 +431,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3316745357754041207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2505949527415372711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 538b0128262134d0899877ecd951304f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentFloor: {fileID: 0}
-  _gridX: 0
-  _gridZ: 0
-  plants: []
-  soilConfig: {fileID: 0}
-  plantCount: 0
-  plantSlotOccupation: 000000000000000000
 --- !u!114 &7134725830656282439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,8 +448,8 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 3316745357754041207}
   - {fileID: 1683917860028085507}
+  - {fileID: -7170111954412572750}
 --- !u!114 &1683917860028085507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,6 +511,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-7170111954412572750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2505949527415372711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c0e9832230742899e1684175e7b2359, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentFloor: {fileID: 0}
+  _gridX: 0
+  _gridZ: 0
+  plants: []
+  soilConfig: {fileID: 0}
+  plantCount: 0
+  plantSlotOccupation: 000000000000000000
+  _NutrientLevels:
+    water: 0
+    nutrients: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2505949527437129070
 GameObject:
   m_ObjectHideFlags: 0
