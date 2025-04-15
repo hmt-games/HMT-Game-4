@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using WebSocketSharp;
 
@@ -19,13 +20,19 @@ public class DefaultPuppetBot : PuppetBehavior
 
     protected struct BotInfo {
         public int FloorIdx;
-        public int X;
-        public int Y;
-        public GridCellBehavior[,] CellsOnFloor;
-        public int MaxX;
-        public int MaxY;
+        public Vector2Int CellIdx;
+        //public int X;
+        //public int Y;
+        //public GridCellBehavior[,] CellsOnFloor;
+        //public int MaxX;
+        //public int MaxY;
         public BotType CurrentBotType;
     }
+
+    /// <summary>
+    /// TODO: This needs to be put in some kind of config
+    /// </summary>
+    public int SensorRange = 1;
 
     private BotInfo _botInfo;
     private bool _walking = false;
@@ -40,11 +47,14 @@ public class DefaultPuppetBot : PuppetBehavior
     public void InitBot(int floor, int x, int y)
     {
         _botInfo.FloorIdx = floor;
-        _botInfo.X = x;
-        _botInfo.Y = y;
-        _botInfo.CellsOnFloor = GameManager.Instance.parentTower.floors[floor].Cells;
-        _botInfo.MaxX = _botInfo.CellsOnFloor.GetLength(0);
-        _botInfo.MaxY = _botInfo.CellsOnFloor.GetLength(1);
+        _botInfo.CellIdx = new Vector2Int(x, y);
+        //_botInfo.X = x;
+        //_botInfo.Y = y;
+    }
+
+
+    Floor CurrentFloor {
+        get { return GameManager.Instance.parentTower.floors[_botInfo.FloorIdx]; }
     }
 
     public override HashSet<string> SupportedActions =>
@@ -56,12 +66,12 @@ public class DefaultPuppetBot : PuppetBehavior
 
     public override void ExecuteAction(PuppetCommand command)
     {
-        CurrentCommand = command;
+        //CurrentCommand = command;
         Debug.LogFormat("Default Puppet Bot Execute Action:{0}", command.json.ToString());
         switch (command.Action)
         {
             case "move":
-                Move();
+                Move(command);
                 break;
             default:
                 command.SendIllegalActionResponse();
@@ -71,108 +81,172 @@ public class DefaultPuppetBot : PuppetBehavior
 
     protected virtual void Update()
     {
-        if (_walking)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, _targetPos, GameManager.Instance.secondPerTick * Time.deltaTime);
-            if (transform.position == _targetPos)
-            {
-                _walking = false;
-                CurrentCommand = null;
-            }
-            return;
-        }
+        //if (_walking)
+        //{
+        //    transform.position = Vector3.MoveTowards(transform.position, _targetPos, GameManager.Instance.secondPerTick * Time.deltaTime);
+        //    if (transform.position == _targetPos)
+        //    {
+        //        _walking = false;
+        //        CurrentCommand = null;
+        //    }
+        //    return;
+        //}
     }
 
-    private void Move()
-    {
-        JObject Params = CurrentCommand.Params;
-        string direction = (string)Params["direction"];
-        if (direction.IsNullOrEmpty())
-        {
-            CurrentCommand.SendMissingParametersResponse(new JObject
-            {
+    private void Move(PuppetCommand command) {
+        if (_walking) {
+            command.SendIllegalActionResponse("Bot is already moving");
+            return;
+        }
+        JObject Params = command.Params;
+        string direction = Params["direction"].ToString();
+        if (direction.IsNullOrEmpty()) {
+            command.SendMissingParametersResponse(new JObject {
                 {"direction", new JArray{"up", "down", "left", "right"}}
             });
-
-            CurrentCommand = null;
             return;
         }
 
-        switch (direction)
-        {
-            case "up":
-                if (ValidTargetPosition(_botInfo.X, _botInfo.Y + 1))
-                {
-                    _targetPos = _botInfo.CellsOnFloor[_botInfo.X, _botInfo.Y + 1].transform.position;
-                    _botInfo.Y += 1;
-                }
-                break;
-            case "down":
-                if (ValidTargetPosition(_botInfo.X, _botInfo.Y - 1))
-                {
-                    _targetPos = _botInfo.CellsOnFloor[_botInfo.X, _botInfo.Y - 1].transform.position;
-                    _botInfo.Y -= 1;
-                }
-                break;
-            case "left":
-                if (ValidTargetPosition(_botInfo.X - 1, _botInfo.Y))
-                {
-                    _targetPos = _botInfo.CellsOnFloor[_botInfo.X - 1, _botInfo.Y].transform.position;
-                    _botInfo.X -= 1;
-                }
-                break;
-            case "right":
-                if (ValidTargetPosition(_botInfo.X + 1, _botInfo.Y))
-                {
-                    _targetPos = _botInfo.CellsOnFloor[_botInfo.X + 1, _botInfo.Y].transform.position;
-                    _botInfo.X += 1;
-                }
-                break;
-            default:
-                CurrentCommand.SendBadParametersResponse(new JObject
-                {
-                    {"direction", direction}
-                }, new JObject
-                {
-                    "direction", new JArray{"up", "down", "left", "right"}
-                });
-                CurrentCommand = null;
-                break;
+        Vector2Int direct = direction switch {
+            "up" => new Vector2Int(0, 1),
+            "down" => new Vector2Int(0, -1),
+            "left" => new Vector2Int(-1, 0),
+            "right" => new Vector2Int(1, 0),
+            _ => Vector2Int.zero
+        };
+
+        if(!ValidTargetPosition(direct + _botInfo.CellIdx)) {
+            command.SendIllegalActionResponse("Attmepting to move bot out of bounds");
+            return;
         }
+
+        CurrentCommand = command;
+        StartCoroutine(MoveCoroutine(direct));
+
+
+
+        //switch (direction)
+        //{
+        //    case "up":
+        //        if (ValidTargetPosition(_botInfo.X, _botInfo.Y + 1))
+        //        {
+        //            _targetPos = CurrentFloor.Cells[_botInfo.X, _botInfo.Y + 1].transform.position;
+        //            _botInfo.Y += 1;
+        //        }
+        //        break;
+        //    case "down":
+        //        if (ValidTargetPosition(_botInfo.X, _botInfo.Y - 1))
+        //        {
+        //            _targetPos = CurrentFloor.Cells[_botInfo.X, _botInfo.Y - 1].transform.position;
+        //            _botInfo.Y -= 1;
+        //        }
+        //        break;
+        //    case "left":
+        //        if (ValidTargetPosition(_botInfo.X - 1, _botInfo.Y))
+        //        {
+        //            _targetPos = CurrentFloor.Cells[_botInfo.X - 1, _botInfo.Y].transform.position;
+        //            _botInfo.X -= 1;
+        //        }
+        //        break;
+        //    case "right":
+        //        if (ValidTargetPosition(_botInfo.X + 1, _botInfo.Y))
+        //        {
+        //            _targetPos = CurrentFloor.Cells[_botInfo.X + 1, _botInfo.Y].transform.position;
+        //            _botInfo.X += 1;
+        //        }
+        //        break;
+        //    default:
+        //        CurrentCommand.SendBadParametersResponse(new JObject
+        //        {
+        //            {"direction", direction}
+        //        }, new JObject
+        //        {
+        //            "direction", new JArray{"up", "down", "left", "right"}
+        //        });
+        //        CurrentCommand = null;
+        //        break;
+        //}
     }
+
+    IEnumerator MoveCoroutine(Vector2Int direction) {
+        _walking = true;
+        Vector3 target = CurrentFloor.Cells[_botInfo.CellIdx.x + direction.x, _botInfo.CellIdx.y + direction.y].transform.position;
+        if (GameManager.Instance.secondPerTick > 0) {
+            float moveDuration = Vector3.Distance(transform.position, target) / GameManager.Instance.secondPerTick;
+            float startTime = Time.time;
+            while (Time.time - startTime < moveDuration) {
+                transform.position = Vector3.Lerp(transform.position, target, (Time.time - startTime) / moveDuration);
+                yield return null;
+            }
+        }
+        _botInfo.CellIdx += direction;
+        transform.position = target;
+        CurrentCommand = null;
+        _walking = false;
+    }
+
 
     public override void ExecuteCommunicate(PuppetCommand command)
     {
         throw new System.NotImplementedException();
     }
 
-    public override JObject GetState(PuppetCommand command)
-    {
-        return new JObject();
+    public override JObject GetState(PuppetCommand command) {
+        JObject ret = new JObject();
+
+        ret["info"] = HMTStateRep(HMTStateLevelOfDetail.Full);
+        
+        JArray percept = new JArray();
+        int xMin = Mathf.Max(0, _botInfo.CellIdx.x - SensorRange);
+        int xMax = Mathf.Min(CurrentFloor.SizeX - 1, _botInfo.CellIdx.x + SensorRange);
+        int yMin = Mathf.Max(0, _botInfo.CellIdx.y - SensorRange);
+        int yMax = Mathf.Min(CurrentFloor.SizeY - 1, _botInfo.CellIdx.y + SensorRange);
+        for (int x = xMin; x <= xMax; x++) {
+            for (int y = yMin; y <= yMax; y++) {
+                percept.Add(CurrentFloor.Cells[x, y].HMTStateRep(HMTStateLevelOfDetail.Visible));  
+            }
+        }
+        ret["percept"] = percept;
+
+        //TODO: we could add "communications" or something as well as a flag in the GetState command for additional details
+        return ret;
     }
 
     public override JObject HMTStateRep(HMTStateLevelOfDetail level) {
+        JObject resp = new JObject();
         switch (level) {
-            case HMTStateLevelOfDetail.None:
-                return new JObject();
-            case HMTStateLevelOfDetail.Unseen:
-                return new JObject();
-            case HMTStateLevelOfDetail.Seen:
-                return new JObject();
-            case HMTStateLevelOfDetail.Visible:
-                return new JObject();
             case HMTStateLevelOfDetail.Full:
-                return new JObject();
+                resp["actions"] = new JArray(SupportedActions);
+                goto case HMTStateLevelOfDetail.Visible;
+
+            case HMTStateLevelOfDetail.Visible:
+                resp["x"] = _botInfo.CellIdx.x;
+                resp["y"] = _botInfo.CellIdx.x;
+                resp["floor"] = _botInfo.FloorIdx;
+                resp["mode"] = _botInfo.CurrentBotType.ToString();
+                if (CurrentCommand != null) {
+                    resp["current_command"] = CurrentCommand.HMTStateRep();
+                }
+                else { 
+                    resp["current_command"] = null;
+                }
+                goto case HMTStateLevelOfDetail.Seen;
+
+            case HMTStateLevelOfDetail.Seen:
+            case HMTStateLevelOfDetail.Unseen:
+            case HMTStateLevelOfDetail.None:
             default:
-                return new JObject();
+                break;
         }
+        return resp;
     }
 
-    private bool ValidTargetPosition(int x, int y)
+    private bool ValidTargetPosition(Vector2 position)
     {
-        bool ret = x < _botInfo.MaxX && y < _botInfo.MaxY && x >= 0 && y >= 0;
-        if (ret) _walking = true;
-        else CurrentCommand = null;
-        return ret;
+
+        return position.x < CurrentFloor.SizeX && position.y < CurrentFloor.SizeY && position.x >= 0 && position.y >= 0;
+        //if (ret) _walking = true;
+        //else CurrentCommand = null;
+        //return ret;
     }
 }

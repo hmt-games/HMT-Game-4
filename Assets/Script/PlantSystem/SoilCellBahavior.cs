@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Fusion;
 using GameConstant;
+using HMT.Puppetry;
+using Newtonsoft.Json.Linq;
 
 public class SoilCellBehavior : GridCellBehavior
 {
@@ -71,6 +73,25 @@ public class SoilCellBehavior : GridCellBehavior
     public override NutrientSolution OnWater(NutrientSolution volumes)
     {
         return volumes;
+    }
+
+    public override JObject HMTStateRep(HMTStateLevelOfDetail lod) {
+        JObject rep = base.HMTStateRep(lod);
+        switch (lod) {
+            case HMTStateLevelOfDetail.Full:
+                rep["soil_config"] = soilConfig.ToFlatJSON();
+                rep["nutrients"] = NutrientLevels.ToFlatJSON();
+                goto case HMTStateLevelOfDetail.Visible;
+            case HMTStateLevelOfDetail.Visible:
+                rep["saturation"] = NutrientLevels.water / soilConfig.waterCapacity;
+                rep["plant_count"] = plantCount;
+                rep["plants"] = new JArray(plants.Select(p => p.HMTStateRep(lod)));
+                goto case HMTStateLevelOfDetail.Seen;
+            case HMTStateLevelOfDetail.Seen:
+                rep["cell_type"] = "soil";
+                break;
+        }
+        return rep;
     }
 
     // Start is called before the first frame update

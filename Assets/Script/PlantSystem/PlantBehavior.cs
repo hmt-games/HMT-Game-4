@@ -69,11 +69,6 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
     private float healthTotal = 0;
     private Queue<float> healthHistory;
 
-    private void Awake() {
-        ObjectID = IPuppet.GenerateUniquePuppetID("plant");
-    }
-
-
     public void SetInitialProperties(PlantInitInfo plantInitInfo) {
         _rootMass = plantInitInfo.RootMass;
         _surfaceMass = plantInitInfo.Height;
@@ -158,18 +153,35 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
         }
     }
 
-
-    public string ObjectID { get; private set; }
-
     public JObject HMTStateRep(HMTStateLevelOfDetail lod) {
         JObject state = new JObject();
-        //state["rootMass"] = RootMass;
-        //state["height"] = Height;
-        //state["energyLevel"] = EnergyLevel;
-        //state["health"] = Health;
-        //state["age"] = Age;
-        //state["water"] = WaterLevel;
-        //state["nutrients"] = NutrientLevels.nutrients.ToString();
+        switch (lod) {
+            case HMTStateLevelOfDetail.Full:
+                state["nutrirents"] = NutrientLevels.ToFlatJSON();
+                state["root_mass"] = RootMass;
+                state["energy_level"] = EnergyLevel;
+                goto case HMTStateLevelOfDetail.Visible;
+
+            case HMTStateLevelOfDetail.Visible:
+                state["species"] = config.speciesName;
+                state["growth_stage"] = plantCurrentStage;
+                state["surface_mass"] = SurfaceMass;
+                state["has_fruit"] = hasFruit;
+                state["health"] = Health;
+                state["age"] = Age;
+                goto case HMTStateLevelOfDetail.Seen;
+
+            case HMTStateLevelOfDetail.Seen:
+                goto case HMTStateLevelOfDetail.Unseen;
+
+            case HMTStateLevelOfDetail.Unseen:
+                break;
+
+            case HMTStateLevelOfDetail.None:
+            default:
+                break;
+        }
+
         return state;
     }
 

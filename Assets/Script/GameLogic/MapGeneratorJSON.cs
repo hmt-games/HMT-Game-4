@@ -647,6 +647,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         
         PlantConfig plantConfig = ScriptableObject.CreateInstance<PlantConfig>();
 
+        plantConfig.speciesName = configName;
         plantConfig.waterCapacity = (float)planConfigJToken["capacities"];
         plantConfig.uptakeRate = (float)planConfigJToken["uptakeRate"];
         plantConfig.metabolismNeeds = Vector4FromJTokenList(planConfigJToken["metabolismNeeds"].ToList());

@@ -22,10 +22,10 @@ public class Floor : NetworkBehaviour
 
 
     //Do we need these two variables?
-    [Networked]
-    public int SizeX { get; set; }
-    [Networked]
-    public int SizeY { get; set; }
+    //[Networked]
+    public int SizeX { get { return Cells.GetLength(0); } }
+    //[Networked]
+    public int SizeY { get { return Cells.GetLength(1); } }
 
 
     // Start is called before the first frame update

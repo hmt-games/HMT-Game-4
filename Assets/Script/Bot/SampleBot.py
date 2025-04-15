@@ -1,6 +1,7 @@
 ﻿import requests
 from json import loads
 from json import dumps
+from json.decoder import JSONDecodeError
 from pprint import pprint
 import random
 import time
@@ -22,21 +23,26 @@ class UnityWebSocket:
             data["session_id"] = session_id
 
         resp = requests.post('http://' + root_url + '/register_agent', json=data)
-        resp_json = resp.json()
 
-        print('Register Agent Response')
-        pprint(resp_json)
+        if resp.status_code != 200:
+            print('Register Agent Response Status:', resp.status_code)
+            print(resp.text)
+            self.connection = None
+        else:
+            resp_json = resp.json()
+            print('Register Agent Response')
+            pprint(resp_json)
 
-        self.service_target = resp_json['service_target']
-        self.session_id = resp_json['session_id']
-        self.agent_id = resp_json['agent_id']
-        self.puppet_id = resp_json['puppet_id']
-        self.priority = resp_json['priority']
-        self.action_set = resp_json['action_set']
-        self.api_key = resp_json.get('api_key', '')
+            self.service_target = resp_json['service_target']
+            self.session_id = resp_json['session_id']
+            self.agent_id = resp_json['agent_id']
+            self.puppet_id = resp_json['puppet_id']
+            self.priority = resp_json['priority']
+            self.action_set = resp_json['action_set']
+            self.api_key = resp_json.get('api_key', '')
 
-        self.connection = connect(self.service_target,
-                                  open_timeout=None, close_timeout=None)
+            self.connection = connect(self.service_target,
+                                      open_timeout=None, close_timeout=None)
 
     def execute_action(self, action, params=None):
         # Command to send to Game env
@@ -127,7 +133,7 @@ if __name__ == "__main__":
                 print('Retrieved Puppets:')
                 for puppet in resp_json['puppets']:
 
-                    print(' - '+puppet['puppet_id'])
+                    print(' - ' + puppet['puppet_id'])
                     print('     - actions:' + str(puppet['action_set']))
             except JSONDecodeError:
                 print('Response Format is Bad')
@@ -138,8 +144,13 @@ if __name__ == "__main__":
         socket = UnityWebSocket(args.root_url, args.agent_id,
                                 args.puppet_id, args.priority)
 
-        if args.style == 'random-walk':
-            print('Launching random walk agent')
-            test_random_walk(socket, args.waitTime, args.iterations)
-        elif args.stype == 'random':
-            pass
+        if socket.connection:
+
+            if args.style == 'random-walk':
+                print('Launching random walk agent')
+                test_random_walk(socket, args.waitTime, args.iterations)
+            elif args.stype == 'random':
+                pass
+
+        else:
+            print('Socket failed to intialize')

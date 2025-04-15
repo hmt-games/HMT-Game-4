@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -12,4 +13,11 @@ public class SoilConfig: ScriptableObject {
     [FormerlySerializedAs("capacities")] public float waterCapacity;
 
     [FormerlySerializedAs("drainTime")] public float drainRate;
+
+    public JObject ToFlatJSON() {
+        return new JObject {
+            {"water_capacity", waterCapacity},
+            {"drain_rate", drainRate}
+        };
+    }
 }

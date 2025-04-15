@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using GameConstant;
 using Fusion;
+using Newtonsoft.Json.Linq;
 
 [Serializable]
 public struct NutrientSolution : INetworkStruct {
@@ -146,8 +147,7 @@ public struct NutrientSolution : INetworkStruct {
         return (portion, remainder);
     }
 
-    public NutrientSolution DrawOff(float portionSize)
-    {
+    public NutrientSolution DrawOff(float portionSize) {
         if (portionSize <= 0.0f || water <= 0) return Empty;
         NutrientSolution result = new NutrientSolution();
         result.water = Mathf.Min(water, portionSize);
@@ -157,8 +157,7 @@ public struct NutrientSolution : INetworkStruct {
         return result;
     }
 
-    public NutrientSolution DrawOffPercentage(float percent)
-    {
+    public NutrientSolution DrawOffPercentage(float percent) {
         if (percent < 0.0 || percent > 1.0) throw new ArgumentException("Invalid percentage");
         NutrientSolution result = this * percent;
         water -= result.water;
@@ -166,8 +165,18 @@ public struct NutrientSolution : INetworkStruct {
         return result;
     }
 
-    public override string ToString()
-    {
+    public JObject ToFlatJSON() {
+        return new JObject
+        {
+            {"w", water },
+            {"a", nutrients.x },
+            {"b", nutrients.y },
+            {"c", nutrients.z },
+            {"d", nutrients.w }
+        };
+    }
+
+    public override string ToString() {
         return $"{water}, {nutrients.x}, {nutrients.y}, {nutrients.z}, {nutrients.w}";
     }
 }

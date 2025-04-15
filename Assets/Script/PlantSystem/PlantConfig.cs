@@ -1,10 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Config/Plant")]
 public class PlantConfig : ScriptableObject {
+
+    /// <summary>
+    /// The name of the plant species, should be equivalent to the config name in the map generator.
+    /// </summary>
+    public string speciesName;
 
     /// <summary>
     /// How much of each compound can the plan store

@@ -131,6 +131,16 @@ namespace HMT.Puppetry {
             Responded = false;
         }
 
+        public JObject HMTStateRep() {
+            JObject state = new JObject();
+            state["puppet_id"] = TargetPuppet;
+            state["command"] = CommandTypeToString(Command);
+            state["action"] = Action;
+            state["params"] = Params;
+            state["priority"] = Priority;
+            return state;
+        }
+
         public T GetParam<T>(string name, T defaultValue)
         {
             if (Params != null)
@@ -237,6 +247,13 @@ namespace HMT.Puppetry {
 
         public void SendIllegalActionResponse() {
             FormatAndSendResponse((int)PuppetResponseCode.IllegalAction, "Illegal Action");
+        }
+
+        public void SendIllegalActionResponse(string longMessage) {
+            JObject content = new JObject {
+                {"longMessage", longMessage }
+            };
+            FormatAndSendResponse((int)PuppetResponseCode.IllegalAction, "Illegal Action", content);
         }
 
         public void SendInsufficientPriorityResponse() {
