@@ -48,6 +48,7 @@ public class DefaultPuppetBot : PuppetBehavior
     {
         _botInfo.FloorIdx = floor;
         _botInfo.CellIdx = new Vector2Int(x, y);
+        SensorRange = 1;
         //_botInfo.X = x;
         //_botInfo.Y = y;
     }
@@ -180,6 +181,7 @@ public class DefaultPuppetBot : PuppetBehavior
             }
         }
         _botInfo.CellIdx += direction;
+        
         transform.position = target;
         CurrentCommand = null;
         _walking = false;
@@ -196,17 +198,19 @@ public class DefaultPuppetBot : PuppetBehavior
 
         ret["info"] = HMTStateRep(HMTStateLevelOfDetail.Full);
         
-        JArray percept = new JArray();
+        List<JObject> percept = new List<JObject>();
         int xMin = Mathf.Max(0, _botInfo.CellIdx.x - SensorRange);
         int xMax = Mathf.Min(CurrentFloor.SizeX - 1, _botInfo.CellIdx.x + SensorRange);
         int yMin = Mathf.Max(0, _botInfo.CellIdx.y - SensorRange);
         int yMax = Mathf.Min(CurrentFloor.SizeY - 1, _botInfo.CellIdx.y + SensorRange);
+        Debug.LogFormat("<color=yellow>Bot is At</color> {0}", _botInfo.CellIdx);
+        Debug.LogFormat("<color=cyan>GetState for Tiles</color> ({0}, {1}) to ({2}, {3})", xMin, yMin, xMax, yMax);
         for (int x = xMin; x <= xMax; x++) {
             for (int y = yMin; y <= yMax; y++) {
                 percept.Add(CurrentFloor.Cells[x, y].HMTStateRep(HMTStateLevelOfDetail.Visible));  
             }
         }
-        ret["percept"] = percept;
+        ret["percept"] = new JArray(percept);
 
         //TODO: we could add "communications" or something as well as a flag in the GetState command for additional details
         return ret;
