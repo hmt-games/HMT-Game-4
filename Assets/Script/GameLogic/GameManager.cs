@@ -68,6 +68,8 @@ public class GameManager : MonoBehaviour
     {
         int x = Random.Range(0, parentTower.floors[0].Cells.GetLength(0));
         int y = Random.Range(0, parentTower.floors[0].Cells.GetLength(1));
+        Debug.Log($"{parentTower == null}");
+        Debug.Log($"{parentTower.floors == null}");
         GameObject nBotObj = Instantiate(puppetBot, parentTower.floors[0].Cells[x, y].transform.position, Quaternion.identity);
         DefaultPuppetBot nBot = nBotObj.GetComponent<DefaultPuppetBot>();
         nBot.InitBot(0, x, y);

@@ -154,7 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configJSON: {fileID: 4900000, guid: 2874a7f83d514353b7f25dcfa7fb36ef, type: 3}
   towerJSON: {fileID: 4900000, guid: 216d1c12db89477aaa41eefc090e77bf, type: 3}
-  tilePrefab: {fileID: 2505949527415372711, guid: b0d9a3063d2cf4f0c9d81c821a9dfac1,
+  soilPrefab: {fileID: 2505949527415372711, guid: b0d9a3063d2cf4f0c9d81c821a9dfac1,
+    type: 3}
+  stationPrefab: {fileID: 4141611712455103029, guid: 18303503c683b0b44acf391dea77682d,
     type: 3}
   grid2DTheme: {fileID: 11400000, guid: 52a33883be6c542ad90e696c33757c1e, type: 2}
   plantPrefab: {fileID: 8738970323915121554, guid: 3fcab9bb57d9349d2b78c1cdce737480,
@@ -1851,51 +1853,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309087988}
   m_CullTransparentMesh: 1
---- !u!1 &310485503
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 310485505}
-  - component: {fileID: 310485504}
-  m_Layer: 0
-  m_Name: DataVisualization
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &310485504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 310485503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05183c2236f33423b8cd568a19dae8bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toggleParent: {fileID: 305743840}
---- !u!4 &310485505
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 310485503}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &319810173
 GameObject:
   m_ObjectHideFlags: 0
@@ -4625,6 +4582,57 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!1 &852369534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 852369536}
+  - component: {fileID: 852369535}
+  m_Layer: 0
+  m_Name: SpriteResorce
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &852369535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852369534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e80ce329232ec459c0ce6b59e8330e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  harvestStation: {fileID: 21300000, guid: f06c83e869dadd64dbc45da7f7cfb43f, type: 3}
+  pluckStation: {fileID: 21300000, guid: b983085ed3b296b4cb0cabc46d7b0ea3, type: 3}
+  plantStation: {fileID: 21300000, guid: cd900f5b4883d7c4d8d0ebbd57396410, type: 3}
+  sampleStation: {fileID: 21300000, guid: d6916a8137241dc42ba780cc4e6a8a8a, type: 3}
+  sprayStation: {fileID: 21300000, guid: 558fedae58d71dc479397799adcee5e5, type: 3}
+  tillStation: {fileID: 21300000, guid: 795b409ddfbf21e41a152b43cf3481d5, type: 3}
+  discardStation: {fileID: 21300000, guid: 2a6f49b7f9117ba459459548391733a4, type: 3}
+--- !u!4 &852369536
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852369534}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1280, y: 720, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &865541510
 GameObject:
   m_ObjectHideFlags: 0
@@ -6118,7 +6126,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 310485504}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DataVisualization, Assembly-CSharp
         m_MethodName: OnNutrientToggle
         m_Mode: 0
@@ -7187,7 +7195,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 310485504}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DataVisualization, Assembly-CSharp
         m_MethodName: OnWaterToggle
         m_Mode: 0
@@ -9743,7 +9751,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BackGroundColor: {r: 0.41960788, g: 0.6627451, b: 0.7843138, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -11302,8 +11310,8 @@ SceneRoots:
   - {fileID: 1427542055}
   - {fileID: 1518213130}
   - {fileID: 37077477}
-  - {fileID: 310485505}
   - {fileID: 1464501393}
+  - {fileID: 852369536}
   - {fileID: 1327457112}
   - {fileID: 372874357}
   - {fileID: 253625272}

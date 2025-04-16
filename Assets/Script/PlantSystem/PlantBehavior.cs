@@ -86,9 +86,11 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
 
 
     public NutrientSolution OnTick(NutrientSolution allocation) {
+        Debug.Log(allocation);
         // UPTAKE
         float uptakeVolume = Mathf.Min(config.waterCapacity - NutrientLevels.water, config.uptakeRate);
         NutrientLevels += allocation.DrawOff(uptakeVolume);
+        Debug.Log(uptakeVolume);
 
         //METABOLISM
         NutrientSolution metabolismDraw = NutrientLevels.DrawOff(config.metabolismRate);
@@ -109,6 +111,7 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
             RootMass += growth * config.PercentToRoots(Age);
             SurfaceMass += growth * (1 - config.PercentToRoots(Age));
         }
+        PlantNextStage();
 
         //LEECH
         EnergyLevel += tick_energy;
@@ -146,6 +149,7 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
 
         BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        Debug.Log($"plant display stage {plantCurrentStage}");
         spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;
         if (plantCurrentStage == _plantMaxStage) {

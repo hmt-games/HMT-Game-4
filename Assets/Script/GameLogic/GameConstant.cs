@@ -11,6 +11,18 @@ namespace GameConstant
         C = 2,
         D = 3
     }
+
+    public enum TileType
+    {
+        Soil,
+        HarvestStation,
+        PluckStation,
+        PlantStation,
+        SampleStation,
+        SprayStation,
+        TillStation,
+        DiscardStation,
+    }
     
     public struct GLOBAL_CONSTANTS
     {

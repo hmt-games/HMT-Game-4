@@ -8,8 +8,10 @@ using GameConstant;
 using Newtonsoft.Json.Linq;
 using HMT.Puppetry;
 
-public abstract class GridCellBehavior : NetworkBehaviour, IPuppetPerceivable {
-
+public abstract class GridCellBehavior : NetworkBehaviour, IPuppetPerceivable
+{
+    public TileType tileType = TileType.Soil;
+    
     /// <summary>
     /// The floor of a tower that this cell is on. 
     /// </summary>

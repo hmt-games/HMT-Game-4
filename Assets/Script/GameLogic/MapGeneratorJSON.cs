@@ -17,7 +17,8 @@ public class MapGeneratorJSON : NetworkBehaviour
 {
     [SerializeField] private TextAsset configJSON;
     [SerializeField] private TextAsset towerJSON;
-    [FormerlySerializedAs("tilePrefab")] [SerializeField] private GameObject soilPrefab;
+    [SerializeField] private GameObject soilPrefab;
+    [SerializeField] private GameObject stationPrefab;
     [SerializeField] private GridTheme grid2DTheme;
     [SerializeField] private GameObject plantPrefab;
     [SerializeField] private GameObject towerPrefab;
@@ -454,7 +455,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         
         Debug.LogWarning("Map generation for host should be done?");
         //GameManager.Instance.SpawnBot();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
             GameManager.Instance.SpawnPuppetBot();
     }
 
@@ -517,38 +518,81 @@ public class MapGeneratorJSON : NetworkBehaviour
         
         int floorOffsetY = parentFloor.floorNumber * (_depth + 1);
         
-        //GameObject gridObj = Instantiate(tilePrefab, new Vector3(x, z + floorOffsetY, 0.0f), Quaternion.identity);
         NetworkObject gridObj;
+        string tileType = gridJObject["GridType"].ToString();
         if (BasicSpawner._runner.IsServer)
         {
-            switch (gridJObject["GridType"].ToString())
+            switch (tileType)
             {
                 case "Soil":
                     gridObj = BasicSpawner._runner.Spawn(soilPrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
                     break;
                 default:
-                    gridObj = BasicSpawner._runner.Spawn(soilPrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
+                    gridObj = BasicSpawner._runner.Spawn(stationPrefab, new Vector3(x, z + floorOffsetY * parentFloor.floorNumber, 0.0f), Quaternion.identity);
                     break;
             }
-            
             gridCellIDs[parentFloor.floorNumber, x, z] = gridObj.Id;
         }
         else
         {
-
             NetworkId gridCellID = gridCellIDs[parentFloor.floorNumber, x, z];
             if (!BasicSpawner._runner.TryFindObject(gridCellID, out gridObj))
             {
                 Debug.LogError($"Failed to extract grid cell's network ID for cell [{x}, {z}] on floor {parentFloor.floorNumber}");
             }
         }
+        
+        // setup stations
+        if (tileType != "Soil")
+        {
+            gridObj.name = $"{tileType} {x},{z}";
+            gridObj.transform.parent = parentFloor.gameObject.transform;
+            StationCellBehavior nStation = gridObj.GetComponent<StationCellBehavior>();
+            nStation.parentFloor = parentFloor;
+            nStation.gridX = x;
+            nStation.gridZ = z;
 
+            SpriteRenderer spriteRenderer = gridObj.GetComponent<SpriteRenderer>();
+            switch (tileType)
+            {
+                case "Harvest":
+                    nStation.tileType = TileType.HarvestStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.harvestStation;
+                    break;
+                case "Pluck":
+                    nStation.tileType = TileType.PluckStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.pluckStation;
+                    break;
+                case "Plant":
+                    nStation.tileType = TileType.PlantStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.plantStation;
+                    break;
+                case "Sample":
+                    nStation.tileType = TileType.SampleStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.sampleStation;
+                    break;
+                case "Spray":
+                    nStation.tileType = TileType.SprayStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.sprayStation;
+                    break;
+                case "Till":
+                    nStation.tileType = TileType.TillStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.tillStation;
+                    break;
+                case "Discard":
+                    nStation.tileType = TileType.DiscardStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.discardStation;
+                    break;
+            }
+
+            parentFloor.Cells[x, z] = nStation;
+            return;
+        }
 
         gridObj.name = $"Grid {x},{z}";
         gridObj.GetComponent<SpriteRenderer>().color = (x + z + parentFloor.floorNumber) % 2 == 0 ? grid2DTheme.lightColor : grid2DTheme.darkColor;
         gridObj.transform.parent = parentFloor.gameObject.transform;
 
-        //GridCellBehavior nGrid = gridObj.AddComponent<GridCellBehavior>();
         SoilCellBehavior nGrid = gridObj.GetComponent<SoilCellBehavior>();
         nGrid.parentFloor = parentFloor;
         nGrid.gridX = x;
