@@ -7,6 +7,7 @@ using GameConstant;
 using UnityEngine;
 using UnityEngine.UI;
 using WebSocketSharp;
+using GameConfig;
 
 public class PlayerPuppetBot : PuppetBehavior
 {
@@ -82,6 +83,9 @@ public class PlayerPuppetBot : PuppetBehavior
             case "sample":
                 StartCoroutine(Sample(command));
                 break;
+            case "spray":
+                StartCoroutine(Spray(command));
+                break;
             default:
                 command.SendIllegalActionResponse();
                 break;
@@ -124,10 +128,15 @@ public class PlayerPuppetBot : PuppetBehavior
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            PuppetCommand cmd;
             switch (_botInfo.CurrentBotType)
             {
                 case BotType.Sample:
-                    PuppetCommand cmd = new PuppetCommand(PuppetID, "sample");
+                    cmd = new PuppetCommand(PuppetID, "sample");
+                    HMTPuppetManager.Instance.EnqueueCommand(cmd);
+                    break;
+                case BotType.Spray:
+                    cmd = new PuppetCommand(PuppetID, "spray");
                     HMTPuppetManager.Instance.EnqueueCommand(cmd);
                     break;
             }
@@ -156,7 +165,7 @@ public class PlayerPuppetBot : PuppetBehavior
 
     private void UseStation(PuppetCommand command)
     {
-        TileType tileType = CurrentFloor.Cells[_botInfo.CellIdx.x, _botInfo.CellIdx.y].tileType;
+        TileType tileType = GetCurrentTile().tileType;
         if (tileType == TileType.Soil)
         {
             command.SendIllegalActionResponse("Cannot perform useStation on soil tiles");
@@ -178,9 +187,13 @@ public class PlayerPuppetBot : PuppetBehavior
                 _animator.SetTrigger("TransTill");
                 _botInfo.CurrentBotType = BotType.Till;
                 break;
-            case TileType.SprayStation:
+            case TileType.SprayAStation:
+            case TileType.SprayBStation:
+            case TileType.SprayCStation:
+            case TileType.SprayDStation:
                 _animator.SetTrigger("TransSpray");
                 _botInfo.CurrentBotType = BotType.Spray;
+                StartCoroutine(SprayUp());
                 break;
             case TileType.SampleStation:
                 _animator.SetTrigger("TransSample");
@@ -193,15 +206,19 @@ public class PlayerPuppetBot : PuppetBehavior
             case TileType.DiscardStation:
                 DumpInventory();
                 break;
+            default:
+                command.SendIllegalActionResponse("can only call use station on station tile");
+                break;
         }
 
-        CurrentCommand = null;
+        if (tileType != TileType.SprayAStation && tileType != TileType.SprayBStation
+            && tileType != TileType.SprayCStation && tileType != TileType.SprayDStation)
+            CurrentCommand = null;
     }
 
-    private IEnumerator Sample(PuppetCommand command)
+    private IEnumerator SprayUp()
     {
-        CurrentCommand = command;
-        float actionTime = ActionTickTimeCost.Sample * GameManager.Instance.secondPerTick;
+        float actionTime = ActionTickTimeCost.SprayUp * GameManager.Instance.secondPerTick;
         StartCoroutine(StartProgressTimer(actionTime));
         
         while (_actionProgressing)
@@ -209,26 +226,60 @@ public class PlayerPuppetBot : PuppetBehavior
             yield return null;
         }
         
+        GameActions.Instance.SprayUp(GetCurrentTile().GetComponent<StationCellBehavior>(), this);
+        CurrentCommand = null;
+    }
+
+    private IEnumerator Spray(PuppetCommand command)
+    {
+        GridCellBehavior grid = GetCurrentTile();
+        if (grid.tileType != TileType.Soil)
+        {
+            command.SendIllegalActionResponse("can only spray to soil tile");
+            yield break;
+        }
+        
+        CurrentCommand = command;
+        float actionTime = ActionTickTimeCost.Spray * GameManager.Instance.secondPerTick;
+        StartCoroutine(StartProgressTimer(actionTime));
+        
+        while (_actionProgressing)
+        {
+            yield return null;
+        }
+
+        GameActions.Instance.Spray(grid as SoilCellBehavior, this);
+        CurrentCommand = null;
+    }
+
+    private IEnumerator Sample(PuppetCommand command)
+    {
         if (_botInfo.CurrentBotType != BotType.Sample || !SupportedActions.Contains("sample"))
         {
             command.SendIllegalActionResponse("bot is not sample bot or sample not supported");
-            CurrentCommand = null;
             yield break;
         }
 
         if (WaterInventory != NutrientSolution.Empty)
         {
             command.SendIllegalActionResponse("water inventory must be empty before sample");
-            CurrentCommand = null;
             yield break;
         }
 
-        GridCellBehavior grid = CurrentFloor.Cells[_botInfo.CellIdx.x, _botInfo.CellIdx.y];
+        GridCellBehavior grid = GetCurrentTile();
         if (grid.tileType != TileType.Soil)
         {
             command.SendIllegalActionResponse("must sample on a soil grid");
-            CurrentCommand = null;
             yield break;
+        }
+        
+        CurrentCommand = command;
+        float actionTime = ActionTickTimeCost.Sample * GameManager.Instance.secondPerTick;
+        StartCoroutine(StartProgressTimer(actionTime));
+        
+        while (_actionProgressing)
+        {
+            yield return null;
         }
 
         CurrentCommand = command;
@@ -358,5 +409,10 @@ public class PlayerPuppetBot : PuppetBehavior
         //if (ret) _walking = true;
         //else CurrentCommand = null;
         //return ret;
+    }
+
+    private GridCellBehavior GetCurrentTile()
+    {
+        return CurrentFloor.Cells[_botInfo.CellIdx.x, _botInfo.CellIdx.y];
     }
 }

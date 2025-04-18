@@ -5821,7 +5821,10 @@ MonoBehaviour:
   pluckStation: {fileID: 21300000, guid: b983085ed3b296b4cb0cabc46d7b0ea3, type: 3}
   plantStation: {fileID: 21300000, guid: cd900f5b4883d7c4d8d0ebbd57396410, type: 3}
   sampleStation: {fileID: 21300000, guid: d6916a8137241dc42ba780cc4e6a8a8a, type: 3}
-  sprayStation: {fileID: 21300000, guid: 558fedae58d71dc479397799adcee5e5, type: 3}
+  sprayAStation: {fileID: 21300000, guid: a92faf7e20a2c0d4abee8c667014315c, type: 3}
+  sprayBStation: {fileID: 21300000, guid: 6e7aabe2c5174ed48b98f69816f63186, type: 3}
+  sprayCStation: {fileID: 21300000, guid: 71a359bf1e1aaf641a1d6777f27565a5, type: 3}
+  sprayDStation: {fileID: 21300000, guid: 3477d354f051c1644ac2cbebde3042c7, type: 3}
   tillStation: {fileID: 21300000, guid: 795b409ddfbf21e41a152b43cf3481d5, type: 3}
   discardStation: {fileID: 21300000, guid: 2a6f49b7f9117ba459459548391733a4, type: 3}
 --- !u!4 &852369536
@@ -7583,8 +7586,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294954752
-  m_fontColor: {r: 0, g: 0.8117647, b: 1, a: 1}
+    rgba: 4294901955
+  m_fontColor: {r: 0.7647059, g: 0, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

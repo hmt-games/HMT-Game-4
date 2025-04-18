@@ -12,7 +12,10 @@ public class SpriteResources : MonoBehaviour
     public Sprite pluckStation;
     public Sprite plantStation;
     public Sprite sampleStation;
-    public Sprite sprayStation;
+    public Sprite sprayAStation;
+    public Sprite sprayBStation;
+    public Sprite sprayCStation;
+    public Sprite sprayDStation;
     public Sprite tillStation;
     public Sprite discardStation;
 

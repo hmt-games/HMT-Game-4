@@ -98,6 +98,7 @@ public class InventoryUIManager : MonoBehaviour
     
     public void ShowInventory()
     {
+        SetPlayerInventory();
         _animator.SetTrigger("show");
     }
 

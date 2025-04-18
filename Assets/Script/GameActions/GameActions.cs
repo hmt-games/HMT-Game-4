@@ -6,6 +6,7 @@ using UnityEngine;
 using GameConstant;
 using HMT.Puppetry;
 using Unity.Mathematics;
+using GameConfig;
 
 public class GameActions : MonoBehaviour
 {
@@ -56,9 +57,30 @@ public class GameActions : MonoBehaviour
     /// </summary>
     /// <param name="targetGrid"></param>
     /// <param name="nutrientSolution"></param>
-    public void Spray(GridCellBehavior targetGrid, NutrientSolution nutrientSolution)
+    public void Spray(SoilCellBehavior targetGrid, PuppetBehavior bot)
     {
-        
+        float sprayAmount = Mathf.Min(bot.WaterInventory.water, SprayConfig.SprayAmountPerAction);
+        sprayAmount = Mathf.Min(targetGrid.RemainingWaterCapacity, sprayAmount);
+        targetGrid.NutrientLevels += bot.WaterInventory.DrawOff(sprayAmount);
+    }
+
+    public void SprayUp(StationCellBehavior tile, PuppetBehavior bot)
+    {
+        Vector4 nutrients = tile.tileType switch
+        {
+            TileType.SprayAStation => new Vector4(1.0f, 0.0f, 0.0f, 0.0f),
+            TileType.SprayBStation => new Vector4(0.0f, 1.0f, 0.0f, 0.0f),
+            TileType.SprayCStation => new Vector4(0.0f, 0.0f, 1.0f, 0.0f),
+            TileType.SprayDStation => new Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+            _ => throw new InvalidOperationException("Trying to spray up while not on spray station, this should never happen?")
+        };
+
+        float sprayUpAmount = Mathf.Min(SprayConfig.WaterAmount,
+            bot.SolutionInventoryCapacity - bot.WaterInventory.water);
+        NutrientSolution sprayUpSolution = new NutrientSolution(sprayUpAmount,
+            nutrients * (sprayUpAmount * SprayConfig.NutrientConcentration));
+
+        bot.WaterInventory += sprayUpSolution;
     }
     
     /// <summary>

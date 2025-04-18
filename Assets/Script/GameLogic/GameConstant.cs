@@ -19,7 +19,10 @@ namespace GameConstant
         PluckStation,
         PlantStation,
         SampleStation,
-        SprayStation,
+        SprayAStation,
+        SprayBStation,
+        SprayCStation,
+        SprayDStation,
         TillStation,
         DiscardStation,
     }
@@ -33,16 +36,7 @@ namespace GameConstant
         Sample,
         Plant
     }
-
-    public struct ActionTickTimeCost
-    {
-        public const int HarvestPerStage = 1;
-        public const int Pluck = 1;
-        public const int Till = 1;
-        public const int Spray = 1;
-        public const int Sample = 1;
-        public const int Plant = 1;
-    }
+    
     
     public struct GLOBAL_CONSTANTS
     {

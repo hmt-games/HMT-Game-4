@@ -571,9 +571,21 @@ public class MapGeneratorJSON : NetworkBehaviour
                     nStation.tileType = TileType.SampleStation;
                     spriteRenderer.sprite = SpriteResources.Instance.sampleStation;
                     break;
-                case "Spray":
-                    nStation.tileType = TileType.SprayStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.sprayStation;
+                case "SprayA":
+                    nStation.tileType = TileType.SprayAStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.sprayAStation;
+                    break;
+                case "SprayB":
+                    nStation.tileType = TileType.SprayBStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.sprayBStation;
+                    break;
+                case "SprayC":
+                    nStation.tileType = TileType.SprayCStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.sprayCStation;
+                    break;
+                case "SprayD":
+                    nStation.tileType = TileType.SprayDStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.sprayDStation;
                     break;
                 case "Till":
                     nStation.tileType = TileType.TillStation;
