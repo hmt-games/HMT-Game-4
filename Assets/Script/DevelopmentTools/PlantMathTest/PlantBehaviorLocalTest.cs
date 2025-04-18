@@ -124,7 +124,6 @@ public class PlantBehaviorLocalTest : MonoBehaviour
         Debug.Log(allocation);
         return allocation;
     }
-    
 
     /// <summary>
     /// Handles when water lands on the plant.

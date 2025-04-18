@@ -53,6 +53,7 @@ public class SoilCellBehavior : GridCellBehavior
             NutrientLevels.water > soilConfig.waterCapacity 
                 ? NutrientLevels.DrawOff(NutrientLevels.water - soilConfig.waterCapacity) 
                 : NutrientSolution.Empty;
+        if (plants.Count == 0) aggregate = NutrientLevels;
         foreach(PlantBehavior plant in plants) {
             aggregate += plant.OnTick(NutrientLevels * (plant.RootMass / rootTotal));
         }
