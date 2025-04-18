@@ -295,11 +295,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             {
                 capacities = kvp.Value.waterCapacity,
                 uptakeRate = kvp.Value.uptakeRate,
-                metabolismNeeds = ConvertToFloatArray(kvp.Value.metabolismNeeds),
-                metabolismWaterNeeds = kvp.Value.metabolismWaterNeeds,
                 metabolismFactor = ConvertToFloatArray(kvp.Value.metabolismFactor),
-                growthConsumptionRateLimit = ConvertToFloatArray(kvp.Value.growthConsumptionRateLimit),
-                growthFactor = ConvertToFloatArray(kvp.Value.growthFactor),
                 rootHeightTransition = kvp.Value.rootHeightTransition,
                 growthToleranceThreshold = kvp.Value.growthToleranceThreshold,
                 leachingEnergyThreshold = kvp.Value.leachingEnergyThreshold,
@@ -338,11 +334,7 @@ public class MapGeneratorJSON : NetworkBehaviour
                 var config = ScriptableObject.CreateInstance<PlantConfig>();
                 config.waterCapacity = kvp.Value.capacities;
                 config.uptakeRate = kvp.Value.uptakeRate;
-                config.metabolismNeeds = ConvertToVector4(kvp.Value.metabolismNeeds);
-                config.metabolismWaterNeeds = kvp.Value.metabolismWaterNeeds;
                 config.metabolismFactor = ConvertToVector4(kvp.Value.metabolismFactor);
-                config.growthConsumptionRateLimit = ConvertToVector4(kvp.Value.growthConsumptionRateLimit);
-                config.growthFactor = ConvertToVector4(kvp.Value.growthFactor);
                 config.rootHeightTransition = kvp.Value.rootHeightTransition;
                 config.growthToleranceThreshold = kvp.Value.growthToleranceThreshold;
                 config.leachingEnergyThreshold = kvp.Value.leachingEnergyThreshold;
@@ -706,11 +698,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         plantConfig.speciesName = configName;
         plantConfig.waterCapacity = (float)planConfigJToken["capacities"];
         plantConfig.uptakeRate = (float)planConfigJToken["uptakeRate"];
-        plantConfig.metabolismNeeds = Vector4FromJTokenList(planConfigJToken["metabolismNeeds"].ToList());
-        plantConfig.metabolismWaterNeeds = (float)planConfigJToken["metabolismWaterNeeds"];
         plantConfig.metabolismFactor = Vector4FromJTokenList(planConfigJToken["metabolismFactor"].ToList());
-        plantConfig.growthConsumptionRateLimit = Vector4FromJTokenList(planConfigJToken["growthConsumptionRateLimit"].ToList());
-        plantConfig.growthFactor = Vector4FromJTokenList(planConfigJToken["growthFactor"].ToList());
         plantConfig.rootHeightTransition = (float)planConfigJToken["rootHeightTransition"];
         plantConfig.growthToleranceThreshold = (float)planConfigJToken["growthToleranceThreshold"];
         plantConfig.leachingEnergyThreshold = (float)planConfigJToken["leachingEnergyThreshold"];

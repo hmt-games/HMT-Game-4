@@ -28,33 +28,9 @@ public class PlantConfig : ScriptableObject {
     public float metabolismRate;
 
     /// <summary>
-    ///// The rate at which the plant can leech each compound back into the soil
-    ///// This is a percentage in the range 0 to 1
-    ///// </summary>
-    //public float[] leechRate = new float[System.Enum.GetValues(typeof(NutrientType)).Length];
-    
-    /// <summary>
-    /// The amount of each compound per tick needed to maintain the plant's health
-    /// </summary>
-    [Obsolete] public Vector4 metabolismNeeds;
-    [Obsolete] public float metabolismWaterNeeds;
-
-
-    /// <summary>
     /// The amount each compound contributes to the plant's metabolism
     /// </summary>
    public Vector4 metabolismFactor;
-
-    /// <summary>
-    /// The amount pulled from the plant's reserves to grow
-    /// This is a real value used in a clamp function
-    [Obsolete] public Vector4 growthConsumptionRateLimit;
-    
-    /// <summary>
-    /// The coefficients for the effect of each compound on the plant's growth if they are negtaive they inhibit growth
-    /// This is a real value
-    /// </summary>
-    [Obsolete] public Vector4 growthFactor;
 
     /// <summary>
     /// The point at which the plan transitions from growing root mass to growing height
@@ -94,10 +70,7 @@ public class PlantConfig : ScriptableObject {
     {
         return $"Capacity: {waterCapacity}\n" +
                $"UptakeRate: {uptakeRate}\n" +
-               $"MetabolismWaterNeeds: {metabolismWaterNeeds}" +
-               $"MetabolismNeed: {metabolismNeeds}\n" +
-               $"MetabolismFactor: {metabolismFactor}\n" +
-               $"growthConsumptionRateLimit: {growthConsumptionRateLimit}";
+               $"MetabolismFactor: {metabolismFactor}\n";
     }
 
 }
