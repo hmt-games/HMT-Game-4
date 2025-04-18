@@ -86,6 +86,9 @@ public class PlayerPuppetBot : PuppetBehavior
             case "spray":
                 StartCoroutine(Spray(command));
                 break;
+            case "harvest":
+                Harvest(command);
+                break;
             default:
                 command.SendIllegalActionResponse();
                 break;
@@ -128,18 +131,18 @@ public class PlayerPuppetBot : PuppetBehavior
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            PuppetCommand cmd;
-            switch (_botInfo.CurrentBotType)
+            string actionString = _botInfo.CurrentBotType switch
             {
-                case BotType.Sample:
-                    cmd = new PuppetCommand(PuppetID, "sample");
-                    HMTPuppetManager.Instance.EnqueueCommand(cmd);
-                    break;
-                case BotType.Spray:
-                    cmd = new PuppetCommand(PuppetID, "spray");
-                    HMTPuppetManager.Instance.EnqueueCommand(cmd);
-                    break;
-            }
+                BotType.Sample => "sample",
+                BotType.Spray => "spray",
+                BotType.Harvest => "harvest",
+                _ => ""
+            };
+            
+            if (actionString.Length == 0) return;
+            
+            PuppetCommand cmd = new PuppetCommand(PuppetID, actionString);
+            HMTPuppetManager.Instance.EnqueueCommand(cmd);
         }
     }
 
@@ -161,6 +164,41 @@ public class PlayerPuppetBot : PuppetBehavior
 
         _actionProgressing = false;
         progressBar.gameObject.SetActive(false);
+    }
+
+    private void Harvest(PuppetCommand command)
+    {
+        Debug.Log("Start harvest");
+        GridCellBehavior grid = GetCurrentTile();
+        if (grid.tileType != TileType.Soil)
+        {
+            command.SendIllegalActionResponse("harvest can only target soil tile");
+            return;
+        }
+
+        if (!GameActions.Instance.RequestHarvest(grid as SoilCellBehavior, this))
+        {
+            command.SendIllegalActionResponse("none of the target tile's plants has fruit");
+        }
+        else
+        {
+            CurrentCommand = command;
+        }
+    }
+
+    public override IEnumerator StartHarvest(PlantBehavior plant)
+    {
+        Debug.Log("carry harvest");
+        float actionTime = ActionTickTimeCost.Harvest * GameManager.Instance.secondPerTick;
+        StartCoroutine(StartProgressTimer(actionTime));
+        
+        while (_actionProgressing)
+        {
+            yield return null;
+        }
+        
+        GameActions.Instance.Harvest(plant, this);
+        CurrentCommand = null;
     }
 
     private void UseStation(PuppetCommand command)

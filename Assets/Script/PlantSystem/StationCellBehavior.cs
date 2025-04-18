@@ -1,4 +1,5 @@
 ﻿using GameConstant;
+using HMT.Puppetry;
 
 public class StationCellBehavior : GridCellBehavior
 {
@@ -10,5 +11,10 @@ public class StationCellBehavior : GridCellBehavior
     public override NutrientSolution OnWater(NutrientSolution volumes)
     {
         return volumes;
+    }
+
+    public void OnUseStation(PuppetBehavior bot)
+    {
+        
     }
 }

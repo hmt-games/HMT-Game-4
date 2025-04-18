@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using Fusion;
 using GameConstant;
 using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
+using UnityEngine.Serialization;
 
 public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
     /// <summary>
@@ -34,7 +36,7 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
         get {
             return _surfaceMass;
         }
-        private set {
+        set {
             _surfaceMass = Mathf.Max(0, value);
         }
     }
@@ -61,13 +63,22 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
     public int plantCurrentStage = 0;
     private int _plantMaxStage = 3;
     //TODO: make this configurable in JSON spec
-    private List<float> _stageTransitionThreshold = new List<float> { 0.0f, 1.5f, 3.0f, 5.3f };
+    public List<float> stageTransitionThreshold = new List<float> { 0.0f, 1.5f, 3.0f, 5.3f };
     public bool hasFruit = false;
 
     public int maxHealthHistory = 10;
 
     private float healthTotal = 0;
     private Queue<float> healthHistory;
+
+    public BoxCollider2D boxCollider2D;
+    public SpriteRenderer spriteRenderer;
+
+    private void Awake()
+    {
+        boxCollider2D = GetComponent<BoxCollider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     public void SetInitialProperties(PlantInitInfo plantInitInfo) {
         _rootMass = plantInitInfo.RootMass;
@@ -139,21 +150,23 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
         return waterVolume; //TODO do something meaningful here
     }
 
-    private void PlantNextStage() {
+    public void PlantNextStage() {
         if (plantCurrentStage == _plantMaxStage) return;
 
-        while (SurfaceMass >= _stageTransitionThreshold[plantCurrentStage + 1]) {
+        while (SurfaceMass >= stageTransitionThreshold[plantCurrentStage + 1]) {
             plantCurrentStage++;
             if (plantCurrentStage == _plantMaxStage) break;
         }
-
-        BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        
         Debug.Log($"plant display stage {plantCurrentStage}");
         spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;
         if (plantCurrentStage == _plantMaxStage) {
             hasFruit = true;
+        }
+        else
+        {
+            hasFruit = false;
         }
     }
 

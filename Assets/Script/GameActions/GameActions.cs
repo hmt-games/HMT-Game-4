@@ -14,14 +14,10 @@ public class GameActions : MonoBehaviour
     
     [SerializeField] private GameObject plantPrefab;
 
-    public List<GameObject> inventory;
-
     private void Awake()
     {
         if (Instance) Destroy(this);
         else Instance = this;
-
-        inventory = new List<GameObject>();
     }
 
     /// <summary>
@@ -39,17 +35,34 @@ public class GameActions : MonoBehaviour
     /// Target plant must have surface mass
     /// </summary>
     /// <param name="targetPlant"></param>
-    public void Harvest(PlantBehavior targetPlant)
+    public void Harvest(PlantBehavior targetPlant, PuppetBehavior bot)
     {
-        //TODO: implement some sort of OnHarvest behavior for plants
-        //TODO: this should take some ticks to perform, while showing a progress bar
-        SoilCellBehavior plantGrid = targetPlant.parentCell;
-        plantGrid.plants.Remove(targetPlant);
-        plantGrid.plantCount--;
+        targetPlant.SurfaceMass = targetPlant.stageTransitionThreshold[2];
+        targetPlant.plantCurrentStage = 0;
+        targetPlant.PlantNextStage();
 
-        targetPlant.transform.SetParent(transform);
-        inventory.Add(targetPlant.gameObject);
-        targetPlant.gameObject.SetActive(false);
+        //TODO: add fruit to bot inventory
+    }
+
+    public bool RequestHarvest(SoilCellBehavior tile, PuppetBehavior bot)
+    {
+        Debug.Log("request Harvest");
+        List<PlantBehavior> fertilePlants = new List<PlantBehavior>();
+        foreach (PlantBehavior plant in tile.plants)
+        {
+            Debug.Log("all to list");
+            if (plant.hasFruit) fertilePlants.Add(plant);
+        }
+
+        if (fertilePlants.Count == 0) return false;
+
+        PlantSelectionUIManager.Instance.ShowSelection(fertilePlants, bot, StartHarvest);
+        return true;
+    }
+
+    private void StartHarvest(PlantBehavior plant, PuppetBehavior bot)
+    {
+        StartCoroutine(bot.StartHarvest(plant));
     }
 
     /// <summary>
@@ -144,11 +157,5 @@ public class GameActions : MonoBehaviour
         puppet.WaterInventory = targetGrid.NutrientLevels.DrawOff(1.0f);
         InventoryUIManager.Instance.UpdateWaterInventoryUI(puppet.WaterInventory, 1.0f);
         InventoryUIManager.Instance.ShowInventory();
-    }
-
-    IEnumerator Move(string direction)
-    {
-        
-        yield return null;
     }
 }
