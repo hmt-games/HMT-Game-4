@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
 using GameConstant;
+using HMT.Puppetry;
 using Unity.Mathematics;
 
 public class GameActions : MonoBehaviour
@@ -116,9 +117,11 @@ public class GameActions : MonoBehaviour
         
     }
 
-    public void Sample(GridCellBehavior targetGrid)
+    public void Sample(SoilCellBehavior targetGrid, PuppetBehavior puppet)
     {
-        
+        puppet.WaterInventory = targetGrid.NutrientLevels.DrawOff(1.0f);
+        InventoryUIManager.Instance.UpdateWaterInventoryUI(puppet.WaterInventory, 1.0f);
+        InventoryUIManager.Instance.ShowInventory();
     }
 
     IEnumerator Move(string direction)

@@ -24,6 +24,26 @@ namespace GameConstant
         DiscardStation,
     }
     
+    public enum BotType {
+        Normal,
+        Harvest,
+        Pluck,
+        Till,
+        Spray,
+        Sample,
+        Plant
+    }
+
+    public struct ActionTickTimeCost
+    {
+        public const int HarvestPerStage = 1;
+        public const int Pluck = 1;
+        public const int Till = 1;
+        public const int Spray = 1;
+        public const int Sample = 1;
+        public const int Plant = 1;
+    }
+    
     public struct GLOBAL_CONSTANTS
     {
         public const int MAX_PLANT_COUNT_PER_TILE = 9;

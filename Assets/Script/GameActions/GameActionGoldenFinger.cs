@@ -136,6 +136,10 @@ public class GameActionGoldenFinger : MonoBehaviour
             _selectedGrid = hit.collider.gameObject.GetComponent<GridCellBehavior>();
             ShowActionWheel(_selectedGrid.transform.position);
         }
+        else
+        {
+            actionWheel.gameObject.SetActive(false);
+        }
     }
 
     public void ShowActionWheel(Vector3 pos)

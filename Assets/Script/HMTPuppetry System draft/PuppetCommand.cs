@@ -124,7 +124,7 @@ namespace HMT.Puppetry {
         public PuppetCommand(string puppet_id, string action, JObject Params = null, byte priority = 128) {
             AgentConfig = new AgentServiceConfig(puppet_id, priority);
             Command = PuppetCommandType.EXECUTE_ACTION;
-            this.Action = action;
+            Action = action;
             json = new JObject();
             this.Params = Params;
             originService = null;

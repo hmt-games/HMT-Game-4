@@ -81,6 +81,18 @@ public struct NutrientSolution : INetworkStruct {
         return result;
     }
 
+    public static bool operator ==(NutrientSolution a, NutrientSolution b)
+    {
+        if (a.water != b.water) return false;
+        if (a.nutrients != b.nutrients) return false;
+        return true;
+    }
+    
+    public static bool operator !=(NutrientSolution a, NutrientSolution b)
+    {
+        return !(a == b);
+    }
+
     public static NutrientSolution operator *(NutrientSolution a, float b) {
         NutrientSolution result = new NutrientSolution();
         result.water = a.water * b;

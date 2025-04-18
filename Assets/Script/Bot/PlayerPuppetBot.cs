@@ -1,21 +1,21 @@
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
 using GameConstant;
 using UnityEngine;
+using UnityEngine.UI;
 using WebSocketSharp;
 
-public class DefaultPuppetBot : PuppetBehavior
+public class PlayerPuppetBot : PuppetBehavior
 {
+    [SerializeField] private Slider progressBar;
+    private bool _actionProgressing = false;
+    
     protected struct BotInfo {
         public int FloorIdx;
         public Vector2Int CellIdx;
-        //public int X;
-        //public int Y;
-        //public GridCellBehavior[,] CellsOnFloor;
-        //public int MaxX;
-        //public int MaxY;
         public BotType CurrentBotType;
     }
 
@@ -27,6 +27,16 @@ public class DefaultPuppetBot : PuppetBehavior
     private BotInfo _botInfo;
     private bool _walking = false;
     private Vector3 _targetPos = Vector3.zero;
+    
+    private Dictionary<KeyCode, string> _keyCode2MoveParams = new Dictionary<KeyCode, string>
+    {
+        { KeyCode.A, "left" },
+        { KeyCode.D, "right" },
+        { KeyCode.W, "up" },
+        { KeyCode.S, "down" }
+    };
+
+    private Animator _animator;
 
     /// <summary>
     /// init bot
@@ -39,10 +49,13 @@ public class DefaultPuppetBot : PuppetBehavior
         _botInfo.FloorIdx = floor;
         _botInfo.CellIdx = new Vector2Int(x, y);
         SensorRange = 1;
-        //_botInfo.X = x;
-        //_botInfo.Y = y;
     }
 
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+        progressBar.gameObject.SetActive(false);
+    }
 
     Floor CurrentFloor {
         get { return GameManager.Instance.parentTower.floors[_botInfo.FloorIdx]; }
@@ -52,17 +65,22 @@ public class DefaultPuppetBot : PuppetBehavior
         new()
         {
             "pick", "harvest", "spray", "plant",
-            "sample", "move", "moveto"
+            "sample", "move", "useStation"
         };
 
     public override void ExecuteAction(PuppetCommand command)
     {
-        //CurrentCommand = command;
-        Debug.LogFormat("Default Puppet Bot Execute Action:{0}", command.json.ToString());
+        //Debug.LogFormat("Default Puppet Bot Execute Action:{0}", command.json.ToString());
         switch (command.Action)
         {
             case "move":
                 Move(command);
+                break;
+            case "useStation":
+                UseStation(command);
+                break;
+            case "sample":
+                StartCoroutine(Sample(command));
                 break;
             default:
                 command.SendIllegalActionResponse();
@@ -72,18 +90,159 @@ public class DefaultPuppetBot : PuppetBehavior
 
     protected virtual void Update()
     {
-        //if (_walking)
-        //{
-        //    transform.position = Vector3.MoveTowards(transform.position, _targetPos, GameManager.Instance.secondPerTick * Time.deltaTime);
-        //    if (transform.position == _targetPos)
-        //    {
-        //        _walking = false;
-        //        CurrentCommand = null;
-        //    }
-        //    return;
-        //}
+        MoveInput();
+        UseStationInput();
+        PerformBotAction();
     }
 
+    #region Player Input
+
+    // human player movement input
+    private void MoveInput()
+    {
+        foreach (var kvp in _keyCode2MoveParams)
+        {
+            if (Input.GetKeyDown(kvp.Key))
+            {
+                JObject moveParams = new JObject { { "direction", kvp.Value } };
+                PuppetCommand moveCmd = new PuppetCommand(PuppetID, "move", moveParams);
+                HMTPuppetManager.Instance.EnqueueCommand(moveCmd);
+            }
+        }
+    }
+
+    private void UseStationInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PuppetCommand cmd = new PuppetCommand(PuppetID, "useStation");
+            HMTPuppetManager.Instance.EnqueueCommand(cmd);
+        }
+    }
+
+    private void PerformBotAction()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            switch (_botInfo.CurrentBotType)
+            {
+                case BotType.Sample:
+                    PuppetCommand cmd = new PuppetCommand(PuppetID, "sample");
+                    HMTPuppetManager.Instance.EnqueueCommand(cmd);
+                    break;
+            }
+        }
+    }
+
+    #endregion
+
+    private IEnumerator StartProgressTimer(float time)
+    {
+        progressBar.value = 0;
+        progressBar.gameObject.SetActive(true);
+        _actionProgressing = true;
+
+        float timeElapsed = 0.0f;
+        while (timeElapsed < time)
+        {
+            yield return null;
+            timeElapsed += Time.deltaTime;
+            progressBar.value = Mathf.Clamp01(timeElapsed / time);
+        }
+
+        _actionProgressing = false;
+        progressBar.gameObject.SetActive(false);
+    }
+
+    private void UseStation(PuppetCommand command)
+    {
+        TileType tileType = CurrentFloor.Cells[_botInfo.CellIdx.x, _botInfo.CellIdx.y].tileType;
+        if (tileType == TileType.Soil)
+        {
+            command.SendIllegalActionResponse("Cannot perform useStation on soil tiles");
+            return;
+        }
+
+        CurrentCommand = command;
+        switch (tileType)
+        {
+            case TileType.HarvestStation:
+                _animator.SetTrigger("TransHarvest");
+                _botInfo.CurrentBotType = BotType.Harvest;
+                break;
+            case TileType.PluckStation:
+                _animator.SetTrigger("TransPluck");
+                _botInfo.CurrentBotType = BotType.Pluck;
+                break;
+            case TileType.TillStation:
+                _animator.SetTrigger("TransTill");
+                _botInfo.CurrentBotType = BotType.Till;
+                break;
+            case TileType.SprayStation:
+                _animator.SetTrigger("TransSpray");
+                _botInfo.CurrentBotType = BotType.Spray;
+                break;
+            case TileType.SampleStation:
+                _animator.SetTrigger("TransSample");
+                _botInfo.CurrentBotType = BotType.Sample;
+                break;
+            case TileType.PlantStation:
+                _animator.SetTrigger("TransPlant");
+                _botInfo.CurrentBotType = BotType.Plant;
+                break;
+            case TileType.DiscardStation:
+                DumpInventory();
+                break;
+        }
+
+        CurrentCommand = null;
+    }
+
+    private IEnumerator Sample(PuppetCommand command)
+    {
+        CurrentCommand = command;
+        float actionTime = ActionTickTimeCost.Sample * GameManager.Instance.secondPerTick;
+        StartCoroutine(StartProgressTimer(actionTime));
+        
+        while (_actionProgressing)
+        {
+            yield return null;
+        }
+        
+        if (_botInfo.CurrentBotType != BotType.Sample || !SupportedActions.Contains("sample"))
+        {
+            command.SendIllegalActionResponse("bot is not sample bot or sample not supported");
+            CurrentCommand = null;
+            yield break;
+        }
+
+        if (WaterInventory != NutrientSolution.Empty)
+        {
+            command.SendIllegalActionResponse("water inventory must be empty before sample");
+            CurrentCommand = null;
+            yield break;
+        }
+
+        GridCellBehavior grid = CurrentFloor.Cells[_botInfo.CellIdx.x, _botInfo.CellIdx.y];
+        if (grid.tileType != TileType.Soil)
+        {
+            command.SendIllegalActionResponse("must sample on a soil grid");
+            CurrentCommand = null;
+            yield break;
+        }
+
+        CurrentCommand = command;
+        GameActions.Instance.Sample(grid as SoilCellBehavior, this);
+        CurrentCommand = null;
+    }
+
+    private void DumpInventory()
+    {
+        PlantInventory = new List<PlantBehavior>();
+        WaterInventory = NutrientSolution.Empty;
+        //TODO: refresh the inventory UI here
+    }
+    
     private void Move(PuppetCommand command) {
         if (_walking) {
             command.SendIllegalActionResponse("Bot is already moving");
@@ -113,50 +272,6 @@ public class DefaultPuppetBot : PuppetBehavior
 
         CurrentCommand = command;
         StartCoroutine(MoveCoroutine(direct));
-
-
-
-        //switch (direction)
-        //{
-        //    case "up":
-        //        if (ValidTargetPosition(_botInfo.X, _botInfo.Y + 1))
-        //        {
-        //            _targetPos = CurrentFloor.Cells[_botInfo.X, _botInfo.Y + 1].transform.position;
-        //            _botInfo.Y += 1;
-        //        }
-        //        break;
-        //    case "down":
-        //        if (ValidTargetPosition(_botInfo.X, _botInfo.Y - 1))
-        //        {
-        //            _targetPos = CurrentFloor.Cells[_botInfo.X, _botInfo.Y - 1].transform.position;
-        //            _botInfo.Y -= 1;
-        //        }
-        //        break;
-        //    case "left":
-        //        if (ValidTargetPosition(_botInfo.X - 1, _botInfo.Y))
-        //        {
-        //            _targetPos = CurrentFloor.Cells[_botInfo.X - 1, _botInfo.Y].transform.position;
-        //            _botInfo.X -= 1;
-        //        }
-        //        break;
-        //    case "right":
-        //        if (ValidTargetPosition(_botInfo.X + 1, _botInfo.Y))
-        //        {
-        //            _targetPos = CurrentFloor.Cells[_botInfo.X + 1, _botInfo.Y].transform.position;
-        //            _botInfo.X += 1;
-        //        }
-        //        break;
-        //    default:
-        //        CurrentCommand.SendBadParametersResponse(new JObject
-        //        {
-        //            {"direction", direction}
-        //        }, new JObject
-        //        {
-        //            "direction", new JArray{"up", "down", "left", "right"}
-        //        });
-        //        CurrentCommand = null;
-        //        break;
-        //}
     }
 
     IEnumerator MoveCoroutine(Vector2Int direction) {

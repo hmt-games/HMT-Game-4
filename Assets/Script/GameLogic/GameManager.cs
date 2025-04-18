@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public Tower parentTower;
+    public PlayerPuppetBot player;
     public long currentTick = 0;
     public float secondPerTick = 1.0f;
 
@@ -64,14 +65,15 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] private GameObject puppetBot;
-    public void SpawnPuppetBot()
+    public void SpawnPlayerPuppet()
     {
         int x = Random.Range(0, parentTower.floors[0].Cells.GetLength(0));
         int y = Random.Range(0, parentTower.floors[0].Cells.GetLength(1));
         Debug.Log($"{parentTower == null}");
         Debug.Log($"{parentTower.floors == null}");
         GameObject nBotObj = Instantiate(puppetBot, parentTower.floors[0].Cells[x, y].transform.position, Quaternion.identity);
-        DefaultPuppetBot nBot = nBotObj.GetComponent<DefaultPuppetBot>();
+        PlayerPuppetBot nBot = nBotObj.GetComponent<PlayerPuppetBot>();
         nBot.InitBot(0, x, y);
+        player = nBot;
     }
 }
