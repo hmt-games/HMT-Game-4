@@ -27,14 +27,16 @@ namespace GameConstant
         DiscardStation,
     }
     
-    public enum BotType {
+    public enum BotMode {
         Normal,
         Harvest,
         Pluck,
         Till,
         Spray,
         Sample,
-        Plant
+        Plant,
+        Pick,
+        Carry
     }
     
     

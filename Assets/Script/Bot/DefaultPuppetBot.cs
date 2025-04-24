@@ -11,12 +11,7 @@ public class DefaultPuppetBot : PuppetBehavior
     protected struct BotInfo {
         public int FloorIdx;
         public Vector2Int CellIdx;
-        //public int X;
-        //public int Y;
-        //public GridCellBehavior[,] CellsOnFloor;
-        //public int MaxX;
-        //public int MaxY;
-        public BotType CurrentBotType;
+        public BotMode CurrentBotMode;
     }
 
     /// <summary>
@@ -218,7 +213,7 @@ public class DefaultPuppetBot : PuppetBehavior
                 resp["x"] = _botInfo.CellIdx.x;
                 resp["y"] = _botInfo.CellIdx.x;
                 resp["floor"] = _botInfo.FloorIdx;
-                resp["mode"] = _botInfo.CurrentBotType.ToString();
+                resp["mode"] = _botInfo.CurrentBotMode.ToString();
                 if (CurrentCommand != null) {
                     resp["current_command"] = CurrentCommand.HMTStateRep();
                 }

@@ -11074,7 +11074,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantPrefab: {fileID: 8738970323915121554, guid: 3fcab9bb57d9349d2b78c1cdce737480,
     type: 3}
-  inventory: []
 --- !u!4 &1464501393
 Transform:
   m_ObjectHideFlags: 0

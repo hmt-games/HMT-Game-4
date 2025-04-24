@@ -10,11 +10,6 @@ namespace HMT.Puppetry {
         public virtual string ObjectID { get { return PuppetID; } }
         public virtual string PuppetID { get; protected set; }
 
-        public float SolutionInventoryCapacity = 100.0f;
-        public int PlantInventoryCapacity = 8;
-        public List<PlantBehavior> PlantInventory;
-        public NutrientSolution WaterInventory;
-
         public string puppetIDPrefix = "puppet";
 
         public PuppetCommand CurrentCommand { get; protected set; }
@@ -34,9 +29,6 @@ namespace HMT.Puppetry {
             HMTPuppetManager.Instance.AddPuppet(this);
             CurrentCommand = null;
             currentPlan = null;
-
-            PlantInventory = new List<PlantBehavior>();
-            WaterInventory = NutrientSolution.Empty;
         }
 
         // Update is called once per frame

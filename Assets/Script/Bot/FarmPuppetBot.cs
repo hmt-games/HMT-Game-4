@@ -1,0 +1,416 @@
+using System.Collections;
+using System.Collections.Generic;
+using HMT.Puppetry;
+using Newtonsoft.Json.Linq;
+using GameConstant;
+using UnityEngine;
+using UnityEngine.UI;
+using WebSocketSharp;
+using GameConfig;
+
+public class FarmPuppetBot : PuppetBehavior
+{
+    #region Internal States
+
+    protected struct BotInfo {
+        public int FloorIdx;
+        public Vector2Int CellIdx;
+        public BotMode CurrentBotMode;
+    }
+
+    protected BotInfo _botInfo;
+
+    protected bool _walking = false;
+    protected Vector3 _targetPos = Vector3.zero;
+    
+    [SerializeField] protected Slider progressBar;
+    protected bool _actionProgressing = false;
+    
+    protected Animator _animator;
+
+    #endregion
+
+    #region External States
+
+    public float SolutionInventoryCapacity = 100.0f;
+    public int PlantInventoryCapacity = 8;
+    public List<PlantBehavior> PlantInventory;
+    public NutrientSolution WaterInventory;
+    
+    /// TODO: This needs to be put in some kind of config
+    public int SensorRange = 1;
+
+    #endregion
+
+    #region Bot Init
+
+    public void InitBot(int floor, int x, int y, int sensorRange = 1)
+    {
+        _botInfo.FloorIdx = floor;
+        _botInfo.CellIdx = new Vector2Int(x, y);
+        SensorRange = sensorRange;
+    }
+    
+    protected void Awake()
+    {
+        _animator = GetComponent<Animator>();
+        progressBar.gameObject.SetActive(false);
+        
+        PlantInventory = new List<PlantBehavior>();
+        WaterInventory = NutrientSolution.Empty;
+    }
+
+    #endregion
+
+    public override HashSet<string> SupportedActions { get; }
+    
+    public override void ExecuteAction(PuppetCommand command)
+    {
+        if (!SupportedActions.Contains(command.Action))
+        {
+            command.SendIllegalActionResponse($"Action {command.Action} not supported by the bot currently");
+            return;
+        }
+        
+        switch (command.Action)
+        {
+            case "move":
+                Move(command);
+                break;
+            case "useStation":
+                UseStation(command);
+                break;
+            case "sample":
+                StartCoroutine(Sample(command));
+                break;
+            case "spray":
+                StartCoroutine(Spray(command));
+                break;
+            case "harvest":
+                Harvest(command);
+                break;
+            default:
+                command.SendIllegalActionResponse();
+                break;
+        }
+    }
+
+    #region Bot Action Implementation
+
+    private void Harvest(PuppetCommand command)
+    {
+        Debug.Log("Start harvest");
+        GridCellBehavior grid = GetCurrentTile();
+        if (grid.tileType != TileType.Soil)
+        {
+            command.SendIllegalActionResponse("harvest can only target soil tile");
+            return;
+        }
+
+        if (!GameActions.Instance.RequestHarvest(grid as SoilCellBehavior, this))
+        {
+            command.SendIllegalActionResponse("none of the target tile's plants has fruit");
+        }
+        else
+        {
+            CurrentCommand = command;
+        }
+    }
+
+    public override IEnumerator StartHarvest(PlantBehavior plant)
+    {
+        Debug.Log("carry harvest");
+        float actionTime = ActionTickTimeCost.Harvest * GameManager.Instance.secondPerTick;
+        StartCoroutine(StartProgressTimer(actionTime));
+        
+        while (_actionProgressing)
+        {
+            yield return null;
+        }
+        
+        GameActions.Instance.Harvest(plant, this);
+        CurrentCommand = null;
+    }
+
+    private void UseStation(PuppetCommand command)
+    {
+        TileType tileType = GetCurrentTile().tileType;
+        if (tileType == TileType.Soil)
+        {
+            command.SendIllegalActionResponse("Cannot perform useStation on soil tiles");
+            return;
+        }
+
+        CurrentCommand = command;
+        switch (tileType)
+        {
+            case TileType.HarvestStation:
+                _animator.SetTrigger("TransHarvest");
+                _botInfo.CurrentBotMode = BotMode.Harvest;
+                break;
+            case TileType.PluckStation:
+                _animator.SetTrigger("TransPluck");
+                _botInfo.CurrentBotMode = BotMode.Pluck;
+                break;
+            case TileType.TillStation:
+                _animator.SetTrigger("TransTill");
+                _botInfo.CurrentBotMode = BotMode.Till;
+                break;
+            case TileType.SprayAStation:
+            case TileType.SprayBStation:
+            case TileType.SprayCStation:
+            case TileType.SprayDStation:
+                _animator.SetTrigger("TransSpray");
+                _botInfo.CurrentBotMode = BotMode.Spray;
+                StartCoroutine(SprayUp());
+                break;
+            case TileType.SampleStation:
+                _animator.SetTrigger("TransSample");
+                _botInfo.CurrentBotMode = BotMode.Sample;
+                break;
+            case TileType.PlantStation:
+                _animator.SetTrigger("TransPlant");
+                _botInfo.CurrentBotMode = BotMode.Plant;
+                break;
+            case TileType.DiscardStation:
+                DumpInventory();
+                break;
+            default:
+                command.SendIllegalActionResponse("can only call use station on station tile");
+                break;
+        }
+
+        if (tileType != TileType.SprayAStation && tileType != TileType.SprayBStation
+            && tileType != TileType.SprayCStation && tileType != TileType.SprayDStation)
+            CurrentCommand = null;
+    }
+
+    private IEnumerator SprayUp()
+    {
+        float actionTime = ActionTickTimeCost.SprayUp * GameManager.Instance.secondPerTick;
+        StartCoroutine(StartProgressTimer(actionTime));
+        
+        while (_actionProgressing)
+        {
+            yield return null;
+        }
+        
+        GameActions.Instance.SprayUp(GetCurrentTile().GetComponent<StationCellBehavior>(), this);
+        CurrentCommand = null;
+    }
+
+    private IEnumerator Spray(PuppetCommand command)
+    {
+        GridCellBehavior grid = GetCurrentTile();
+        if (grid.tileType != TileType.Soil)
+        {
+            command.SendIllegalActionResponse("can only spray to soil tile");
+            yield break;
+        }
+        
+        CurrentCommand = command;
+        float actionTime = ActionTickTimeCost.Spray * GameManager.Instance.secondPerTick;
+        StartCoroutine(StartProgressTimer(actionTime));
+        
+        while (_actionProgressing)
+        {
+            yield return null;
+        }
+
+        GameActions.Instance.Spray(grid as SoilCellBehavior, this);
+        CurrentCommand = null;
+    }
+
+    private IEnumerator Sample(PuppetCommand command)
+    {
+        if (_botInfo.CurrentBotMode != BotMode.Sample)
+        {
+            command.SendIllegalActionResponse("bot is not sample bot or sample not supported");
+            yield break;
+        }
+
+        if (WaterInventory != NutrientSolution.Empty)
+        {
+            command.SendIllegalActionResponse("water inventory must be empty before sample");
+            yield break;
+        }
+
+        GridCellBehavior grid = GetCurrentTile();
+        if (grid.tileType != TileType.Soil)
+        {
+            command.SendIllegalActionResponse("must sample on a soil grid");
+            yield break;
+        }
+        
+        CurrentCommand = command;
+        float actionTime = ActionTickTimeCost.Sample * GameManager.Instance.secondPerTick;
+        StartCoroutine(StartProgressTimer(actionTime));
+        
+        while (_actionProgressing)
+        {
+            yield return null;
+        }
+
+        CurrentCommand = command;
+        GameActions.Instance.Sample(grid as SoilCellBehavior, this);
+        CurrentCommand = null;
+    }
+
+    private void DumpInventory()
+    {
+        PlantInventory = new List<PlantBehavior>();
+        WaterInventory = NutrientSolution.Empty;
+        //TODO: refresh the inventory UI here
+    }
+    
+    private void Move(PuppetCommand command) {
+        if (_walking) {
+            command.SendIllegalActionResponse("Bot is already moving");
+            return;
+        }
+        JObject Params = command.Params;
+        string direction = Params["direction"].ToString();
+        if (direction.IsNullOrEmpty()) {
+            command.SendMissingParametersResponse(new JObject {
+                {"direction", new JArray{"up", "down", "left", "right"}}
+            });
+            return;
+        }
+
+        Vector2Int direct = direction switch {
+            "up" => new Vector2Int(0, 1),
+            "down" => new Vector2Int(0, -1),
+            "left" => new Vector2Int(-1, 0),
+            "right" => new Vector2Int(1, 0),
+            _ => Vector2Int.zero
+        };
+
+        if(!ValidTargetPosition(direct + _botInfo.CellIdx)) {
+            command.SendIllegalActionResponse("Attempting to move bot out of bounds");
+            return;
+        }
+
+        CurrentCommand = command;
+        StartCoroutine(MoveCoroutine(direct));
+    }
+
+    IEnumerator MoveCoroutine(Vector2Int direction) {
+        _walking = true;
+        Vector3 target = CurrentFloor.Cells[_botInfo.CellIdx.x + direction.x, _botInfo.CellIdx.y + direction.y].transform.position;
+        if (GameManager.Instance.secondPerTick > 0) {
+            float moveDuration = Vector3.Distance(transform.position, target) / GameManager.Instance.secondPerTick;
+            float startTime = Time.time;
+            while (Time.time - startTime < moveDuration) {
+                transform.position = Vector3.Lerp(transform.position, target, (Time.time - startTime) / moveDuration);
+                yield return null;
+            }
+            
+            _botInfo.CellIdx += direction;
+            transform.position = target;
+        }
+        
+        CurrentCommand = null;
+        _walking = false;
+    }
+
+    #endregion
+
+    public override void ExecuteCommunicate(PuppetCommand command)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    #region HMT State
+
+    public override JObject GetState(PuppetCommand command)
+    {
+        JObject ret = new JObject();
+
+        ret["info"] = HMTStateRep(HMTStateLevelOfDetail.Full);
+        
+        List<JObject> percept = new List<JObject>();
+        int xMin = Mathf.Max(0, _botInfo.CellIdx.x - SensorRange);
+        int xMax = Mathf.Min(CurrentFloor.SizeX - 1, _botInfo.CellIdx.x + SensorRange);
+        int yMin = Mathf.Max(0, _botInfo.CellIdx.y - SensorRange);
+        int yMax = Mathf.Min(CurrentFloor.SizeY - 1, _botInfo.CellIdx.y + SensorRange);
+        Debug.LogFormat("<color=yellow>Bot is At</color> {0}", _botInfo.CellIdx);
+        Debug.LogFormat("<color=cyan>GetState for Tiles</color> ({0}, {1}) to ({2}, {3})", xMin, yMin, xMax, yMax);
+        for (int x = xMin; x <= xMax; x++) {
+            for (int y = yMin; y <= yMax; y++) {
+                percept.Add(CurrentFloor.Cells[x, y].HMTStateRep(HMTStateLevelOfDetail.Visible));  
+            }
+        }
+        ret["percept"] = new JArray(percept);
+
+        //TODO: we could add "communications" or something as well as a flag in the GetState command for additional details
+        return ret;
+    }
+
+    public override JObject HMTStateRep(HMTStateLevelOfDetail level)
+    {
+        JObject resp = new JObject();
+        switch (level) {
+            case HMTStateLevelOfDetail.Full:
+                resp["actions"] = new JArray(SupportedActions);
+                goto case HMTStateLevelOfDetail.Visible;
+
+            case HMTStateLevelOfDetail.Visible:
+                resp["x"] = _botInfo.CellIdx.x;
+                resp["y"] = _botInfo.CellIdx.x;
+                resp["floor"] = _botInfo.FloorIdx;
+                resp["mode"] = _botInfo.CurrentBotMode.ToString();
+                if (CurrentCommand != null) {
+                    resp["current_command"] = CurrentCommand.HMTStateRep();
+                }
+                else { 
+                    resp["current_command"] = null;
+                }
+                goto case HMTStateLevelOfDetail.Seen;
+
+            case HMTStateLevelOfDetail.Seen:
+            case HMTStateLevelOfDetail.Unseen:
+            case HMTStateLevelOfDetail.None:
+            default:
+                break;
+        }
+        return resp;
+    }
+
+        #endregion
+
+    #region Helper Functions
+
+    protected Floor CurrentFloor {
+        get { return GameManager.Instance.parentTower.floors[_botInfo.FloorIdx]; }
+    }
+
+    protected bool ValidTargetPosition(Vector2 position)
+    {
+        return position.x < CurrentFloor.SizeX && position.y < CurrentFloor.SizeY && position.x >= 0 && position.y >= 0;
+    }
+    
+    protected GridCellBehavior GetCurrentTile()
+    {
+        return CurrentFloor.Cells[_botInfo.CellIdx.x, _botInfo.CellIdx.y];
+    }
+
+    #endregion
+    
+    protected IEnumerator StartProgressTimer(float time)
+    {
+        progressBar.value = 0;
+        progressBar.gameObject.SetActive(true);
+        _actionProgressing = true;
+
+        float timeElapsed = 0.0f;
+        while (timeElapsed < time)
+        {
+            yield return null;
+            timeElapsed += Time.deltaTime;
+            progressBar.value = Mathf.Clamp01(timeElapsed / time);
+        }
+
+        _actionProgressing = false;
+        progressBar.gameObject.SetActive(false);
+    }
+}
