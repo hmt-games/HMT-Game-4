@@ -72,9 +72,9 @@ public class GameActions : MonoBehaviour
     /// <param name="nutrientSolution"></param>
     public void Spray(SoilCellBehavior targetGrid, FarmPuppetBot bot)
     {
-        float sprayAmount = Mathf.Min(bot.WaterInventory.water, SprayConfig.SprayAmountPerAction);
+        float sprayAmount = Mathf.Min(bot.reservoirInventory.water, SprayConfig.SprayAmountPerAction);
         sprayAmount = Mathf.Min(targetGrid.RemainingWaterCapacity, sprayAmount);
-        targetGrid.NutrientLevels += bot.WaterInventory.DrawOff(sprayAmount);
+        targetGrid.NutrientLevels += bot.reservoirInventory.DrawOff(sprayAmount);
     }
 
     public void SprayUp(StationCellBehavior tile, FarmPuppetBot bot)
@@ -89,11 +89,11 @@ public class GameActions : MonoBehaviour
         };
 
         float sprayUpAmount = Mathf.Min(SprayConfig.WaterAmount,
-            bot.SolutionInventoryCapacity - bot.WaterInventory.water);
+            bot.reservoirCapacity - bot.reservoirInventory.water);
         NutrientSolution sprayUpSolution = new NutrientSolution(sprayUpAmount,
             nutrients * (sprayUpAmount * SprayConfig.NutrientConcentration));
 
-        bot.WaterInventory += sprayUpSolution;
+        bot.reservoirInventory += sprayUpSolution;
     }
     
     /// <summary>
@@ -154,8 +154,8 @@ public class GameActions : MonoBehaviour
 
     public void Sample(SoilCellBehavior targetGrid, FarmPuppetBot puppet)
     {
-        puppet.WaterInventory = targetGrid.NutrientLevels.DrawOff(1.0f);
-        InventoryUIManager.Instance.UpdateWaterInventoryUI(puppet.WaterInventory, 1.0f);
+        puppet.reservoirInventory = targetGrid.NutrientLevels.DrawOff(1.0f);
+        InventoryUIManager.Instance.UpdateWaterInventoryUI(puppet.reservoirInventory, 1.0f);
         InventoryUIManager.Instance.ShowInventory();
     }
 }

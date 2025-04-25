@@ -43,12 +43,16 @@ public class DefaultPuppetBot : PuppetBehavior
         get { return GameManager.Instance.parentTower.floors[_botInfo.FloorIdx]; }
     }
 
-    public override HashSet<string> SupportedActions =>
-        new()
-        {
-            "pick", "harvest", "spray", "plant",
-            "sample", "move", "moveto"
-        };
+    public override HashSet<string> SupportedActions
+    {
+        get =>
+            new()
+            {
+                "pick", "harvest", "spray", "plant",
+                "sample", "move", "moveto"
+            };
+        protected set => throw new System.NotImplementedException();
+    }
 
     public override void ExecuteAction(PuppetCommand command)
     {

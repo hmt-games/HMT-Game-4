@@ -89,9 +89,9 @@ public class InventoryUIManager : MonoBehaviour
         }
         else
         {
-            if (playerBot.PlantInventory.Count == 0)
+            if (playerBot.plantInventory.Count == 0)
             {
-                UpdateWaterInventoryUI(playerBot.WaterInventory, playerBot.SolutionInventoryCapacity);
+                UpdateWaterInventoryUI(playerBot.reservoirInventory, playerBot.reservoirCapacity);
             }
         }
     }

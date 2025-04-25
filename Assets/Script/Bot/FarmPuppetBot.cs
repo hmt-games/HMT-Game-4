@@ -32,10 +32,10 @@ public class FarmPuppetBot : PuppetBehavior
 
     #region External States
 
-    public float SolutionInventoryCapacity = 100.0f;
-    public int PlantInventoryCapacity = 8;
-    public List<PlantBehavior> PlantInventory;
-    public NutrientSolution WaterInventory;
+    public float reservoirCapacity = 100.0f;
+    public int plantInventoryCapacity = 8;
+    public List<PlantBehavior> plantInventory;
+    public NutrientSolution reservoirInventory;
     
     /// TODO: This needs to be put in some kind of config
     public int SensorRange = 1;
@@ -56,13 +56,18 @@ public class FarmPuppetBot : PuppetBehavior
         _animator = GetComponent<Animator>();
         progressBar.gameObject.SetActive(false);
         
-        PlantInventory = new List<PlantBehavior>();
-        WaterInventory = NutrientSolution.Empty;
+        plantInventory = new List<PlantBehavior>();
+        reservoirInventory = NutrientSolution.Empty;
     }
 
     #endregion
 
-    public override HashSet<string> SupportedActions { get; }
+    public override HashSet<string> SupportedActions { get; protected set; }
+        = new() { "move", "moveto", "useStation" };
+
+    private void ChangeActionSet(HashSet<string> newActions) => SupportedActions = newActions;
+
+    private BotModeSO _botModeConfig;
     
     public override void ExecuteAction(PuppetCommand command)
     {
@@ -142,50 +147,39 @@ public class FarmPuppetBot : PuppetBehavior
         }
 
         CurrentCommand = command;
-        switch (tileType)
-        {
-            case TileType.HarvestStation:
-                _animator.SetTrigger("TransHarvest");
-                _botInfo.CurrentBotMode = BotMode.Harvest;
-                break;
-            case TileType.PluckStation:
-                _animator.SetTrigger("TransPluck");
-                _botInfo.CurrentBotMode = BotMode.Pluck;
-                break;
-            case TileType.TillStation:
-                _animator.SetTrigger("TransTill");
-                _botInfo.CurrentBotMode = BotMode.Till;
-                break;
-            case TileType.SprayAStation:
-            case TileType.SprayBStation:
-            case TileType.SprayCStation:
-            case TileType.SprayDStation:
-                _animator.SetTrigger("TransSpray");
-                _botInfo.CurrentBotMode = BotMode.Spray;
-                StartCoroutine(SprayUp());
-                break;
-            case TileType.SampleStation:
-                _animator.SetTrigger("TransSample");
-                _botInfo.CurrentBotMode = BotMode.Sample;
-                break;
-            case TileType.PlantStation:
-                _animator.SetTrigger("TransPlant");
-                _botInfo.CurrentBotMode = BotMode.Plant;
-                break;
-            case TileType.DiscardStation:
-                DumpInventory();
-                break;
-            default:
-                command.SendIllegalActionResponse("can only call use station on station tile");
-                break;
-        }
+
+        SwitchBotMode();
 
         if (tileType != TileType.SprayAStation && tileType != TileType.SprayBStation
             && tileType != TileType.SprayCStation && tileType != TileType.SprayDStation)
             CurrentCommand = null;
     }
 
-    private IEnumerator SprayUp()
+    private void SwitchBotMode()
+    {
+        StationCellBehavior station = GetCurrentTile() as StationCellBehavior;
+        BotModeSO newBotMode = station.UseStation(this);
+        if (newBotMode != null)
+        {
+            _botModeConfig = newBotMode;
+            SupportedActions = new HashSet<string>(_botModeConfig.supportedActions);
+            _animator.SetTrigger(_botModeConfig.botModeName);
+            _botInfo.CurrentBotMode = _botModeConfig.botMode;
+            
+            // reset inventory
+            ResetBotInventory(_botModeConfig.reservoirCapacity, _botModeConfig.plantInventoryCapacity);
+        }
+    }
+
+    private void ResetBotInventory(float _reservoirCapacity, int _plantInventoryCapacity)
+    {
+        DumpInventory();
+
+        reservoirCapacity = _reservoirCapacity;
+        plantInventoryCapacity = _plantInventoryCapacity;
+    }
+
+    public IEnumerator SprayUp()
     {
         float actionTime = ActionTickTimeCost.SprayUp * GameManager.Instance.secondPerTick;
         StartCoroutine(StartProgressTimer(actionTime));
@@ -229,7 +223,7 @@ public class FarmPuppetBot : PuppetBehavior
             yield break;
         }
 
-        if (WaterInventory != NutrientSolution.Empty)
+        if (reservoirInventory != NutrientSolution.Empty)
         {
             command.SendIllegalActionResponse("water inventory must be empty before sample");
             yield break;
@@ -256,10 +250,10 @@ public class FarmPuppetBot : PuppetBehavior
         CurrentCommand = null;
     }
 
-    private void DumpInventory()
+    public void DumpInventory()
     {
-        PlantInventory = new List<PlantBehavior>();
-        WaterInventory = NutrientSolution.Empty;
+        plantInventory = new List<PlantBehavior>();
+        reservoirInventory = NutrientSolution.Empty;
         //TODO: refresh the inventory UI here
     }
     
@@ -298,7 +292,7 @@ public class FarmPuppetBot : PuppetBehavior
         _walking = true;
         Vector3 target = CurrentFloor.Cells[_botInfo.CellIdx.x + direction.x, _botInfo.CellIdx.y + direction.y].transform.position;
         if (GameManager.Instance.secondPerTick > 0) {
-            float moveDuration = Vector3.Distance(transform.position, target) / GameManager.Instance.secondPerTick;
+            float moveDuration = Vector3.Distance(transform.position, target) * GameManager.Instance.secondPerTick / (_botModeConfig == null ? 1.0f : _botModeConfig.movementSpeed);
             float startTime = Time.time;
             while (Time.time - startTime < moveDuration) {
                 transform.position = Vector3.Lerp(transform.position, target, (Time.time - startTime) / moveDuration);

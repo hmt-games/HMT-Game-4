@@ -37,7 +37,7 @@ public class OptionSelectorEditor : Editor
     {
         "move", "moveto", "harvest", "sample",
         "spray", "pick", "pickUp", "putDown",
-        "plant", "till"
+        "plant", "pluck", "till", "useStation"
     };
 
     SerializedProperty supportedActionsProp;

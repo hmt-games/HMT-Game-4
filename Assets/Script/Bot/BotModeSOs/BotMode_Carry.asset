@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BotMode_Carry
   m_EditorClassIdentifier: 
   botMode: 8
-  botModeName: Roomba-Pick
+  botModeName: Roomba-Carry
   reservoirCapacity: 100
   plantInventoryCapacity: 100
   supportedActions:

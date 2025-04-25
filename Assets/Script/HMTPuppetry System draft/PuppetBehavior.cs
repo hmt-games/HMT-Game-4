@@ -66,7 +66,7 @@ namespace HMT.Puppetry {
 
         #region Abstract Elements
 
-        public abstract HashSet<string> SupportedActions { get; }
+        public abstract HashSet<string> SupportedActions { get; protected set; }
 
         public abstract void ExecuteAction(PuppetCommand command);
 

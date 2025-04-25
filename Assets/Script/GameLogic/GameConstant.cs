@@ -24,6 +24,7 @@ namespace GameConstant
         SprayCStation,
         SprayDStation,
         TillStation,
+        CarryStation,
         DiscardStation,
     }
     
