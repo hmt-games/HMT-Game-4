@@ -96,6 +96,7 @@ public class FarmPuppetBot : PuppetBehavior
                 break;
             default:
                 command.SendIllegalActionResponse();
+                Debug.LogWarning("execute action hit a unimplemented case");
                 break;
         }
     }
@@ -104,7 +105,6 @@ public class FarmPuppetBot : PuppetBehavior
 
     private void Harvest(PuppetCommand command)
     {
-        Debug.Log("Start harvest");
         GridCellBehavior grid = GetCurrentTile();
         if (grid.tileType != TileType.Soil)
         {

@@ -220,7 +220,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: TransTill
+    m_ConditionEvent: Roomba-Till
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -380122718527198727}
@@ -372,7 +372,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: TransPlant
+    m_ConditionEvent: Roomba-Plant
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2452057276898444961}
@@ -397,7 +397,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: TransPluck
+    m_ConditionEvent: Roomba-Pluck
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3339509254222532745}
@@ -550,13 +550,13 @@ AnimatorController:
   m_Name: Bot_Anim_Controller
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: TransHarvest
+  - m_Name: Roomba-Harvest
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: TransPluck
+  - m_Name: Roomba-Pluck
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -574,25 +574,25 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: TransSample
+  - m_Name: Roomba-Sample
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: TransSpray
+  - m_Name: Roomba-Spray
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: TransTill
+  - m_Name: Roomba-Till
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: TransPlant
+  - m_Name: Roomba-Plant
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -620,7 +620,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: TransSample
+    m_ConditionEvent: Roomba-Sample
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -857362682843169785}
@@ -723,7 +723,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: TransSpray
+    m_ConditionEvent: Roomba-Spray
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2958932979625459304}
@@ -851,7 +851,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: TransHarvest
+    m_ConditionEvent: Roomba-Harvest
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4131383925992035050}

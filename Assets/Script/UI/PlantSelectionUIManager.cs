@@ -27,9 +27,10 @@ public class PlantSelectionUIManager : MonoBehaviour
     public void ShowSelection(List<PlantBehavior> plants, PuppetBehavior bot, Action<PlantBehavior, PuppetBehavior>onSelectedCallback)
     {
         _onSelectedCallback = onSelectedCallback;
-        while (plantSlotParent.transform.childCount > 0)
+
+        for (int i = plantSlotParent.transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(plantSlotParent.transform.GetChild(0));
+            Destroy(plantSlotParent.transform.GetChild(i).gameObject);
         }
 
         foreach (PlantBehavior plant in plants)

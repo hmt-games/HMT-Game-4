@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BotMode_Harvest
   m_EditorClassIdentifier: 
   botMode: 1
-  botModeName: Roomba - Harvest
+  botModeName: Roomba-Harvest
   reservoirCapacity: 0
   plantInventoryCapacity: 50
   supportedActions:
