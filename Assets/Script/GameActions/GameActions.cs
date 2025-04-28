@@ -29,12 +29,7 @@ public class GameActions : MonoBehaviour
     {
         
     }
-
-    /// <summary>
-    /// Plant is removed from its tile and added to actors inventory
-    /// Target plant must have surface mass
-    /// </summary>
-    /// <param name="targetPlant"></param>
+    
     public void Harvest(PlantBehavior targetPlant, PuppetBehavior bot)
     {
         targetPlant.SurfaceMass = targetPlant.stageTransitionThreshold[2];
