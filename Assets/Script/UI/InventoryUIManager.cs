@@ -23,6 +23,11 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private Slider DSlider;
     [SerializeField] private TMP_Text DTxt;
 
+    [Header("Plant Inventory")] 
+    [SerializeField] private GameObject plantSlotParent;
+    [SerializeField] private GameObject plantSlotPrefab;
+    [SerializeField] private TMP_Text capacityText;
+
     public static InventoryUIManager Instance;
 
     private Animator _animator;
@@ -75,11 +80,32 @@ public class InventoryUIManager : MonoBehaviour
             DSlider.value = noWater ? nutrients.w / maxNutrientAmount : nutrients.w / waterVolume.water;
             DTxt.text = noWater ? $"{nutrients.w:F1}" : $"{(nutrients.w / waterVolume.water):P0}";
         }
-
-        waterInventory.SetActive(true);
-        plantInventory.SetActive(false);
     }
 
+    public void UpdatePlantInventoryUI(List<PlantBehavior> plants, int plantInventoryCapacity)
+    {
+        for (int i = plantSlotParent.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(plantSlotParent.transform.GetChild(i).gameObject);
+        }
+
+        if (plantInventoryCapacity == 0)
+        {
+            capacityText.text = "No Plant Inventory";
+            return;
+        }
+
+        capacityText.text = $"{plants.Count} / {plantInventoryCapacity}";
+        foreach (PlantBehavior plant in plants)
+        {
+            GameObject nSlot = Instantiate(plantSlotPrefab, plantSlotParent.transform);
+            Image plantImage = nSlot.transform.GetChild(0).GetComponent<Image>();
+
+            plantImage.sprite = plant.spriteRenderer.sprite;
+            ScaleToFit(plantImage);
+        }
+    }
+    
     private void SetPlayerInventory()
     {
         PlayerPuppetBot playerBot = GameManager.Instance.player;
@@ -89,10 +115,8 @@ public class InventoryUIManager : MonoBehaviour
         }
         else
         {
-            if (playerBot.plantInventory.Count == 0)
-            {
-                UpdateWaterInventoryUI(playerBot.reservoirInventory, playerBot.reservoirCapacity);
-            }
+            UpdateWaterInventoryUI(playerBot.reservoirInventory, playerBot.reservoirCapacity);
+            UpdatePlantInventoryUI(playerBot.plantInventory, playerBot.plantInventoryCapacity);
         }
     }
     
@@ -105,5 +129,25 @@ public class InventoryUIManager : MonoBehaviour
     public void HideInventory()
     {
         _animator.SetTrigger("hide");
+    }
+    
+    private void ScaleToFit(Image image)
+    {
+        RectTransform rectTransform = image.rectTransform;
+
+        if (image.sprite == null) return;
+
+        float spriteWidth = image.sprite.rect.width;
+        float spriteHeight = image.sprite.rect.height;
+
+        float rectWidth = rectTransform.rect.width;
+        float rectHeight = rectTransform.rect.height;
+
+        float scale = Mathf.Min(rectWidth / spriteWidth, rectHeight / spriteHeight);
+
+        // Apply scale to the Image transform
+        image.preserveAspect = true;
+        image.SetNativeSize();
+        image.rectTransform.localScale = new Vector3(scale, scale, 1f);
     }
 }

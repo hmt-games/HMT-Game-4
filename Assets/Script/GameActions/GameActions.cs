@@ -7,12 +7,17 @@ using GameConstant;
 using HMT.Puppetry;
 using Unity.Mathematics;
 using GameConfig;
+using Random = UnityEngine.Random;
 
 public class GameActions : MonoBehaviour
 {
     public static GameActions Instance;
-    
+
     [SerializeField] private GameObject plantPrefab;
+
+    private PlantInitInfo _plantInitInfo =
+        new PlantInitInfo(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 5.0f,
+            new Vector4(5.0f, 5.0f, 5.0f, 5.0f));
 
     private void Awake()
     {
@@ -27,37 +32,85 @@ public class GameActions : MonoBehaviour
     /// /// <param name="targetPlant"></param>
     public void Pick(PlantBehavior targetPlant)
     {
-        
+
     }
-    
-    public void Harvest(PlantBehavior targetPlant, PuppetBehavior bot)
+
+    public void Pick(PlantBehavior targetPlant, FarmPuppetBot bot)
     {
         targetPlant.SurfaceMass = targetPlant.stageTransitionThreshold[2];
         targetPlant.plantCurrentStage = 0;
         targetPlant.PlantNextStage();
 
-        //TODO: add fruit to bot inventory
+        // add fruit to bot inventory
+        //TODO: considering object pooling plant objects to save head time
+        int yield = Random.Range(PickConfig.harvestAmountMin, PickConfig.harvestAmountMax + 1);
+        for (int i = 0; i < yield; i++)
+        {
+            if (bot.plantInventory.Count > bot.plantInventoryCapacity) break;
+
+            NetworkObject nPlantObj =
+                BasicSpawner._runner.Spawn(plantPrefab, new Vector3(9999, 9999, -9999), quaternion.identity);
+            PlantBehavior nPlant = nPlantObj.GetComponent<PlantBehavior>();
+            nPlant.config = targetPlant.config;
+            _plantInitInfo.Nutrient = nPlant.config.metabolismFactor;
+            _plantInitInfo.Water = nPlant.config.metabolismRate;
+            nPlant.SetInitialProperties(_plantInitInfo);
+            nPlant.GetComponent<SpriteRenderer>().sprite = nPlant.config.plantSprites[0];
+
+            bot.plantInventory.Add(nPlant);
+        }
     }
 
-    public bool RequestHarvest(SoilCellBehavior tile, FarmPuppetBot bot)
+    public bool RequestPick(SoilCellBehavior tile, FarmPuppetBot bot)
     {
         Debug.Log("request Harvest");
         List<PlantBehavior> fertilePlants = new List<PlantBehavior>();
         foreach (PlantBehavior plant in tile.plants)
         {
-            Debug.Log("all to list");
             if (plant.hasFruit) fertilePlants.Add(plant);
         }
 
         if (fertilePlants.Count == 0) return false;
 
-        PlantSelectionUIManager.Instance.ShowSelection(fertilePlants, bot, StartHarvest);
+        PlantSelectionUIManager.Instance.ShowSelection(fertilePlants, bot, StartPick);
         return true;
     }
 
-    private void StartHarvest(PlantBehavior plant, FarmPuppetBot bot)
+
+    private void StartPick(PlantBehavior plant, FarmPuppetBot bot)
     {
-        StartCoroutine(bot.StartHarvest(plant));
+        StartCoroutine(bot.StartPick(plant));
+    }
+
+    public bool RequestPlant(FarmPuppetBot bot)
+    {
+        List<PlantBehavior> seedPlants = new List<PlantBehavior>();
+        foreach (PlantBehavior plant in bot.plantInventory)
+        {
+            if (plant.Age == 0.0f) seedPlants.Add(plant);
+        }
+
+        if (seedPlants.Count == 0) return false;
+
+        PlantSelectionUIManager.Instance.ShowSelection(seedPlants, bot, StartPlant);
+        return true;
+    }
+
+    private void StartPlant(PlantBehavior plant, FarmPuppetBot bot)
+    {
+        StartCoroutine(bot.StartPlant(plant));
+    }
+
+    public void Plant(SoilCellBehavior tile, PlantBehavior plant, FarmPuppetBot bot)
+    {
+        plant.parentCell = tile;
+        tile.plants.Add(plant);
+        tile.plantCount += 1;
+
+        plant.transform.SetParent(tile.transform.GetChild(1).GetChild(tile.plantCount - 1), false);
+        plant.transform.GetComponent<NetworkTransform>().Teleport(plant.transform.parent.position);
+
+        bot.plantInventory.Remove(plant);
     }
 
     /// <summary>

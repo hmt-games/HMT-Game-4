@@ -27,17 +27,6 @@ public class Floor : NetworkBehaviour
     //[Networked]
     public int SizeY { get { return Cells.GetLength(1); } }
 
-
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     public NutrientSolution[,] OnWater(NutrientSolution[,] volumes) {
         for (int x = 0; x < Cells.GetLength(0); x++) {
             for (int y = 0; y < Cells.GetLength(1); y++) {
