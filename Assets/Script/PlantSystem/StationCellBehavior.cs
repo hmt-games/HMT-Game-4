@@ -1,6 +1,7 @@
 ﻿using GameConstant;
 using HMT.Puppetry;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 public class StationCellBehavior : GridCellBehavior
 {
@@ -45,6 +46,22 @@ public class StationCellBehavior : GridCellBehavior
     
     public override NutrientSolution OnWater(NutrientSolution volumes)
     {
+        //TODO we may want to have this return empty (ie no water drains out of a station to lower floors).
         return volumes;
+    }
+
+    public override JObject HMTStateRep(HMTStateLevelOfDetail lod) {
+        JObject rep = base.HMTStateRep(lod);
+        switch (lod) {
+            case HMTStateLevelOfDetail.Full:
+            case HMTStateLevelOfDetail.Visible:
+            case HMTStateLevelOfDetail.Seen:
+            case HMTStateLevelOfDetail.Unseen:
+                rep["cell_type"] = "station";
+                rep["station_type"] = tileType.ToString();
+                break;
+        }
+
+        return rep;
     }
 }

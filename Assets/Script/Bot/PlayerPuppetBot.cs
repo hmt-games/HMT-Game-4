@@ -14,7 +14,7 @@ public class PlayerPuppetBot : FarmPuppetBot
         { KeyCode.S, "down" }
     };
 
-    public override HashSet<string> SupportedActions =>
+    public override HashSet<string> CurrentActionSet =>
         new()
         {
             "pick", "harvest", "spray", "plant",

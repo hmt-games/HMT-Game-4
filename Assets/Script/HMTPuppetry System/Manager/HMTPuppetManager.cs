@@ -35,7 +35,7 @@ namespace HMT.Puppetry {
         public bool useAPIKeys = true;
         [Tooltip("The threshold for automatic responses to commands. If a Command is not responded to by the target puppet in this time, a generic acknoweldgement will be sent. Note that this is in terms of unscaledTime not regular time so it does not respect speed up or pausing.")]
         public float autoResponseThreshold = 3f;
-        [Tooltip("The default priority level for agent commands that do not specify on registration.")]
+        [Tooltip("The default priority level for agent commands that do not specify on registration. Must be within a byte range.")]
         [Range(0, 255)]
         public int defaultCommandPriority = 128;
 
@@ -46,27 +46,27 @@ namespace HMT.Puppetry {
         private List<(float time, PuppetCommand puppet)> commandsInFlight;
         private Dictionary<string, IPuppet> PuppetIndex = new Dictionary<string, IPuppet>();
 
-        private Dictionary<string, HashSet<AgentServiceConfig>> configsByAgent = new Dictionary<string, HashSet<AgentServiceConfig>>();
-        private Dictionary<string, HashSet<AgentServiceConfig>> configsByPuppet = new Dictionary<string, HashSet<AgentServiceConfig>>();
-        private Dictionary<string, AgentServiceConfig> configsByService = new Dictionary<string, AgentServiceConfig>();
+        private Dictionary<string, HashSet<AgentServiceRecord>> configsByAgent = new Dictionary<string, HashSet<AgentServiceRecord>>();
+        private Dictionary<string, HashSet<AgentServiceRecord>> configsByPuppet = new Dictionary<string, HashSet<AgentServiceRecord>>();
+        private Dictionary<string, AgentServiceRecord> configsByService = new Dictionary<string, AgentServiceRecord>();
 
-        public HashSet<AgentServiceConfig> GetAgentConfigs(string agent) {
+        public HashSet<AgentServiceRecord> GetAgentConfigs(string agent) {
             if (!configsByAgent.ContainsKey(agent)) {
-                return new HashSet<AgentServiceConfig>();
+                return new HashSet<AgentServiceRecord>();
             }
             return configsByAgent[agent];
         }
 
-        public HashSet<AgentServiceConfig> GetPuppetConfigs(string puppet) {
+        public HashSet<AgentServiceRecord> GetPuppetConfigs(string puppet) {
             if (!configsByPuppet.ContainsKey(puppet)) {
-                return new HashSet<AgentServiceConfig>();
+                return new HashSet<AgentServiceRecord>();
             }
             return configsByPuppet[puppet];
         }
 
-        public AgentServiceConfig GetServiceConfig(string service) {
+        public AgentServiceRecord GetServiceConfig(string service) {
             if (!configsByService.ContainsKey(service)) {
-                return AgentServiceConfig.NONE;
+                return AgentServiceRecord.NONE;
             }
             return configsByService[service];
         }
@@ -143,7 +143,7 @@ namespace HMT.Puppetry {
                         return;
                     }
                     
-                    AgentServiceConfig config = LaunchNewServiceTarget(agentId, puppetId, priority);
+                    AgentServiceRecord config = LaunchNewServiceTarget(agentId, puppetId, priority);
 
                     JObject response = new JObject {
                         //{ "service_target", string.Format("ws://localhost:{0}/{1}/{2}", socketPort, rootService, config.ServiceTarget) },
@@ -152,7 +152,7 @@ namespace HMT.Puppetry {
                         { "agent_id", agentId },
                         { "puppet_id", puppetId },
                         { "priority", priority},
-                        { "action_set", new JArray(PuppetIndex[puppetId].SupportedActions) }
+                        { "action_set", new JArray(PuppetIndex[puppetId].CurrentActionSet) }
                     };
                     if (useAPIKeys) {
                         response["api_key"] = config.APIKey;
@@ -190,14 +190,14 @@ namespace HMT.Puppetry {
             foreach(string key in PuppetIndex.Keys) {
                 puppetList.Add(new JObject {
                     {"puppet_id", key },
-                    {"action_set", new JArray(PuppetIndex[key].SupportedActions) }
+                    {"action_set", new JArray(PuppetIndex[key].CurrentActionSet) }
                 });
             }
             job["puppets"] = puppetList;
             return job;
         }
 
-        internal AgentServiceConfig LaunchNewServiceTarget(string agent_id, string puppet_id, byte priority) {
+        internal AgentServiceRecord LaunchNewServiceTarget(string agent_id, string puppet_id, byte priority) {
             string newServiceTarget = string.Empty;
             string apiKey = useAPIKeys ? System.Guid.NewGuid().ToString() : string.Empty;
             if (useSequentialServiceTargets) {
@@ -207,21 +207,21 @@ namespace HMT.Puppetry {
                 newServiceTarget = System.Guid.NewGuid().ToString();
             }
 
-            AgentServiceConfig record = new AgentServiceConfig(newServiceTarget, agent_id, puppet_id, priority,apiKey);
+            AgentServiceRecord record = new AgentServiceRecord(newServiceTarget, agent_id, puppet_id, priority,apiKey);
 
             server.AddWebSocketService<HMTPuppetService>("/" + newServiceTarget, s => {
                 s.ServiceConfig = record;
-                s.ActionSet = PuppetIndex[puppet_id].SupportedActions;
+                s.ActionSet = PuppetIndex[puppet_id].FullActionSet;
             });
 
             Debug.LogFormat("[HMTPuppetManager] Launched Service target {0}, {1}, {2}, {3}", newServiceTarget, agent_id, puppet_id, apiKey);
 
             if (!configsByAgent.ContainsKey(record.AgentId)) {
-                configsByAgent[record.AgentId] = new HashSet<AgentServiceConfig>();
+                configsByAgent[record.AgentId] = new HashSet<AgentServiceRecord>();
             }
             configsByAgent[record.AgentId].Add(record);
             if (!configsByPuppet.ContainsKey(record.PuppetId)) {
-                configsByPuppet[record.PuppetId] = new HashSet<AgentServiceConfig>();
+                configsByPuppet[record.PuppetId] = new HashSet<AgentServiceRecord>();
             }
             configsByPuppet[record.PuppetId].Add(record);
             configsByService[record.ServiceTarget] = record;
@@ -240,16 +240,20 @@ namespace HMT.Puppetry {
                     IPuppet puppet = PuppetIndex[command.TargetPuppet];
                     switch (command.Command) {
                         case PuppetCommandType.EXECUTE_ACTION:
-                            puppet.ExecuteAction(command);
-                            commandsInFlight.Add((Time.unscaledTime, command));
-                            break;
                         case PuppetCommandType.EXECUTE_PLAN:
-                            puppet.ExecutePlan(command);
+                            puppet.DispatchAction(command);
                             commandsInFlight.Add((Time.unscaledTime, command));
                             break;
                         case PuppetCommandType.GET_STATE:
                             JObject state = puppet.GetState(command);
                             command.SendStateResponse(state);
+                            break;
+                        case PuppetCommandType.GET_INFO:
+                            JObject info = puppet.GetInfo(command);
+                            command.SendInfoResponse(info);
+                            break;
+                        case PuppetCommandType.STOP:
+                            puppet.ExecuteStop(command);
                             break;
                         case PuppetCommandType.COMMUNICATE:
                             puppet.ExecuteCommunicate(command);
@@ -289,6 +293,11 @@ namespace HMT.Puppetry {
         public void RemovePuppet(IPuppet puppet) {
             if (PuppetIndex.ContainsKey(puppet.PuppetID)) {
                 PuppetIndex.Remove(puppet.PuppetID);
+            }
+            foreach(IPuppet p in PuppetIndex.Values) {
+                if (p is IPuppetGroup group) {
+                    group.RemoveSubPuppet(puppet);
+                }
             }
 
             //TODO remove any socket connections that are attached to this puppet.

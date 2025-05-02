@@ -9,11 +9,10 @@ namespace HMT.Puppetry {
     /// <summary>
     /// This class is just for facilitating the socket interface. 
     /// 
-    /// My goal would be for no logic to actually live here and instead by 
-    /// handled by the ExecuteAction virtual method in the main HMTInterface class.
+    /// Other than some high-level parsing and status checks no real logic happens here.
     /// </summary>
     public class HMTPuppetService : WebSocketBehavior {
-        public AgentServiceConfig ServiceConfig { get; set; }
+        public AgentServiceRecord ServiceConfig { get; set; }
         public HashSet<string> ActionSet { get; set; }
 
         protected override void OnMessage(MessageEventArgs e) {

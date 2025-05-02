@@ -43,7 +43,7 @@ public class DefaultPuppetBot : PuppetBehavior
         get { return GameManager.Instance.parentTower.floors[_botInfo.FloorIdx]; }
     }
 
-    public override HashSet<string> SupportedActions
+    public override HashSet<string> CurrentActionSet
     {
         get =>
             new()
@@ -51,7 +51,17 @@ public class DefaultPuppetBot : PuppetBehavior
                 "pick", "harvest", "spray", "plant",
                 "sample", "move", "moveto"
             };
-        protected set => throw new System.NotImplementedException();
+        protected set { return; }
+    }
+
+    public override HashSet<string> FullActionSet {
+        get =>
+            new()
+            {
+                "pick", "harvest", "spray", "plant",
+                "sample", "move", "moveto"
+            };
+        protected set { return; }
     }
 
     public override void ExecuteAction(PuppetCommand command)
@@ -210,7 +220,7 @@ public class DefaultPuppetBot : PuppetBehavior
         JObject resp = new JObject();
         switch (level) {
             case HMTStateLevelOfDetail.Full:
-                resp["actions"] = new JArray(SupportedActions);
+                resp["actions"] = new JArray(CurrentActionSet);
                 goto case HMTStateLevelOfDetail.Visible;
 
             case HMTStateLevelOfDetail.Visible:

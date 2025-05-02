@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
 using GameConstant;
@@ -53,6 +54,7 @@ public class FarmPuppetBot : PuppetBehavior
     
     protected void Awake()
     {
+        puppetIDPrefix = "farm_bot";
         _animator = GetComponent<Animator>();
         progressBar.gameObject.SetActive(false);
         
@@ -62,16 +64,21 @@ public class FarmPuppetBot : PuppetBehavior
 
     #endregion
 
-    public override HashSet<string> SupportedActions { get; protected set; }
+    public override HashSet<string> CurrentActionSet { get; protected set; }
         = new() { "move", "moveto", "useStation" };
 
-    private void ChangeActionSet(HashSet<string> newActions) => SupportedActions = newActions;
+    public override HashSet<string> FullActionSet { get; protected set; } = new()
+        {
+            "move", "moveto", "useStation", "sample", "spray", "harvest", "pluck", "pickUp", "putDown", "plant", "till"
+        };
+
+    private void ChangeActionSet(HashSet<string> newActions) => CurrentActionSet = newActions;
 
     private BotModeSO _botModeConfig;
     
     public override void ExecuteAction(PuppetCommand command)
     {
-        if (!SupportedActions.Contains(command.Action))
+        if (!CurrentActionSet.Contains(command.Action))
         {
             command.SendIllegalActionResponse($"Action {command.Action} not supported by the bot currently");
             return;
@@ -122,7 +129,7 @@ public class FarmPuppetBot : PuppetBehavior
         }
     }
 
-    public override IEnumerator StartHarvest(PlantBehavior plant)
+    public IEnumerator StartHarvest(PlantBehavior plant)
     {
         Debug.Log("carry harvest");
         float actionTime = ActionTickTimeCost.Harvest * GameManager.Instance.secondPerTick;
@@ -130,6 +137,11 @@ public class FarmPuppetBot : PuppetBehavior
         
         while (_actionProgressing)
         {
+            //CurrentCommand is set to null by a Stop Command
+            if(CurrentCommand.Command == PuppetCommandType.STOP) {
+                CurrentCommand = null;
+                yield break;
+            }
             yield return null;
         }
         
@@ -162,7 +174,7 @@ public class FarmPuppetBot : PuppetBehavior
         if (newBotMode != null)
         {
             _botModeConfig = newBotMode;
-            SupportedActions = new HashSet<string>(_botModeConfig.supportedActions);
+            CurrentActionSet = new HashSet<string>(_botModeConfig.supportedActions);
             _animator.SetTrigger(_botModeConfig.botModeName);
             _botInfo.CurrentBotMode = _botModeConfig.botMode;
             
@@ -186,6 +198,10 @@ public class FarmPuppetBot : PuppetBehavior
         
         while (_actionProgressing)
         {
+            if (CurrentCommand.Command == PuppetCommandType.STOP) {
+                CurrentCommand = null;
+                yield break;
+            }
             yield return null;
         }
         
@@ -208,6 +224,10 @@ public class FarmPuppetBot : PuppetBehavior
         
         while (_actionProgressing)
         {
+            if (CurrentCommand.Command == PuppetCommandType.STOP) {
+                CurrentCommand = null;
+                yield break;
+            }
             yield return null;
         }
 
@@ -242,10 +262,13 @@ public class FarmPuppetBot : PuppetBehavior
         
         while (_actionProgressing)
         {
+            if (CurrentCommand.Command == PuppetCommandType.STOP) {
+                CurrentCommand = null;
+                yield break;
+            }
             yield return null;
         }
 
-        CurrentCommand = command;
         GameActions.Instance.Sample(grid as SoilCellBehavior, this);
         CurrentCommand = null;
     }
@@ -327,8 +350,8 @@ public class FarmPuppetBot : PuppetBehavior
         int xMax = Mathf.Min(CurrentFloor.SizeX - 1, _botInfo.CellIdx.x + SensorRange);
         int yMin = Mathf.Max(0, _botInfo.CellIdx.y - SensorRange);
         int yMax = Mathf.Min(CurrentFloor.SizeY - 1, _botInfo.CellIdx.y + SensorRange);
-        Debug.LogFormat("<color=yellow>Bot is At</color> {0}", _botInfo.CellIdx);
-        Debug.LogFormat("<color=cyan>GetState for Tiles</color> ({0}, {1}) to ({2}, {3})", xMin, yMin, xMax, yMax);
+        //Debug.LogFormat("<color=yellow>Bot is At</color> {0}", _botInfo.CellIdx);
+        //Debug.LogFormat("<color=cyan>GetState for Tiles</color> ({0}, {1}) to ({2}, {3})", xMin, yMin, xMax, yMax);
         for (int x = xMin; x <= xMax; x++) {
             for (int y = yMin; y <= yMax; y++) {
                 percept.Add(CurrentFloor.Cells[x, y].HMTStateRep(HMTStateLevelOfDetail.Visible));  
@@ -345,7 +368,8 @@ public class FarmPuppetBot : PuppetBehavior
         JObject resp = new JObject();
         switch (level) {
             case HMTStateLevelOfDetail.Full:
-                resp["actions"] = new JArray(SupportedActions);
+                resp["actions"] = new JArray(CurrentActionSet);
+                resp["plan"] = new JArray(_currentPlan.Select(c => c.HMTStateRep()));
                 goto case HMTStateLevelOfDetail.Visible;
 
             case HMTStateLevelOfDetail.Visible:
@@ -399,6 +423,10 @@ public class FarmPuppetBot : PuppetBehavior
         float timeElapsed = 0.0f;
         while (timeElapsed < time)
         {
+            if (CurrentCommand == null || CurrentCommand.Command == PuppetCommandType.STOP) {
+                progressBar.gameObject.SetActive(false);
+                yield break;
+            }
             yield return null;
             timeElapsed += Time.deltaTime;
             progressBar.value = Mathf.Clamp01(timeElapsed / time);

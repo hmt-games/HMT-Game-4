@@ -39,7 +39,7 @@ public class GameActions : MonoBehaviour
         //TODO: add fruit to bot inventory
     }
 
-    public bool RequestHarvest(SoilCellBehavior tile, PuppetBehavior bot)
+    public bool RequestHarvest(SoilCellBehavior tile, FarmPuppetBot bot)
     {
         Debug.Log("request Harvest");
         List<PlantBehavior> fertilePlants = new List<PlantBehavior>();
@@ -55,7 +55,7 @@ public class GameActions : MonoBehaviour
         return true;
     }
 
-    private void StartHarvest(PlantBehavior plant, PuppetBehavior bot)
+    private void StartHarvest(PlantBehavior plant, FarmPuppetBot bot)
     {
         StartCoroutine(bot.StartHarvest(plant));
     }

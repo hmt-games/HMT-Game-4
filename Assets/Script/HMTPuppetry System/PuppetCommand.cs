@@ -7,6 +7,8 @@ namespace HMT.Puppetry {
         INVALID_COMMAND,
         EXECUTE_ACTION,
         EXECUTE_PLAN,
+        STOP,
+        GET_INFO,
         GET_STATE,
         COMMUNICATE,
         CONFIGURE,
@@ -19,12 +21,17 @@ namespace HMT.Puppetry {
 
         CommandAcknowleged = 2000,
         StateRetrieved = 2001,
+        InfoRetrieved = 2002,
         GameOver = 2999,
+
+        SubPuppetNotFound = 3000,
+        SubPuppetLeftGroup = 3001,
 
         IllegalAction = 4000,
         InsufficientPriority = 4001,
         MissingParameters = 4002,
         BadParameters = 4003,
+        NotSupportedInMode = 4004,
 
         CommandParseError = 5000,
         APIKeyMismatch = 5001,
@@ -34,8 +41,13 @@ namespace HMT.Puppetry {
 
 
     public class PuppetCommand {
+
+        public static bool VERBOSE_RESPONSES = true;
         
         private const string NO_ACTION = "no_action";
+
+        public const byte IDLE_PRIORITY = 255;
+
 
         public static string ResponseCodeToStatus(int code) {
             return (code / 1000) switch {
@@ -48,17 +60,37 @@ namespace HMT.Puppetry {
             };
         }
 
-        public static HashSet<string> VALID_COMMANDS = new HashSet<string> { "execute_action", "execute_plan", "get_state", "configure", "communicate" };
+        public static HashSet<string> VALID_COMMANDS = new HashSet<string> { "execute_action", "execute_plan", "get_state", "configure", "communicate", "stop" };
 
         public static string CommandTypeToString(PuppetCommandType command) {
             return command switch {
                 PuppetCommandType.EXECUTE_ACTION => "execute_action",
                 PuppetCommandType.EXECUTE_PLAN => "execute_plan",
                 PuppetCommandType.GET_STATE => "get_state",
+                PuppetCommandType.STOP => "stop",
                 PuppetCommandType.COMMUNICATE => "communicate",
                 PuppetCommandType.CONFIGURE => "configure",
                 _ => "invalid_command"
             };
+        }
+
+        private static PuppetCommandType ParseCommandType(string commandString) {
+            switch (commandString.ToLower()) {
+                case "execute_action":
+                    return PuppetCommandType.EXECUTE_ACTION;
+                case "execute_plan":
+                    return PuppetCommandType.EXECUTE_PLAN;
+                case "get_state":
+                    return PuppetCommandType.GET_STATE;
+                case "configure":
+                    return PuppetCommandType.CONFIGURE;
+                case "stop":
+                    return PuppetCommandType.STOP;
+                case "communicate":
+                    return PuppetCommandType.COMMUNICATE;
+                default:
+                    return PuppetCommandType.INVALID_COMMAND;
+            }
         }
 
         public static string FormatResponse(PuppetCommandType command, string puppetId, int code, string message, JObject content = null) {
@@ -79,29 +111,11 @@ namespace HMT.Puppetry {
             return resp.ToString();
         }
 
-        private static PuppetCommandType ParseCommandType(string commandString) {
-            switch (commandString.ToLower()) {
-                case "execute_action":
-                    return PuppetCommandType.EXECUTE_ACTION;
-                case "execute_plan":
-                    return PuppetCommandType.EXECUTE_PLAN;
-                case "get_state":
-                    return PuppetCommandType.GET_STATE;
-                case "configure":
-                    return PuppetCommandType.CONFIGURE;
-                case "communicate":
-                    return PuppetCommandType.COMMUNICATE;
-                default:
-                    return PuppetCommandType.INVALID_COMMAND;
-            }
-        }
-
-        public const byte IDLE_PRIORITY = 255;
-
         public string Action { get; private set; }
         public PuppetCommandType Command { get; private set; }
-        public AgentServiceConfig AgentConfig { get; private set; }
+        public AgentServiceRecord AgentConfig { get; private set; }
         public string TargetPuppet { get { return AgentConfig.PuppetId; } }
+        public string TargetSubPuppet { get; private set; }
         public byte Priority { get { return AgentConfig.CommandPriority; } }
         public JObject Params { get; private set; }
 
@@ -122,8 +136,8 @@ namespace HMT.Puppetry {
 
             Command = ParseCommandType(json.TryGetDefault("command", string.Empty));
             Action = json.TryGetDefault("action", NO_ACTION).ToLower();
-            Debug.LogFormat("<color=red>PARSE</color> json[\"params\"]: {0}  json.ToString(): {1}", json["params"], json.ToString());
-
+            //Debug.LogFormat("<color=red>PARSE</color> json[\"params\"]: {0}  json.ToString(): {1}", json["params"], json.ToString());
+            TargetSubPuppet = json.TryGetDefault("subpuppet", string.Empty);
             Params = json.TryGetDefault("params", new JObject());
             this.json = json;
             Responded = false;
@@ -137,9 +151,10 @@ namespace HMT.Puppetry {
         /// <param name="Params"></param>
         /// <param name="priority"></param>
         public PuppetCommand(string puppet_id, string action, JObject Params = null, byte priority = 128) {
-            AgentConfig = new AgentServiceConfig(puppet_id, priority);
+            AgentConfig = new AgentServiceRecord(puppet_id, priority);
             Command = PuppetCommandType.EXECUTE_ACTION;
             Action = action;
+            TargetSubPuppet = string.Empty;
             json = new JObject();
             this.Params = Params;
             originService = null;
@@ -153,9 +168,10 @@ namespace HMT.Puppetry {
         /// <param name="plan"></param>
         /// <param name="priority"></param>
         public PuppetCommand(string puppet_id, List<(string action, JObject Params)> plan, byte priority = 128) {
-            AgentConfig = new AgentServiceConfig(puppet_id, priority);
+            AgentConfig = new AgentServiceRecord(puppet_id, priority);
             Command = PuppetCommandType.EXECUTE_PLAN;
             Action = "execute_plan";
+            TargetSubPuppet = string.Empty;
             json = new JObject();
             Plan = new List<PuppetCommand>();
             originService = null;
@@ -163,6 +179,41 @@ namespace HMT.Puppetry {
             foreach (var step in plan) {
                 Plan.Add(new PuppetCommand(step.action, step.Params, this));
             }
+        }
+
+        /// <summary>
+        /// A copy constructor that is only used for creating Action commands from plan commands.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="original"></param>
+        private PuppetCommand(string action, JObject Params, PuppetCommand original) {
+            AgentConfig = original.AgentConfig;
+            Command = PuppetCommandType.EXECUTE_ACTION;
+            Action = action;
+            TargetSubPuppet = string.Empty;
+            this.Params = Params;
+            json = new JObject();
+            originService = original.originService;
+            Responded = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="original"></param>
+        private PuppetCommand(PuppetCommandType command, PuppetCommand original) {
+            AgentConfig = original.AgentConfig;
+            Command = command;
+            Action = NO_ACTION;
+            TargetSubPuppet = string.Empty;
+            this.Params = null;
+            json = new JObject();
+            originService = original.originService;
+            Responded = true;
+        }
+
+        public PuppetCommand GenerateStop() {
+            return new PuppetCommand(PuppetCommandType.STOP, this);
         }
 
         public JObject HMTStateRep() {
@@ -187,20 +238,7 @@ namespace HMT.Puppetry {
             }
         }
 
-        /// <summary>
-        /// A copy constructor that is only used for creating Action commands from plan commands.
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="original"></param>
-        private PuppetCommand(string action, JObject Params, PuppetCommand original) {
-            AgentConfig = original.AgentConfig;
-            Command = PuppetCommandType.EXECUTE_ACTION;
-            Action = action;
-            this.Params = Params;
-            json = new JObject();
-            originService = original.originService;
-            Responded = false;
-        }
+
 
         public List<PuppetCommand> GetPlan() {
             if(this.Command != PuppetCommandType.EXECUTE_PLAN) {
@@ -230,21 +268,30 @@ namespace HMT.Puppetry {
                 content = new JObject();
             }
 
-            JObject resp = new JObject
-            {
-                {"command",  CommandTypeToString(Command)},
-                {"puppet_id", TargetPuppet },
-                { "code", code },
-                {"status", ResponseCodeToStatus(code)  },
-                {"message", message },
-                {"content", content }
-            };
+            JObject resp;
 
-
+            if (VERBOSE_RESPONSES) {
+                resp = new JObject {
+                        {"command",  CommandTypeToString(Command)},
+                        {"puppet_id", TargetPuppet },
+                        { "code", code },
+                        {"status", ResponseCodeToStatus(code)  },
+                        {"message", message },
+                        {"content", content }
+                    };
+            }
+            else {
+                resp = new JObject {
+                        {"command",  CommandTypeToString(Command)},
+                        {"puppet_id", TargetPuppet },
+                        {"code", code },
+                        {"content", content }
+                    };
+            }
             string mess = resp.ToString();
-            Debug.LogFormat("Puppet Response: {0}", mess);
-            originService.Context.WebSocket.Send(mess);
+            Debug.LogFormat("puppet: <color=cyan>{0}</color> responds: <color=yellow>{1}</color> to: <color=red>{2}</color> {3}, {4}\nfull_responcse:{5}",TargetPuppet, code, AgentConfig.AgentId, CommandTypeToString(Command),Action,mess);
             Responded = true;
+            originService.Context.WebSocket.Send(mess);
         }
 
         #region RESEND (1000s) Responses
@@ -277,6 +324,28 @@ namespace HMT.Puppetry {
             FormatAndSendResponse((int)PuppetResponseCode.StateRetrieved, "State Retrieved", state);
         }
 
+        public void SendInfoResponse(JObject info) {
+            FormatAndSendResponse((int)PuppetResponseCode.InfoRetrieved, "Info Retrieved", info);
+        }
+
+        #endregion
+
+        #region NOTFOUND (3000s) Responses
+
+        public void SendSubPuppetNotFoundResponse(string subPuppetId) {
+            JObject content = new JObject {
+                {"subpuppet_id", subPuppetId }
+            };
+            FormatAndSendResponse((int)PuppetResponseCode.SubPuppetNotFound, "SubPuppet Not Found", content);
+        }
+
+        public void SendSubPuppetLeftGroupResponse(string subPuppetId) {
+            JObject content = new JObject {
+                {"subpuppet_id", subPuppetId }
+            };
+            FormatAndSendResponse((int)PuppetResponseCode.SubPuppetLeftGroup, "SubPuppet Left Group", content);
+        }
+
         #endregion
 
         #region ILLEGAL (4000s) Responses
@@ -287,7 +356,7 @@ namespace HMT.Puppetry {
 
         public void SendIllegalActionResponse(string longMessage) {
             JObject content = new JObject {
-                {"longMessage", longMessage }
+                {"long_message", longMessage }
             };
             FormatAndSendResponse((int)PuppetResponseCode.IllegalAction, "Illegal Action", content);
         }
@@ -298,17 +367,21 @@ namespace HMT.Puppetry {
 
         public void SendMissingParametersResponse(JObject requiredParams) {
             JObject content = new JObject {
-                {"requiredParams", requiredParams }
+                {"required_params", requiredParams }
             };
             FormatAndSendResponse((int)PuppetResponseCode.MissingParameters, "Missing Parameters", content);
         }
 
         public void SendBadParametersResponse(JObject badParameters, JObject requiredParams) {
             JObject content = new JObject {
-                {"badParams", badParameters },
-                {"requiredParams", requiredParams }
+                {"bad_params", badParameters },
+                {"required_params", requiredParams }
             };
             FormatAndSendResponse((int)PuppetResponseCode.BadParameters, "Bad Parameters", content);
+        }
+
+        public void SendWrongModeResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.NotSupportedInMode, "Not Supported In Current Mode");
         }
 
         #endregion

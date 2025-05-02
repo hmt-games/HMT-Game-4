@@ -27,26 +27,34 @@ namespace HMT.Puppetry {
         public PuppetCommand CurrentCommand { get; }
 
         /// <summary>
-        /// Returns whether the puppet is currently executing an Action.
+        /// A collection of Action Commands that are queued up to execute.
+        /// 
+        /// Implicitly this is a queue but it could be implemented in other ways
         /// </summary>
-        public bool ExecutingAction { get; }
+        public Queue<PuppetCommand> CurrentPlan { get; }
 
         /// <summary>
-        /// Returns whether the puppet is currently executing a plan.
-        /// </summary>
-        public bool ExecutingPlan { get; }
-
-        /// <summary>
-        /// Returns the list of actions supported by the puppet at the given API.
+        /// Returns the list of actions supported by the puppet in it's current configuration or mode.
         /// </summary>
         /// <param name="api"></param>
         /// <returns></returns>
-        public HashSet<string> SupportedActions { get; }
+        public HashSet<string> CurrentActionSet { get; }
+
+        /// <summary>
+        /// Returns the list of actions that could ever be supported by the puppet in any configuration or mode.
+        /// </summary>
+        public HashSet<string> FullActionSet { get; }
+
+        /// <summary>
+        /// Used by the HMTPuppetManager to send commands to the puppet.
+        /// 
+        /// The Manager does not directly call ExecuteAction to allow puppets to implement their own conflict resolution system.
+        /// </summary>
+        /// <param name="command"></param>
+        public void DispatchAction(PuppetCommand command);
 
         /// <summary>
         /// Takes a Command from the HMTPupperManager and executes it.
-        /// 
-        /// The IEnumerator is used to allow for coroutines to be used in the implementation but it could also just set a variable or trigger an Action. 
         /// 
         /// All commands executions should recieve a response to the origin service even if it's just an acknowledgment of receipt.
         /// </summary>
@@ -55,26 +63,32 @@ namespace HMT.Puppetry {
         public void ExecuteAction(PuppetCommand command);
 
         /// <summary>
-        /// Takes a sequence of commands and executes them in order.
-        /// 
-        /// This plan would come bundled as part of a single Command from the HMTPupperManager.
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public void ExecutePlan(PuppetCommand command);
-        
-        /// <summary>
         /// Takes a Commnuicate Command and executes it.
         /// </summary>
         /// <param name="command"></param>
         public void ExecuteCommunicate(PuppetCommand command);
 
         /// <summary>
-        /// Returns the Json representation of the state as percieved by the puppet
+        /// Stops the current action and clears the current plan if there is sufficient priority.
+        /// </summary>
+        /// <param name="command"></param>
+        public void ExecuteStop(PuppetCommand command);
+
+        /// <summary>
+        /// Returns the JSON representation of the state as percieved by the puppet
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
         public JObject GetState(PuppetCommand command);
+
+        /// <summary>
+        /// Returns a JSON representation of basic puppet information.
+        /// 
+        /// The provided command could provide additional context such as specific information requested.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public JObject GetInfo(PuppetCommand command);
     }
 
 }

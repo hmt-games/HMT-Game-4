@@ -14,7 +14,7 @@ public class PlantSelectionUIManager : MonoBehaviour
     [SerializeField] private GameObject plantSlotParent;
     [SerializeField] private GameObject plantSlotPrefab;
 
-    private Action<PlantBehavior, PuppetBehavior> _onSelectedCallback;
+    private Action<PlantBehavior, FarmPuppetBot> _onSelectedCallback;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class PlantSelectionUIManager : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void ShowSelection(List<PlantBehavior> plants, PuppetBehavior bot, Action<PlantBehavior, PuppetBehavior>onSelectedCallback)
+    public void ShowSelection(List<PlantBehavior> plants, FarmPuppetBot bot, Action<PlantBehavior, FarmPuppetBot> onSelectedCallback)
     {
         _onSelectedCallback = onSelectedCallback;
 
@@ -47,7 +47,7 @@ public class PlantSelectionUIManager : MonoBehaviour
         Show();
     }
 
-    public void PlantSelected(PlantBehavior plant, PuppetBehavior bot)
+    public void PlantSelected(PlantBehavior plant, FarmPuppetBot bot)
     {
         _onSelectedCallback(plant, bot);
         _onSelectedCallback = null;
