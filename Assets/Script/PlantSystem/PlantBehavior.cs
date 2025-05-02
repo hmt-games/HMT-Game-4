@@ -97,7 +97,6 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
 
 
     public NutrientSolution OnTick(NutrientSolution allocation) {
-        Debug.Log(allocation);
         // UPTAKE
         float uptakeVolume = Mathf.Min(config.waterCapacity - NutrientLevels.water, config.uptakeRate);
         NutrientLevels += allocation.DrawOff(uptakeVolume);
@@ -134,7 +133,6 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
 
         Age++;
 
-        Debug.Log(allocation);
         return allocation;
     }
 

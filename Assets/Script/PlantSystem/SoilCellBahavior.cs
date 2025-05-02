@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Fusion;
 using GameConstant;
 using HMT.Puppetry;
@@ -53,27 +51,35 @@ public class SoilCellBehavior : GridCellBehavior
             NutrientLevels.water > soilConfig.waterCapacity 
                 ? NutrientLevels.DrawOff(NutrientLevels.water - soilConfig.waterCapacity) 
                 : NutrientSolution.Empty;
-        if (plants.Count == 0) aggregate = NutrientLevels;
+        if (plants.Count == 0) aggregate += NutrientLevels;
         foreach(PlantBehavior plant in plants) {
             aggregate += plant.OnTick(NutrientLevels * (plant.RootMass / rootTotal));
         }
 
         NutrientLevels = aggregate;
 
+        // draining excess solution to the next floor (if not bottom floor)
         if (NutrientLevels.water > soilConfig.waterCapacity)
         {
             NutrientSolution excess =
                 NutrientLevels.DrawOff(Mathf.Min(soilConfig.drainRate, NutrientLevels.water - soilConfig.waterCapacity));
-            //TODO
-        }
 
-        ///Reconcile the aggregate with the capacities.
-        ///If there is excess, pass it down the farm (or do you pass it out?)
+            //TODO： what happens to the bottom floor?
+            if (parentFloor.floorNumber != 0)
+            {
+                GridCellBehavior bottomGrid =
+                    parentFloor.parentTower.floors[parentFloor.floorNumber - 1].Cells[gridX, gridZ];
+
+                bottomGrid.OnWater(excess);
+            }
+            //TODO: add drain sprite animation to next floor
+        }
     }
 
     public override NutrientSolution OnWater(NutrientSolution volumes)
     {
-        return volumes;
+        NutrientLevels += volumes;
+        return NutrientSolution.Empty;
     }
 
     public override JObject HMTStateRep(HMTStateLevelOfDetail lod) {
@@ -93,15 +99,5 @@ public class SoilCellBehavior : GridCellBehavior
                 break;
         }
         return rep;
-    }
-
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
     }
 }

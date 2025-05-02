@@ -46,8 +46,10 @@ public class StationCellBehavior : GridCellBehavior
         // just do nothing for now
     }
     
+    // when drained on station tile, we just discard the drained amount?
+    // or just pass down to next floor
     public override NutrientSolution OnWater(NutrientSolution volumes)
     {
-        return volumes;
+        return NutrientSolution.Empty;
     }
 }
