@@ -21,8 +21,6 @@ namespace HMT.Puppetry {
 
         public virtual bool ExecutingPlan { get { return currentPlan != null; } }
 
-        public virtual IEnumerator StartHarvest(PlantBehavior plant){yield break;}
-
         // Start is called before the first frame update
         protected virtual void Start() {
             PuppetID = IPuppet.GenerateUniquePuppetID(puppetIDPrefix);

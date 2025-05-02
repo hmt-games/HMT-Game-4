@@ -106,7 +106,8 @@ MonoBehaviour:
   _gridZ: 0
   harvestBotModeSO: {fileID: 11400000, guid: d2212005799e142fbb2a6437a1aa93c4, type: 2}
   sprayBotModeSO: {fileID: 11400000, guid: ca376b38b7a114d50995a050e4d47bf0, type: 2}
-  pluckBotModeSO: {fileID: 11400000, guid: 06254ed14356d49f7bd2ce77c6de9155, type: 2}
+  pickBotModeSO: {fileID: 11400000, guid: 06254ed14356d49f7bd2ce77c6de9155, type: 2}
+  plantBotModeSO: {fileID: 11400000, guid: 777b17bd05b1ca0418768dad382daf92, type: 2}
   tillBotModeSO: {fileID: 11400000, guid: 2091cbc84f48e47528888ffd9d4bd1ce, type: 2}
   sampleBotModeSO: {fileID: 11400000, guid: 7bc644a3342034d4f9a155ceb1501a5e, type: 2}
   carryBotModeSO: {fileID: 11400000, guid: 043012e2af87b43ad96110f0aa0b00c8, type: 2}

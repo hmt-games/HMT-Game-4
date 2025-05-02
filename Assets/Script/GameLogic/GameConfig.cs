@@ -19,7 +19,7 @@
     }
 
     //TODO: probably want this to be a parameter of plant
-    public struct HarvestConfig
+    public struct PickConfig
     {
         public const int harvestAmountMin = 3;
         public const int harvestAmountMax = 5;

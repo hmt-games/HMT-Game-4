@@ -1,12 +1,14 @@
 ﻿using GameConstant;
 using HMT.Puppetry;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class StationCellBehavior : GridCellBehavior
 {
     [SerializeField] private BotModeSO harvestBotModeSO;
     [SerializeField] private BotModeSO sprayBotModeSO;
-    [SerializeField] private BotModeSO pluckBotModeSO;
+    [SerializeField] private BotModeSO pickBotModeSO;
+    [SerializeField] private BotModeSO plantBotModeSO;
     [SerializeField] private BotModeSO tillBotModeSO;
     [SerializeField] private BotModeSO sampleBotModeSO;
     [SerializeField] private BotModeSO carryBotModeSO;
@@ -30,7 +32,8 @@ public class StationCellBehavior : GridCellBehavior
             or TileType.SprayBStation
             or TileType.SprayCStation
             or TileType.SprayDStation => sprayBotModeSO,
-            TileType.PluckStation => pluckBotModeSO,
+            TileType.PluckStation => pickBotModeSO,
+            TileType.PlantStation => plantBotModeSO,
             TileType.TillStation => tillBotModeSO,
             TileType.SampleStation => sampleBotModeSO,
             TileType.CarryStation => carryBotModeSO,
