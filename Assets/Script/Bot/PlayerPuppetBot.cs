@@ -14,17 +14,17 @@ public class PlayerPuppetBot : FarmPuppetBot
         { KeyCode.S, "down" }
     };
 
-    public override HashSet<string> CurrentActionSet =>
-        new()
-        {
-            "pick", "harvest", "spray", "plant",
-            "sample", "move", "useStation"
-        };
+    //public override HashSet<string> CurrentActionSet =>
+    //    new()
+    //    {
+    //        "pick", "harvest", "spray", "plant",
+    //        "sample", "move", "useStation"
+    //    };
 
     protected virtual void Update()
     {
         MoveInput();
-        UseStationInput();
+        InteractInput();
         PerformBotAction();
     }
 
@@ -44,11 +44,11 @@ public class PlayerPuppetBot : FarmPuppetBot
         }
     }
 
-    private void UseStationInput()
+    private void InteractInput()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            PuppetCommand cmd = new PuppetCommand(PuppetID, "useStation");
+            PuppetCommand cmd = new PuppetCommand(PuppetID, "interact");
             HMTPuppetManager.Instance.EnqueueCommand(cmd);
         }
     }

@@ -16,15 +16,15 @@ namespace HMT.Puppetry {
 
         public PuppetCommand CurrentCommand { get; protected set; }
 
-        protected Queue<PuppetCommand> _currentPlan = new Queue<PuppetCommand>();
-        public Queue<PuppetCommand> CurrentPlan { get { return _currentPlan; } }
+        protected Queue<PuppetCommand> _currentQueue = new Queue<PuppetCommand>();
+        public Queue<PuppetCommand> CurrentPlan { get { return _currentQueue; } }
 
         // Start is called before the first frame update
         protected virtual void Start() {
             PuppetID = IPuppet.GenerateUniquePuppetID(puppetIDPrefix);
             HMTPuppetManager.Instance.AddPuppet(this);
             CurrentCommand = null;
-            _currentPlan = new Queue<PuppetCommand>();
+            _currentQueue = new Queue<PuppetCommand>();
         }
 
         // Update is called once per frame
@@ -38,11 +38,11 @@ namespace HMT.Puppetry {
             if (CurrentCommand == null) {
                 if (command.Command == PuppetCommandType.EXECUTE_PLAN) {
                     foreach (PuppetCommand cmd in command.GetPlan()) {
-                        _currentPlan.Enqueue(cmd);
+                        _currentQueue.Enqueue(cmd);
                     }
                 }
                 else {
-                    _currentPlan.Enqueue(command);
+                    _currentQueue.Enqueue(command);
                 }
                 CheckNextAction();
             }
@@ -54,24 +54,24 @@ namespace HMT.Puppetry {
                 }
                 else if (command.Priority < CurrentCommand.Priority) {
                     CurrentCommand = command.GenerateStop();
-                    _currentPlan.Clear();
+                    _currentQueue.Clear();
                 }
 
                 if (command.Command == PuppetCommandType.EXECUTE_PLAN) {
                     foreach (PuppetCommand cmd in command.GetPlan()) {
-                        _currentPlan.Enqueue(cmd);
+                        _currentQueue.Enqueue(cmd);
                     }
                 }
                 else {
-                    _currentPlan.Enqueue(command);
+                    _currentQueue.Enqueue(command);
                 }
 
             }
         }
 
         protected void CheckNextAction() {
-            if (CurrentCommand == null &&  _currentPlan.Count > 0) {
-                PuppetCommand nextCommand = _currentPlan.Dequeue();
+            if (CurrentCommand == null &&  _currentQueue.Count > 0) {
+                PuppetCommand nextCommand = _currentQueue.Dequeue();
                 ExecuteAction(nextCommand);
             }
         }
@@ -100,9 +100,9 @@ namespace HMT.Puppetry {
 
         #region Abstract Elements
 
-        public abstract HashSet<string> CurrentActionSet { get; protected set; }
+        public abstract HashSet<string> CurrentActionSet { get; }
 
-        public abstract HashSet<string> FullActionSet { get; protected set; }
+        public abstract HashSet<string> FullActionSet { get; }
 
         public abstract void ExecuteAction(PuppetCommand command);
 

@@ -25,7 +25,6 @@ public class FarmPuppetBot : PuppetBehavior
     protected Vector3 _targetPos = Vector3.zero;
     
     [SerializeField] protected Slider progressBar;
-    protected bool _actionProgressing = false;
     
     protected Animator _animator;
 
@@ -64,15 +63,28 @@ public class FarmPuppetBot : PuppetBehavior
 
     #endregion
 
-    public override HashSet<string> CurrentActionSet { get; protected set; }
-        = new() { "move", "moveto", "useStation" };
+    //public override HashSet<string> CurrentActionSet { get; protected set; }
+    //    = new() { "move", "moveto", "useStation" };    
+    
+    public override HashSet<string> CurrentActionSet {
+        get {
+            if (_botModeConfig == null) {
+                return new HashSet<string> { "move", "move_to", "interact" };
+            }
+            else {
+                return new HashSet<string>(_botModeConfig.supportedActions);
+            }
+        }
+    }
 
-    public override HashSet<string> FullActionSet { get; protected set; } = new()
+       // = new() { "move", "moveto", "useStation" };
+
+    public override HashSet<string> FullActionSet { get; } = new()
         {
-            "move", "moveto", "useStation", "sample", "spray", "harvest", "pluck", "pickUp", "putDown", "plant", "till"
+            "move", "move_to", "interact", "sample", "spray", "harvest", "pluck", "pick_up", "put_down", "plant", "till"
         };
 
-    private void ChangeActionSet(HashSet<string> newActions) => CurrentActionSet = newActions;
+    //private void ChangeActionSet(HashSet<string> newActions) => CurrentActionSet = newActions;
 
     private BotModeSO _botModeConfig;
     
@@ -89,8 +101,8 @@ public class FarmPuppetBot : PuppetBehavior
             case "move":
                 Move(command);
                 break;
-            case "useStation":
-                UseStation(command);
+            case "interact":
+                Interact(command);
                 break;
             case "sample":
                 StartCoroutine(Sample(command));
@@ -99,11 +111,20 @@ public class FarmPuppetBot : PuppetBehavior
                 StartCoroutine(Spray(command));
                 break;
             case "pick":
+            case "pluck":
                 Pick(command);
                 break;
             case "plant":
                 Plant(command);
                 break;
+            case "harvest":
+            case "move_to":
+            case "pick_up":
+            case "put_down":
+            case "till":
+                command.SendIllegalActionResponse("action not implemented yet");
+                break;
+
             default:
                 command.SendIllegalActionResponse();
                 Debug.LogWarning("execute action hit a unimplemented case");
@@ -141,13 +162,12 @@ public class FarmPuppetBot : PuppetBehavior
     public IEnumerator StartPlant(PlantBehavior plant)
     {
         float actionTime = ActionTickTimeCost.PlantPerStage * GameManager.Instance.secondPerTick;
-        StartCoroutine(StartProgressTimer(actionTime));
-        
-        while (_actionProgressing)
-        {
-            yield return null;
+        yield return StartProgressTimer(actionTime);
+        if(CurrentCommand == null || CurrentCommand.Command == PuppetCommandType.STOP) {
+            CurrentCommand = null;
+            yield break;
         }
-        
+
         GameActions.Instance.Plant(GetCurrentTile() as SoilCellBehavior, plant, this);
         CurrentCommand = null;
     }
@@ -174,28 +194,22 @@ public class FarmPuppetBot : PuppetBehavior
     public IEnumerator StartPick(PlantBehavior plant)
     {
         float actionTime = ActionTickTimeCost.Harvest * GameManager.Instance.secondPerTick;
-        StartCoroutine(StartProgressTimer(actionTime));
-        
-        while (_actionProgressing)
-        {
-            //CurrentCommand is set to null by a Stop Command
-            if(CurrentCommand.Command == PuppetCommandType.STOP) {
-                CurrentCommand = null;
-                yield break;
-            }
-            yield return null;
+        yield return StartProgressTimer(actionTime);
+        if (CurrentCommand.Command == PuppetCommandType.STOP) {
+            CurrentCommand = null;
+            yield break;
         }
         
         GameActions.Instance.Pick(plant, this);
         CurrentCommand = null;
     }
 
-    private void UseStation(PuppetCommand command)
+    private void Interact(PuppetCommand command)
     {
         TileType tileType = GetCurrentTile().tileType;
         if (tileType == TileType.Soil)
         {
-            command.SendIllegalActionResponse("Cannot perform useStation on soil tiles");
+            command.SendIllegalActionResponse("Cannot perform interact on soil tiles");
             return;
         }
 
@@ -211,11 +225,11 @@ public class FarmPuppetBot : PuppetBehavior
     private void SwitchBotMode()
     {
         StationCellBehavior station = GetCurrentTile() as StationCellBehavior;
-        BotModeSO newBotMode = station.UseStation(this);
+        BotModeSO newBotMode = station.Interact(this);
         if (newBotMode != null)
         {
             _botModeConfig = newBotMode;
-            CurrentActionSet = new HashSet<string>(_botModeConfig.supportedActions);
+            //CurrentActionSet = new HashSet<string>(_botModeConfig.supportedActions);
             _animator.SetTrigger(_botModeConfig.botModeName);
             _botInfo.CurrentBotMode = _botModeConfig.botMode;
             
@@ -238,15 +252,11 @@ public class FarmPuppetBot : PuppetBehavior
     public IEnumerator SprayUp()
     {
         float actionTime = ActionTickTimeCost.SprayUp * GameManager.Instance.secondPerTick;
-        StartCoroutine(StartProgressTimer(actionTime));
-        
-        while (_actionProgressing)
-        {
-            if (CurrentCommand.Command == PuppetCommandType.STOP) {
-                CurrentCommand = null;
-                yield break;
-            }
-            yield return null;
+        yield return StartProgressTimer(actionTime);
+
+        if (CurrentCommand == null || CurrentCommand.Command == PuppetCommandType.STOP) {
+            CurrentCommand = null;
+            yield break;
         }
         
         GameActions.Instance.SprayUp(GetCurrentTile().GetComponent<StationCellBehavior>(), this);
@@ -264,15 +274,11 @@ public class FarmPuppetBot : PuppetBehavior
         
         CurrentCommand = command;
         float actionTime = ActionTickTimeCost.Spray * GameManager.Instance.secondPerTick;
-        StartCoroutine(StartProgressTimer(actionTime));
-        
-        while (_actionProgressing)
-        {
-            if (CurrentCommand.Command == PuppetCommandType.STOP) {
-                CurrentCommand = null;
-                yield break;
-            }
-            yield return null;
+        yield return StartProgressTimer(actionTime);
+
+        if (CurrentCommand.Command == PuppetCommandType.STOP) {
+            CurrentCommand = null;
+            yield break;
         }
 
         GameActions.Instance.Spray(grid as SoilCellBehavior, this);
@@ -302,15 +308,10 @@ public class FarmPuppetBot : PuppetBehavior
         
         CurrentCommand = command;
         float actionTime = ActionTickTimeCost.Sample * GameManager.Instance.secondPerTick;
-        StartCoroutine(StartProgressTimer(actionTime));
-        
-        while (_actionProgressing)
-        {
-            if (CurrentCommand.Command == PuppetCommandType.STOP) {
-                CurrentCommand = null;
-                yield break;
-            }
-            yield return null;
+        yield return StartProgressTimer(actionTime);
+        if (CurrentCommand.Command == PuppetCommandType.STOP) {
+            CurrentCommand = null;
+            yield break;
         }
 
         GameActions.Instance.Sample(grid as SoilCellBehavior, this);
@@ -364,12 +365,11 @@ public class FarmPuppetBot : PuppetBehavior
             while (Time.time - startTime < moveDuration) {
                 transform.position = Vector3.Lerp(transform.position, target, (Time.time - startTime) / moveDuration);
                 yield return null;
-            }
-            
-            _botInfo.CellIdx += direction;
-            transform.position = target;
+            }            
         }
-        
+        _botInfo.CellIdx += direction;
+        transform.position = target;
+
         CurrentCommand = null;
         _walking = false;
     }
@@ -412,13 +412,14 @@ public class FarmPuppetBot : PuppetBehavior
         JObject resp = new JObject();
         switch (level) {
             case HMTStateLevelOfDetail.Full:
-                resp["actions"] = new JArray(CurrentActionSet);
-                resp["plan"] = new JArray(_currentPlan.Select(c => c.HMTStateRep()));
+                resp["current_actions"] = new JArray(CurrentActionSet);
+                resp["full_actions"] = new JArray(FullActionSet);
+                resp["command_queue"] = new JArray(_currentQueue.Select(c => c.HMTStateRep()));
                 goto case HMTStateLevelOfDetail.Visible;
 
             case HMTStateLevelOfDetail.Visible:
                 resp["x"] = _botInfo.CellIdx.x;
-                resp["y"] = _botInfo.CellIdx.x;
+                resp["y"] = _botInfo.CellIdx.y;
                 resp["floor"] = _botInfo.FloorIdx;
                 resp["mode"] = _botInfo.CurrentBotMode.ToString();
                 if (CurrentCommand != null) {
@@ -462,21 +463,18 @@ public class FarmPuppetBot : PuppetBehavior
     {
         progressBar.value = 0;
         progressBar.gameObject.SetActive(true);
-        _actionProgressing = true;
 
-        float timeElapsed = 0.0f;
-        while (timeElapsed < time)
-        {
-            if (CurrentCommand == null || CurrentCommand.Command == PuppetCommandType.STOP) {
-                progressBar.gameObject.SetActive(false);
-                yield break;
+        if (GameManager.Instance.secondPerTick > 0) {
+            float startTime = Time.time;
+            while (Time.time - startTime < time) {
+                progressBar.value = Mathf.Clamp01((Time.time - startTime) / time);
+                if (CurrentCommand == null || CurrentCommand.Command == PuppetCommandType.STOP) {
+                    progressBar.gameObject.SetActive(false);
+                    yield break;
+                }
+                yield return null;
             }
-            yield return null;
-            timeElapsed += Time.deltaTime;
-            progressBar.value = Mathf.Clamp01(timeElapsed / time);
         }
-
-        _actionProgressing = false;
         progressBar.gameObject.SetActive(false);
     }
 }

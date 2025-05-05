@@ -14,7 +14,7 @@ public class StationCellBehavior : GridCellBehavior
     [SerializeField] private BotModeSO sampleBotModeSO;
     [SerializeField] private BotModeSO carryBotModeSO;
     
-    public BotModeSO UseStation(FarmPuppetBot bot)
+    public BotModeSO Interact(FarmPuppetBot bot)
     {
         if (tileType == TileType.SprayAStation | tileType == TileType.SprayBStation |
             tileType == TileType.SprayCStation | tileType == TileType.SprayDStation)
