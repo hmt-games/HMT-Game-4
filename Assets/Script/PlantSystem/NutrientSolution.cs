@@ -191,4 +191,14 @@ public struct NutrientSolution : INetworkStruct {
     public override string ToString() {
         return $"{water}, {nutrients.x}, {nutrients.y}, {nutrients.z}, {nutrients.w}";
     }
+
+    public override bool Equals(object obj) {
+        return obj is NutrientSolution solution &&
+               water == solution.water &&
+               nutrients.Equals(solution.nutrients);
+    }
+
+    public override int GetHashCode() {
+        return HashCode.Combine(water, nutrients);
+    }
 }

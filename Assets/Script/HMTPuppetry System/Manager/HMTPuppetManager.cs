@@ -27,8 +27,6 @@ namespace HMT.Puppetry {
         //public string socketUrl = "ws://localhost";
         [Tooltip("The port that the puppetry server should use.")]
         public int socketPort = 4649;
-        [Tooltip("The name of the root service apprended to the url for the puppet manager.")]
-        public string rootService = "hmt";
         [Tooltip("Whether service targets should be assigned sequentially or randomly. If true, targets will be incremental integers, if false they will be randomly generated GUIDs")]
         public bool useSequentialServiceTargets = false;
         [Tooltip("Whether the puppet manager should use API keys to authenticate calls to service targets.")]
@@ -126,7 +124,8 @@ namespace HMT.Puppetry {
 
         private void Server_OnPost(object sender, HttpRequestEventArgs e) {
             string[] full_path = e.Request.RawUrl.Split('/');
-            string path = full_path[full_path.Length - 1];
+            
+            string path = full_path[1];
             Debug.LogFormat("[HMTPuppetManager] POST Request recieved at {0}", path);
 
             switch (path) {
@@ -170,7 +169,7 @@ namespace HMT.Puppetry {
 
         private void Server_OnGet(object sender, HttpRequestEventArgs e) {
             string[] full_path = e.Request.RawUrl.Split('/');
-            string path = full_path[full_path.Length - 1];
+            string path = full_path[1];
             Debug.LogFormat("[HMTPuppetManager] GET Request recieved {0}", path);
 
             switch (path) {

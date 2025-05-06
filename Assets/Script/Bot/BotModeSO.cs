@@ -21,7 +21,7 @@ public class BotModeSO : ScriptableObject
     //      ==> speed = 2 tiles / sec
     [Header("Bot Capabilities")]
     public float movementSpeed;
-    public Vector2 sensingRange;
+    public Vector2Int sensingRange;
 
 
 }

@@ -22,7 +22,7 @@ namespace HMT.Puppetry {
 
         public PuppetCommand CurrentCommand { get; private set; }
 
-        public Queue<PuppetCommand> CurrentPlan { get; private set; } = new Queue<PuppetCommand>();
+        public Queue<PuppetCommand> CommandQueue { get; private set; } = new Queue<PuppetCommand>();
 
         public HashSet<string> CurrentActionSet {
             get {

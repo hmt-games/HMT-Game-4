@@ -2834,7 +2834,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartServerOnStart: 1
   socketPort: 4649
-  rootService: hmt
   useSequentialServiceTargets: 0
   useAPIKeys: 1
   autoResponseThreshold: 3
@@ -9795,7 +9794,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 914555907}
   m_HandleRect: {fileID: 914555906}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

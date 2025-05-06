@@ -28,10 +28,8 @@ namespace HMT.Puppetry {
 
         /// <summary>
         /// A collection of Action Commands that are queued up to execute.
-        /// 
-        /// Implicitly this is a queue but it could be implemented in other ways
         /// </summary>
-        public Queue<PuppetCommand> CurrentPlan { get; }
+        public Queue<PuppetCommand> CommandQueue { get; }
 
         /// <summary>
         /// Returns the list of actions supported by the puppet in it's current configuration or mode.

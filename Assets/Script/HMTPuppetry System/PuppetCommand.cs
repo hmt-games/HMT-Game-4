@@ -5,6 +5,7 @@ using UnityEngine;
 namespace HMT.Puppetry {
     public enum PuppetCommandType {
         INVALID_COMMAND,
+        IDLE,
         EXECUTE_ACTION,
         EXECUTE_PLAN,
         STOP,
@@ -33,14 +34,16 @@ namespace HMT.Puppetry {
         BadParameters = 4003,
         NotSupportedInMode = 4004,
 
+
         CommandParseError = 5000,
         APIKeyMismatch = 5001,
         CommandNotRecognized = 5002,
         ActionNotSupportedByPuppet = 5003,
+        ActionNotImplemented = 5004,
     }
 
 
-    public class PuppetCommand {
+    public struct PuppetCommand {
 
         public static bool VERBOSE_RESPONSES = true;
         
@@ -48,6 +51,11 @@ namespace HMT.Puppetry {
 
         public const byte IDLE_PRIORITY = 255;
 
+        public static PuppetCommand IDLE {
+            get {
+                return new PuppetCommand(PuppetCommandType.IDLE, IDLE_PRIORITY);
+            }
+        }
 
         public static string ResponseCodeToStatus(int code) {
             return (code / 1000) switch {
@@ -117,13 +125,16 @@ namespace HMT.Puppetry {
         public string TargetPuppet { get { return AgentConfig.PuppetId; } }
         public string TargetSubPuppet { get; private set; }
         public byte Priority { get { return AgentConfig.CommandPriority; } }
-        public JObject Params { get; private set; }
+        public JObject ActionParams { get; private set; }
 
-        public List<PuppetCommand> Plan { get; private set; }
+        private List<PuppetCommand> Plan;
 
         public JObject json { get; private set; }
         public bool Responded { get; private set; }
+        
         private HMTPuppetService originService;
+
+        #region Constructors
 
         /// <summary>
         /// External Constructor used by the Puppetry Interface for commands coming from outside agents.
@@ -138,8 +149,9 @@ namespace HMT.Puppetry {
             Action = json.TryGetDefault("action", NO_ACTION).ToLower();
             //Debug.LogFormat("<color=red>PARSE</color> json[\"params\"]: {0}  json.ToString(): {1}", json["params"], json.ToString());
             TargetSubPuppet = json.TryGetDefault("subpuppet", string.Empty);
-            Params = json.TryGetDefault("params", new JObject());
+            ActionParams = json.TryGetDefault("params", new JObject());
             this.json = json;
+            Plan = null;
             Responded = false;
         }
 
@@ -156,7 +168,8 @@ namespace HMT.Puppetry {
             Action = action;
             TargetSubPuppet = string.Empty;
             json = new JObject();
-            this.Params = Params;
+            this.ActionParams = Params;
+            Plan = null;
             originService = null;
             Responded = false;
         }
@@ -173,6 +186,7 @@ namespace HMT.Puppetry {
             Action = "execute_plan";
             TargetSubPuppet = string.Empty;
             json = new JObject();
+            this.ActionParams = null;
             Plan = new List<PuppetCommand>();
             originService = null;
             Responded = false;
@@ -190,15 +204,16 @@ namespace HMT.Puppetry {
             AgentConfig = original.AgentConfig;
             Command = PuppetCommandType.EXECUTE_ACTION;
             Action = action;
-            TargetSubPuppet = string.Empty;
-            this.Params = Params;
+            TargetSubPuppet = original.TargetSubPuppet;
+            this.ActionParams = Params;
             json = new JObject();
+            this.Plan = null;
             originService = original.originService;
             Responded = false;
         }
 
         /// <summary>
-        /// 
+        /// A copy constructor that is only used to change the command type of a command.
         /// </summary>
         /// <param name="original"></param>
         private PuppetCommand(PuppetCommandType command, PuppetCommand original) {
@@ -206,12 +221,31 @@ namespace HMT.Puppetry {
             Command = command;
             Action = NO_ACTION;
             TargetSubPuppet = string.Empty;
-            this.Params = null;
+            this.ActionParams = null;
             json = new JObject();
+            this.Plan = null;
             originService = original.originService;
             Responded = true;
         }
 
+        private PuppetCommand(PuppetCommandType command, byte priority) {
+            AgentConfig = AgentServiceRecord.NONE;
+            Command = command;
+            Action = NO_ACTION;
+            TargetSubPuppet = string.Empty;
+            this.ActionParams = null;
+            json = new JObject();
+            this.Plan = null;
+            originService = null;
+            Responded = true;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Creates a STOP command that uses the same priority and properties as the original command.
+        /// </summary>
+        /// <returns></returns>
         public PuppetCommand GenerateStop() {
             return new PuppetCommand(PuppetCommandType.STOP, this);
         }
@@ -221,24 +255,10 @@ namespace HMT.Puppetry {
             state["puppet_id"] = TargetPuppet;
             state["command"] = CommandTypeToString(Command);
             state["action"] = Action;
-            state["params"] = Params;
+            state["params"] = ActionParams;
             state["priority"] = Priority;
             return state;
         }
-
-        public T GetParam<T>(string name, T defaultValue)
-        {
-            if (Params != null)
-            {
-                return Params.TryGetDefault(name, defaultValue);
-            }
-            else
-            {
-                throw new System.Exception("no Params in Puppet Command");
-            }
-        }
-
-
 
         public List<PuppetCommand> GetPlan() {
             if(this.Command != PuppetCommandType.EXECUTE_PLAN) {
@@ -380,7 +400,7 @@ namespace HMT.Puppetry {
             FormatAndSendResponse((int)PuppetResponseCode.BadParameters, "Bad Parameters", content);
         }
 
-        public void SendWrongModeResponse() {
+        public void SendActionNotCurrentlySupported() {
             FormatAndSendResponse((int)PuppetResponseCode.NotSupportedInMode, "Not Supported In Current Mode");
         }
 
@@ -392,8 +412,6 @@ namespace HMT.Puppetry {
             FormatAndSendResponse((int)PuppetResponseCode.APIKeyMismatch, "API Key Mismatch");
         }
 
-
-
         public void SendCommandNotRecognizedResposne() {
             JObject content = new JObject();
             content["valid_commands"] = JArray.FromObject(VALID_COMMANDS);
@@ -404,6 +422,10 @@ namespace HMT.Puppetry {
             JObject content = new JObject();
             content["action_set"] = JArray.FromObject(supportedActions);
             FormatAndSendResponse((int)PuppetResponseCode.ActionNotSupportedByPuppet, "Action Not Supported By Puppet", content);
+        }
+
+        public void SendActionNotImplementedResponse() {
+            FormatAndSendResponse((int)PuppetResponseCode.ActionNotImplemented, "Action Not Implemented");
         }
 
         #endregion
