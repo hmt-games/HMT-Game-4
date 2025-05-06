@@ -47,13 +47,7 @@ namespace HMT.Puppetry {
         private Dictionary<string, IPuppet> _subPuppets = new Dictionary<string, IPuppet>();
         private HashSet<string> allTimeSubPuppets = new HashSet<string>();
 
-        public BasicPuppetGroup(string groupName) {
-            GroupName = groupName;
-            MembershipType = PuppetGroupMembershipType.Category;
-            StateRepresentation = PuppetGroupStateRepresentation.Union;
-            _subPuppets = new Dictionary<string, IPuppet>();
-            allTimeSubPuppets = new HashSet<string>();
-        }
+        public BasicPuppetGroup(string groupName) : this(groupName, PuppetGroupMembershipType.Category, PuppetGroupStateRepresentation.Union) { }
 
         public BasicPuppetGroup(string groupName, PuppetGroupMembershipType membershipType, PuppetGroupStateRepresentation stateRep) {
             GroupName = groupName;
@@ -61,6 +55,8 @@ namespace HMT.Puppetry {
             StateRepresentation = stateRep;
             _subPuppets = new Dictionary<string, IPuppet>();
             allTimeSubPuppets = new HashSet<string>();
+
+            HMTPuppetManager.Instance.AddPuppet(this);
         }
 
         public void AddSubPuppet(IPuppet puppet) {

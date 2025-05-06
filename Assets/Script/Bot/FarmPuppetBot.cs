@@ -45,6 +45,7 @@ public class FarmPuppetBot : PuppetBehavior
     {
         _botInfo.FloorIdx = floor;
         _botInfo.CellIdx = new Vector2Int(x, y);
+        CurrentFloor.AddBotToFloor(this);
     }
     
     protected void Awake()

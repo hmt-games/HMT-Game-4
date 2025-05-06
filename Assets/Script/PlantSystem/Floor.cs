@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using HMT.Puppetry;
 
 public class Floor : NetworkBehaviour
 {
@@ -27,6 +28,8 @@ public class Floor : NetworkBehaviour
     //[Networked]
     public int SizeY { get { return Cells.GetLength(1); } }
 
+    BasicPuppetGroup _puppetGroup;
+
     public NutrientSolution[,] OnWater(NutrientSolution[,] volumes) {
         for (int x = 0; x < Cells.GetLength(0); x++) {
             for (int y = 0; y < Cells.GetLength(1); y++) {
@@ -42,6 +45,18 @@ public class Floor : NetworkBehaviour
                 Cells[x, y].OnTick();
             }
         }
+    }
+
+    private void Awake() {
+        BasicPuppetGroup _puppetGroup = new BasicPuppetGroup($"floor{floorNumber}", PuppetGroupMembershipType.Custom, PuppetGroupStateRepresentation.Union);
+    }
+
+    public void AddBotToFloor(FarmPuppetBot bot) {
+        _puppetGroup.AddSubPuppet(bot);
+    }
+
+    public void RemoveBotFromFloor(FarmPuppetBot bot) {
+        _puppetGroup.RemoveSubPuppet(bot);
     }
 
 }
