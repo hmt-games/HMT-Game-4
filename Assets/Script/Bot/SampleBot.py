@@ -3,6 +3,7 @@ from json import loads
 from json import dumps
 from json.decoder import JSONDecodeError
 from pprint import pprint
+from uuid import uuid4
 import random
 import time
 import argparse
@@ -12,7 +13,7 @@ from websockets.sync.client import connect
 
 class UnityWebSocket:
 
-    def __init__(self, root_url, agent_id, puppet_id, priority=None, session_id=None):
+    def __init__(self, root_url, agent_id, puppet_id, priority=None, session_id=None, transaction_ids=False):
         # self.connection = connect(url, open_timeout=None, close_timeout=None)
         data = {"agent_id": agent_id,
                 "puppet_id": puppet_id}
@@ -40,6 +41,7 @@ class UnityWebSocket:
             self.priority = resp_json['priority']
             self.action_set = resp_json['action_set']
             self.api_key = resp_json.get('api_key', '')
+            self.transaction_ids = transaction_ids
 
             self.connection = connect(self.service_target,
                                       open_timeout=None, close_timeout=None)
@@ -72,6 +74,8 @@ class UnityWebSocket:
         else:
             if self.api_key != '':
                 mess['api_key'] = self.api_key
+            if self.transaction_ids:
+                mess['transaction_id'] = str(uuid4())
             mess = dumps(mess)
             self.connection.send(mess)
             resp = self.connection.recv()
@@ -153,6 +157,8 @@ if __name__ == "__main__":
 
     parser.add_argument('-f', '--full_response', action='store_true',
                         help='Whether to print the full response or just the status code')
+    parser.add_argument('-t', '--send_transaction_ids', action='store_true',
+                        help='Whether to send transaction_ids in requests, these will be parroted back in responses to aid with debugging')
 
     args = parser.parse_args()
 
@@ -183,7 +189,8 @@ if __name__ == "__main__":
             print('Response Status:', resp.status_code)
     else:
         socket = UnityWebSocket(root_url, args.agent_id,
-                                args.puppet_id, args.priority)
+                                args.puppet_id, args.priority,
+                                transaction_ids=args.send_transaction_ids)
 
         if socket.connection:
 

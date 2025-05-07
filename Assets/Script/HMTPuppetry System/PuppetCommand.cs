@@ -131,6 +131,8 @@ namespace HMT.Puppetry {
 
         public JObject json { get; private set; }
         public bool Responded { get; private set; }
+
+        public string TransactionID { get; private set; }
         
         private HMTPuppetService originService;
 
@@ -148,6 +150,7 @@ namespace HMT.Puppetry {
             Command = ParseCommandType(json.TryGetDefault("command", string.Empty));
             Action = json.TryGetDefault("action", NO_ACTION).ToLower();
             //Debug.LogFormat("<color=red>PARSE</color> json[\"params\"]: {0}  json.ToString(): {1}", json["params"], json.ToString());
+            TransactionID = json.TryGetDefault("transaction_id", string.Empty);
             TargetSubPuppet = json.TryGetDefault("subpuppet", string.Empty);
             ActionParams = json.TryGetDefault("params", new JObject());
             this.json = json;
@@ -167,6 +170,7 @@ namespace HMT.Puppetry {
             Command = PuppetCommandType.EXECUTE_ACTION;
             Action = action;
             TargetSubPuppet = string.Empty;
+            TransactionID = string.Empty;
             json = new JObject();
             this.ActionParams = Params;
             Plan = null;
@@ -185,6 +189,7 @@ namespace HMT.Puppetry {
             Command = PuppetCommandType.EXECUTE_PLAN;
             Action = "execute_plan";
             TargetSubPuppet = string.Empty;
+            TransactionID = string.Empty;
             json = new JObject();
             this.ActionParams = null;
             Plan = new List<PuppetCommand>();
@@ -205,6 +210,7 @@ namespace HMT.Puppetry {
             Command = PuppetCommandType.EXECUTE_ACTION;
             Action = action;
             TargetSubPuppet = original.TargetSubPuppet;
+            TransactionID = original.TransactionID;
             this.ActionParams = Params;
             json = new JObject();
             this.Plan = null;
@@ -221,6 +227,7 @@ namespace HMT.Puppetry {
             Command = command;
             Action = NO_ACTION;
             TargetSubPuppet = string.Empty;
+            TransactionID = original.TransactionID;
             this.ActionParams = null;
             json = new JObject();
             this.Plan = null;
@@ -233,6 +240,7 @@ namespace HMT.Puppetry {
             Command = command;
             Action = NO_ACTION;
             TargetSubPuppet = string.Empty;
+            TransactionID = string.Empty;
             this.ActionParams = null;
             json = new JObject();
             this.Plan = null;
@@ -308,8 +316,16 @@ namespace HMT.Puppetry {
                         {"content", content }
                     };
             }
+            if(TransactionID != string.Empty) {
+                resp["transaction_id"] = TransactionID;
+            }
             string mess = resp.ToString();
-            Debug.LogFormat("puppet: <color=cyan>{0}</color> responds: <color=yellow>{1}</color> to: <color=red>{2}</color> {3}, {4}\nfull_responcse:{5}",TargetPuppet, code, AgentConfig.AgentId, CommandTypeToString(Command),Action,mess);
+            if (TransactionID != string.Empty) {
+                Debug.LogFormat("<color=magenta>{5}</color> puppet: <color=cyan>{0}</color> responds: <color=yellow>{1}</color> to: <color=red>{2}</color> {3}, {4}\nfull_response:{6}", TargetPuppet, code, AgentConfig.AgentId, CommandTypeToString(Command), Action, TransactionID, mess);
+            }
+            else {
+                Debug.LogFormat("puppet: <color=cyan>{0}</color> responds: <color=yellow>{1}</color> to: <color=red>{2}</color> {3}, {4}\nfull_response:{5}", TargetPuppet, code, AgentConfig.AgentId, CommandTypeToString(Command), Action, mess);
+            }
             Responded = true;
             originService.Context.WebSocket.Send(mess);
         }
