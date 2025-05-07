@@ -261,7 +261,7 @@ namespace HMT.Puppetry {
                 }
             }
             if (autoResponseThreshold > 0) {
-                foreach ((float time, PuppetCommand command) in commandsInFlight.ToList()) {
+                /*foreach ((float time, PuppetCommand command) in commandsInFlight.ToList()) {
                     if (command.Responded) {
                         commandsInFlight.Remove((time, command));
                         continue;
@@ -269,6 +269,19 @@ namespace HMT.Puppetry {
                     if (Time.unscaledTime - time > autoResponseThreshold) {
                         command.SendAcknowledgeResponse();
                         commandsInFlight.Remove((time, command));
+                    }
+                }*/
+
+                for (int i = commandsInFlight.Count - 1; i > 0; i--)
+                {
+                    (float time, PuppetCommand command) = commandsInFlight[i];
+                    if (command.Responded) {
+                        commandsInFlight.RemoveAt(i);
+                        continue;
+                    }
+                    if (Time.unscaledTime - time > autoResponseThreshold) {
+                        command.SendAcknowledgeResponse();
+                        commandsInFlight.RemoveAt(i);
                     }
                 }
             }
