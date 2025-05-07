@@ -61,8 +61,9 @@ public class PlayerPuppetBot : FarmPuppetBot
             {
                 BotMode.Sample => "sample",
                 BotMode.Spray => "spray",
-                BotMode.Pick => "pick",
+                BotMode.Pick => "pluck",
                 BotMode.Plant => "plant",
+                BotMode.Till => "till",
                 _ => ""
             };
             

@@ -25,14 +25,18 @@ public class GameActions : MonoBehaviour
         else Instance = this;
     }
 
-    /// <summary>
-    /// Fruits are removed and added to actors inventory.
-    /// Target plant must bear fruit. Plants go back to mature stage.
-    /// </summary>
-    /// /// <param name="targetPlant"></param>
-    public void Pick(PlantBehavior targetPlant)
+    public void Till(SoilCellBehavior tile, FarmPuppetBot bot)
     {
+        NutrientSolution nutrientSolution = NutrientSolution.Empty;
 
+        foreach (PlantBehavior plant in tile.plants)
+        {
+            nutrientSolution += plant.NutrientLevels;
+            plant.DespawnPlant();
+        }
+
+        tile.plantCount = 0;
+        tile.OnWater(nutrientSolution);
     }
 
     public void Pick(PlantBehavior targetPlant, FarmPuppetBot bot)

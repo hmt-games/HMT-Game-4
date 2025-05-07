@@ -45,7 +45,7 @@ public class FarmPuppetBot : PuppetBehavior
     {
         _botInfo.FloorIdx = floor;
         _botInfo.CellIdx = new Vector2Int(x, y);
-        CurrentFloor.AddBotToFloor(this);
+        //CurrentFloor.AddBotToFloor(this);
     }
     
     protected void Awake()
@@ -57,6 +57,8 @@ public class FarmPuppetBot : PuppetBehavior
         plantInventory = new List<PlantBehavior>();
         reservoirInventory = NutrientSolution.Empty;
 
+        _botModeConfig = GameManager.Instance.DefaultBotMode;
+
         RegisterAction("move", Move);
         RegisterAction("interact", Interact);
 
@@ -64,9 +66,9 @@ public class FarmPuppetBot : PuppetBehavior
         RegisterAction("move_to", ActionNotImplemented);
         RegisterAction("pick_up", ActionNotImplemented);
         RegisterAction("put_down", ActionNotImplemented);
-        RegisterAction("till", ActionNotImplemented);
+        // RegisterAction("till", ActionNotImplemented);
 
-        }
+    }
 
     #endregion
 
@@ -78,6 +80,75 @@ public class FarmPuppetBot : PuppetBehavior
     private BotModeSO _botModeConfig;
 
     #region Bot Action Implementation
+    
+    private void SwitchBotMode()
+    {
+        StationCellBehavior station = GetCurrentTile() as StationCellBehavior;
+        BotModeSO newBotMode = station.Interact(this);
+        if (newBotMode != null)
+        {
+            _botModeConfig = newBotMode;
+            //CurrentActionSet = new HashSet<string>(_botModeConfig.supportedActions);
+            _animator.SetTrigger(_botModeConfig.botModeName);
+            _botInfo.CurrentBotMode = _botModeConfig.botMode;
+            
+            // reset inventory
+            SetBotInventory(_botModeConfig.reservoirCapacity, _botModeConfig.plantInventoryCapacity);
+            ClearActionSet();
+            RegisterAction("move", Move);
+            RegisterAction("interact", Interact);
+            RegisterAction("move_to", ActionNotImplemented);
+            RegisterAction("pick_up", ActionNotImplemented);
+            RegisterAction("put_down", ActionNotImplemented);
+
+            foreach (string action in _botModeConfig.supportedActions) {
+                switch (action) {
+                    case "sample":
+                        RegisterAction("sample", Sample);
+                        break;
+                    case "spray":
+                        RegisterAction("spray", Spray);
+                        break;
+                    case "pick":
+                    case "pluck":
+                        RegisterAction("pluck", Pick);
+                        break;
+                    case "plant":
+                        RegisterAction("plant", Plant);
+                        break;
+                    case "harvest":
+                        RegisterAction("harvest", ActionNotImplemented);
+                        break;
+                    case "till":
+                        RegisterAction("till", Till);
+                        break;
+                }
+            }
+
+        }
+    }
+
+    private IEnumerator Till(PuppetCommand command)
+    {
+        GridCellBehavior grid = GetCurrentTile();
+        if (grid.tileType != TileType.Soil)
+        {
+            command.SendIllegalActionResponse("till can only target soil tile");
+            yield break;
+        }
+        
+        CurrentCommand = command;
+        float actionTime = ActionTickTimeCost.Till * GameManager.Instance.secondPerTick;
+        yield return StartProgressTimer(actionTime);
+
+        if (CurrentCommand.Command == PuppetCommandType.STOP) {
+            CurrentCommand = PuppetCommand.IDLE;
+            yield break;
+        }
+
+        GameActions.Instance.Till(grid as SoilCellBehavior, this);
+        CurrentCommand = PuppetCommand.IDLE;
+    }
 
     private void Plant(PuppetCommand command)
     {
@@ -126,13 +197,39 @@ public class FarmPuppetBot : PuppetBehavior
             return;
         }
 
-        if (!GameActions.Instance.RequestPick(grid as SoilCellBehavior, this))
+        // for human players
+        if (command.ActionParams == null)
         {
-            command.SendIllegalActionResponse("none of the target tile's plants has fruit");
+            if (!GameActions.Instance.RequestPick(grid as SoilCellBehavior, this))
+            {
+                command.SendIllegalActionResponse("none of the target tile's plants has fruit");
+            }
+            else
+            {
+                CurrentCommand = command;
+            }
         }
+        //for bots
         else
         {
+            SoilCellBehavior tile = grid as SoilCellBehavior;
+            int plantIdx = (int)command.ActionParams["target"];
+            
+            if (plantIdx > tile.plantCount - 1)
+            {
+                command.SendIllegalActionResponse("Target Index for pluck out of bound of tile plant list");
+                return;
+            }
+            
+            PlantBehavior plant = tile.plants[plantIdx];
+            if (!plant.hasFruit)
+            {
+                command.SendIllegalActionResponse("Target plant does not bear fruit");
+                return;
+            }
+
             CurrentCommand = command;
+            StartCoroutine(StartPick(plant));
         }
     }
 
@@ -165,51 +262,6 @@ public class FarmPuppetBot : PuppetBehavior
         if (tileType != TileType.SprayAStation && tileType != TileType.SprayBStation
             && tileType != TileType.SprayCStation && tileType != TileType.SprayDStation)
             CurrentCommand = PuppetCommand.IDLE;
-    }
-
-    private void SwitchBotMode()
-    {
-        StationCellBehavior station = GetCurrentTile() as StationCellBehavior;
-        BotModeSO newBotMode = station.Interact(this);
-        if (newBotMode != null)
-        {
-            _botModeConfig = newBotMode;
-            //CurrentActionSet = new HashSet<string>(_botModeConfig.supportedActions);
-            _animator.SetTrigger(_botModeConfig.botModeName);
-            _botInfo.CurrentBotMode = _botModeConfig.botMode;
-            
-            // reset inventory
-            SetBotInventory(_botModeConfig.reservoirCapacity, _botModeConfig.plantInventoryCapacity);
-            ClearActionSet();
-            RegisterAction("move", Move);
-            RegisterAction("interact", Interact);
-            RegisterAction("move_to", ActionNotImplemented);
-            RegisterAction("pick_up", ActionNotImplemented);
-            RegisterAction("put_down", ActionNotImplemented);
-
-            foreach (string action in _botModeConfig.supportedActions) {
-                switch (action) {
-                    case "sample":
-                        RegisterAction("sample", Sample);
-                        break;
-                    case "spray":
-                        RegisterAction("spray", Spray);
-                        break;
-                    case "pick":
-                    case "pluck":
-                        RegisterAction("pick", Pick);
-                        break;
-                    case "plant":
-                        RegisterAction("plant", Plant);
-                        break;
-                    case "harvest":
-                    case "till":
-                        RegisterAction("harvest", ActionNotImplemented);
-                        break;
-                }
-            }
-
-        }
     }
 
     private void SetBotInventory(float _reservoirCapacity, int _plantInventoryCapacity)

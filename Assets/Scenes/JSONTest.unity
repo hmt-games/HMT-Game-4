@@ -9794,7 +9794,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 914555907}
   m_HandleRect: {fileID: 914555906}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -11780,6 +11780,7 @@ MonoBehaviour:
   player: {fileID: 0}
   currentTick: 0
   secondPerTick: 1
+  DefaultBotMode: {fileID: 11400000, guid: b6f7cdbc01dee3a4a96ed116bbca92b6, type: 2}
   bot: {fileID: 1553247983956851260, guid: 38a38a5b619c04ad7bcff75e127ad6a7, type: 3}
   puppetBot: {fileID: 1553247983956851260, guid: 137e7a3f5d1a50846b03a813fe457bf8,
     type: 3}

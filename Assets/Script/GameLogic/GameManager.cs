@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public long currentTick = 0;
     public float secondPerTick = 1.0f;
 
+    public BotModeSO DefaultBotMode;
+
     private void Awake()
     {
         if (Instance) Destroy(this.gameObject);

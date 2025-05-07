@@ -77,9 +77,13 @@ public class MapGeneratorJSON : NetworkBehaviour
         plantIDs = new NetworkId[_height, _width, _depth, GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE];
     }
 
-    private void Start()
+    private IEnumerator SpawnBot()
     {
-        //CreateTower();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        //GameManager.Instance.SpawnBot();
+        for (int i = 0; i < 1; i++)
+            GameManager.Instance.SpawnPlayerPuppet();
     }
 
 
@@ -445,9 +449,8 @@ public class MapGeneratorJSON : NetworkBehaviour
         }
         
         Debug.LogWarning("Map generation for host should be done?");
-        //GameManager.Instance.SpawnBot();
-        for (int i = 0; i < 1; i++)
-            GameManager.Instance.SpawnPlayerPuppet();
+
+        StartCoroutine(SpawnBot());
     }
 
     private void CreateFloor(JToken floorJObject, int floorIdx, Tower parentTower)

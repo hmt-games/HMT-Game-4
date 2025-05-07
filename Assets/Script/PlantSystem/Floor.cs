@@ -47,7 +47,11 @@ public class Floor : NetworkBehaviour
         }
     }
 
-    private void Awake() {
+    /* TODO: I commented these out for now
+     * instead of Awake, BasicPuppetGroup should be set in NetworkBehaviour's Spawned() event function
+     * but to hook up the bots, I need to first convert the bot to also use NetworkBehaviour
+     */
+    /*private void Awake() {
         BasicPuppetGroup _puppetGroup = new BasicPuppetGroup($"floor{floorNumber}", PuppetGroupMembershipType.Custom, PuppetGroupStateRepresentation.Union);
     }
 
@@ -57,6 +61,6 @@ public class Floor : NetworkBehaviour
 
     public void RemoveBotFromFloor(FarmPuppetBot bot) {
         _puppetGroup.RemoveSubPuppet(bot);
-    }
+    }*/
 
 }

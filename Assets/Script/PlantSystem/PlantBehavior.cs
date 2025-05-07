@@ -200,4 +200,8 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
         return state;
     }
 
+    public void DespawnPlant()
+    {
+        Runner.Despawn(transform.GetComponent<NetworkObject>());
+    }
 }
