@@ -140,7 +140,7 @@ if __name__ == "__main__":
         description='A simple agent for testing the HMT Agent Interface')
 
     parser.add_argument(
-        'root_url', help='The root url for the agent service. default is usually: localhost:4649/hmt')
+        'root_url', help='The root url for the agent service. default is usually: localhost:4649')
     parser.add_argument('-l', '--list_puppets', action='store_true',
                         help='Overrides other params and calls the list_puppets target')
     parser.add_argument('-p', '--puppet_id', help='The puppet_id to register actions on')
