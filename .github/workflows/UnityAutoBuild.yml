@@ -1,0 +1,182 @@
+name: Unity Multi-Platform Auto Build
+
+on:
+  workflow_dispatch:
+    inputs:
+        buildTag:
+          description: 'Provide Build Version'
+          required: true
+
+jobs:
+  build-mac:
+    name: Build for macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Activate Unity License (macOS)
+        run: |
+          brew install --cask unity-hub
+          echo "Available Editors for Mac "
+          "/Applications/Unity Hub.app/Contents/MacOS/Unity Hub" --disable-gpu --headless editors -r
+          "/Applications/Unity Hub.app/Contents/MacOS/Unity Hub" --disable-gpu --headless install --version 2021.3.45f1 --module mac-il2cpp --architecture arm64
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+      - name: Cache Library Folder
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-macOS-${{ github.sha }}
+          restore-keys: |
+            Library-macOS-
+
+      - name: Build macOS
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f1
+          targetPlatform: StandaloneOSX
+          buildName: VerticalFarmMacBuild_${{ inputs.buildTag }}
+          buildMethod: AutoBuild.PerformMacBuild
+      
+      - name: Upload macOS Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: VerticalFarmMacBuild_${{ inputs.buildTag }}
+          path: build/StandaloneOSX
+
+  build-windows:
+    name: Build for Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Activate Unity License (Windows)
+        run: |
+          mkdir -p "$HOME/AppData/Local/Unity/Editor"          
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+      - name: Cache Library Folder
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-Windows-${{ github.sha }}
+          restore-keys: |
+            Library-Windows-
+
+      - name: Build Windows
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2020.3.32f1
+          targetPlatform: StandaloneWindows64
+          buildName: VerticalFarmBuild_${{ inputs.buildTag }}
+          buildMethod: AutoBuild.PerformWindowsBuild
+
+      - name: Upload Windows Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: VerticalFarmWindowsBuild_${{ inputs.buildTag }}
+          path: build/StandaloneWindows64
+
+  build-linux:
+    name: Build for Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Activate Unity License (Linux)
+        run: |
+          mkdir -p "$HOME/.local/share/unity3d/Unity/License"
+          echo ${{ secrets.UNITY_SERIAL }} | tee "$HOME/.local/share/unity3d/Unity/License/Unity_v2020.x.ulf" > /dev/null
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+      - name: Cache Library Folder
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-Linux-${{ github.sha }}
+          restore-keys: |
+            Library-Linux-
+
+      - name: Build Linux
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2020.3.32f1
+          targetPlatform: StandaloneLinux64
+          buildName: VerticalFarmLinuxBuild_${{ inputs.buildTag }}
+          buildMethod: AutoBuild.PerformLinuxBuild
+
+      - name: Upload Linux Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: VerticalFarmLinuxBuild_${{ inputs.buildTag }}
+          path: build/StandaloneLinux64
+
+  build-webgl:
+    name: Build for WebGL
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Activate Unity License (WebGL)
+        run: |
+          mkdir -p "$HOME/.local/share/unity3d/Unity/License"
+          mkdir -p "$HOME/.local/share/unity3d/builds/WebGL"
+          echo ${{ secrets.UNITY_SERIAL }} | tee "$HOME/.local/share/unity3d/Unity/License/Unity_v2020.x.ulf" > /dev/null
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+      - name: Cache Library Folder
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-WebGL-${{ github.sha }}
+          restore-keys: |
+            Library-WebGL-
+
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2020.3.32f1
+          targetPlatform: WebGL
+          buildName: VerticalFarmWebGLBuild_${{ inputs.buildTag }}
+          buildMethod: AutoBuild.PerformWebGLBuild
+
+      - name: Upload WebGL Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: VerticalFarmWebGLBuild_${{ inputs.buildTag }}
+          path: build/DiceAdventureWebGL
