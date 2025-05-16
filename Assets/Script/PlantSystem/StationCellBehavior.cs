@@ -24,6 +24,10 @@ public class StationCellBehavior : GridCellBehavior
         else if (tileType == TileType.DiscardStation)
         {
             bot.DumpInventory();
+        } 
+        else if (tileType == TileType.ScoreStation)
+        {
+            GameActions.Instance.Score(bot);
         }
 
         return tileType switch

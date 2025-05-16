@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using Fusion;
+using TMPro;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -15,6 +17,11 @@ public class GameManager : MonoBehaviour
     public float secondPerTick = 1.0f;
 
     public BotModeSO DefaultBotMode;
+    
+    // Game Score
+    [SerializeField] private TMP_Text scoreGoalText;
+    [SerializeField] private TMP_Text scoreCurrentText;
+    private Dictionary<string, int> _currentScore;
 
     private void Awake()
     {
@@ -32,7 +39,60 @@ public class GameManager : MonoBehaviour
         //HeatMapSwicher.S.SwitchOnHeatMap();
         currentTick++;
     }
-    
+
+    //TODO: score goal should be configable in a separate config file, supplied to map generator
+    public void InitScoring(Dictionary<string, PlantConfig> plantConfigs)
+    {
+        _currentScore = new Dictionary<string, int>();
+        StringBuilder sb = new StringBuilder();
+        sb.Append("Goal: ");
+        bool separator = false;
+        
+        foreach (var kvp in plantConfigs)
+        {
+            if (separator) sb.Append(" | ");
+            
+            string plantName = kvp.Key;
+            sb.Append($"{plantName}: {10}");
+            _currentScore[plantName] = 0;
+            
+            if (!separator) separator = true;
+        }
+
+        scoreGoalText.text = sb.ToString();
+        UpdateCurrentScore();
+    }
+
+    public void SubmitPlant(Dictionary<string, int> submittedPlant)
+    {
+        foreach (var kvp in submittedPlant)
+        {
+            _currentScore[kvp.Key] += kvp.Value;
+        }
+        
+        UpdateCurrentScore();
+    }
+
+    private void UpdateCurrentScore()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("Current: ");
+        bool separator = false;
+        
+        foreach (var kvp in _currentScore)
+        {
+            if (separator) sb.Append(" | ");
+            
+            sb.Append($"{kvp.Key}: {kvp.Value}");
+            
+            if (!separator) separator = true;
+        }
+
+        scoreCurrentText.text = sb.ToString();
+    }
+
+    #region temperary testing scripts
+
     // golden finger for testing
     private int plantStages = 0;
     public void PlantNextStage()
@@ -78,4 +138,6 @@ public class GameManager : MonoBehaviour
         nBot.InitBot(0, x, y);
         player = nBot;
     }
+
+    #endregion
 }

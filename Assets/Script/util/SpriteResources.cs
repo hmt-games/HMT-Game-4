@@ -18,6 +18,7 @@ public class SpriteResources : MonoBehaviour
     public Sprite sprayDStation;
     public Sprite tillStation;
     public Sprite discardStation;
+    public Sprite scoreStation;
 
     private void Awake()
     {

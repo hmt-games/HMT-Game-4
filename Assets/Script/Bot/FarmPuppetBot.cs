@@ -165,13 +165,38 @@ public class FarmPuppetBot : PuppetBehavior
             return;
         }
         
-        if (!GameActions.Instance.RequestPlant(this))
+        // for human players
+        if (command.ActionParams == null)
         {
-            command.SendIllegalActionResponse("none of the plant in inventory is seed");
+            if (!GameActions.Instance.RequestPlant(this))
+            {
+                command.SendIllegalActionResponse("none of the plant in inventory is seed");
+            }
+            else
+            {
+                CurrentCommand = command;
+            }
         }
+        //for bots
         else
         {
+            int plantIdx = (int)command.ActionParams["target"];
+            
+            if (plantIdx > plantInventory.Count - 1)
+            {
+                command.SendIllegalActionResponse("Target Index for plant out of bound of plant inventory");
+                return;
+            }
+            
+            PlantBehavior plant = plantInventory[plantIdx];
+            if (plant.Age != 0.0f)
+            {
+                command.SendIllegalActionResponse("Target plant is not a seed");
+                return;
+            }
+
             CurrentCommand = command;
+            StartCoroutine(StartPlant(plant));
         }
     }
 

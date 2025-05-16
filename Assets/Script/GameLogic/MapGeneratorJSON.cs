@@ -448,9 +448,9 @@ public class MapGeneratorJSON : NetworkBehaviour
             CreateFloor(towerJObject[$"Floor{level}"], level, nTower);
         }
         
-        Debug.LogWarning("Map generation for host should be done?");
-
         StartCoroutine(SpawnBot());
+        
+        GameManager.Instance.InitScoring(plantConfigs);
     }
 
     private void CreateFloor(JToken floorJObject, int floorIdx, Tower parentTower)
@@ -588,6 +588,10 @@ public class MapGeneratorJSON : NetworkBehaviour
                 case "Discard":
                     nStation.tileType = TileType.DiscardStation;
                     spriteRenderer.sprite = SpriteResources.Instance.discardStation;
+                    break;
+                case "Score":
+                    nStation.tileType = TileType.ScoreStation;
+                    spriteRenderer.sprite = SpriteResources.Instance.scoreStation;
                     break;
             }
 

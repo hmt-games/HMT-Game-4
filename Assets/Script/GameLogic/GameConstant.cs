@@ -26,6 +26,7 @@ namespace GameConstant
         TillStation,
         CarryStation,
         DiscardStation,
+        ScoreStation
     }
     
     public enum BotMode {

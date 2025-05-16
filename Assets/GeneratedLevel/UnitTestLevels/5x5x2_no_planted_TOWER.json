@@ -232,18 +232,7 @@
       "Plants": {}
     },
     {
-      "GridType" : "Soil",
-      "SoilConfig": "SoilConfig0",
-      "NutrientLevels": {
-        "water": 1000,
-        "nutrients": [
-          1000,
-          1000,
-          1000,
-          1000
-        ]
-      },
-      "Plants": {}
+      "GridType" : "Score"
     }
   ],
   "Floor1": [
@@ -474,18 +463,7 @@
       "Plants": {}
     },
     {
-      "GridType" : "Soil",
-      "SoilConfig": "SoilConfig0",
-      "NutrientLevels": {
-        "water": 1000,
-        "nutrients": [
-          1000,
-          1000,
-          1000,
-          1000
-        ]
-      },
-      "Plants": {}
+      "GridType" : "Score"
     }
   ]
 }

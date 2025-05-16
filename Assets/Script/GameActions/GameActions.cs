@@ -210,4 +210,25 @@ public class GameActions : MonoBehaviour
         InventoryUIManager.Instance.UpdateWaterInventoryUI(puppet.reservoirInventory, 1.0f);
         InventoryUIManager.Instance.ShowInventory();
     }
+
+    public void Score(FarmPuppetBot bot)
+    {
+        if (bot.plantInventoryCapacity == 0) return;
+
+        Dictionary<string, int> submittedPlant = new Dictionary<string, int>();
+        for (int i = bot.plantInventory.Count - 1; i > -1; i--)
+        {
+            PlantBehavior plant = bot.plantInventory[i];
+            if (plant.Age == 0)
+            {
+                string plantName = plant.config.speciesName;
+                submittedPlant.TryAdd(plantName, 0);
+                submittedPlant[plantName] += 1;
+                bot.plantInventory.RemoveAt(i);
+                plant.DespawnPlant();
+            }
+        }
+        
+        GameManager.Instance.SubmitPlant(submittedPlant);
+    }
 }
