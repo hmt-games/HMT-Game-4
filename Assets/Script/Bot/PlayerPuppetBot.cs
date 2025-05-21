@@ -6,6 +6,23 @@ using UnityEngine;
 
 public class PlayerPuppetBot : FarmPuppetBot
 {
+    private bool _playerEmbodied = false;
+
+    public void PlayerEmbody()
+    {
+        _playerEmbodied = true;
+        if (GameManager.Instance.player != null)
+        {
+            GameManager.Instance.player.PlayerDisembody();
+        }
+        GameManager.Instance.player = this;
+    }
+
+    public void PlayerDisembody()
+    {
+        _playerEmbodied = false;
+    }
+    
     private Dictionary<KeyCode, string> _keyCode2MoveParams = new Dictionary<KeyCode, string>
     {
         { KeyCode.A, "left" },
@@ -23,6 +40,7 @@ public class PlayerPuppetBot : FarmPuppetBot
 
     protected virtual void Update()
     {
+        if (!_playerEmbodied) return;
         MoveInput();
         InteractInput();
         PerformBotAction();

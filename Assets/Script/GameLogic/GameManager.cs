@@ -17,12 +17,15 @@ public class GameManager : MonoBehaviour
     public float secondPerTick = 1.0f;
 
     public BotModeSO DefaultBotMode;
-    
+
     // Game Score
     [SerializeField] private TMP_Text scoreGoalText;
     [SerializeField] private TMP_Text scoreCurrentText;
     private Dictionary<string, int> _currentScore;
 
+    [Header("bots")]
+    public GameObject puppetBot;
+    
     private void Awake()
     {
         if (Instance) Destroy(this.gameObject);
@@ -123,7 +126,6 @@ public class GameManager : MonoBehaviour
         Instantiate(bot, parentTower.floors[0].Cells[0, 0].transform.position, Quaternion.identity);
     }
 
-    [SerializeField] private GameObject puppetBot;
     public void SpawnPlayerPuppet()
     {
         int x = Random.Range(0, parentTower.floors[0].Cells.GetLength(0));
@@ -133,7 +135,7 @@ public class GameManager : MonoBehaviour
         GameObject nBotObj = Instantiate(puppetBot, parentTower.floors[0].Cells[x, y].transform.position, Quaternion.identity);
         PlayerPuppetBot nBot = nBotObj.GetComponent<PlayerPuppetBot>();
         nBot.InitBot(0, x, y);
-        player = nBot;
+        nBot.PlayerEmbody();
     }
 
     #endregion

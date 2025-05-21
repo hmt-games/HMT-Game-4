@@ -20,6 +20,10 @@ public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable
     //[FormerlySerializedAs("gridY")]
     public int gridZ { get; set; }
 
+    // true if there is a bot currently on the tile.
+    // this flag is checked so that bot will not walk onto another bot
+    public bool botOnGrid = false;
+
     public string ObjectID => $"cell_{parentFloor.floorNumber}_{gridX}_{gridZ}";
 
     /// <summary>
@@ -34,7 +38,8 @@ public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable
         return new JObject {
             {"x", gridX},
             {"y", gridZ},
-            {"floor", parentFloor.floorNumber}
+            {"floor", parentFloor.floorNumber},
+            {"bot_on_grid", botOnGrid}
         };
     }
   

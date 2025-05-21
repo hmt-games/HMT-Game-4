@@ -15,9 +15,12 @@ public class GameActionGoldenFinger : MonoBehaviour
     [SerializeField] private Transform GF_Config;
     [SerializeField] private Transform GF_Info;
     [SerializeField] private LayerMask gridLayerMask;
+    [SerializeField] private LayerMask botLayerMask;
     private TMP_Text _infoText;
 
     private GridCellBehavior _selectedGrid;
+
+    private bool _actionSelectionInProgress = false;
 
     #region PlantFields
 
@@ -33,6 +36,20 @@ public class GameActionGoldenFinger : MonoBehaviour
 
     #endregion
 
+    public void AddBotSelected()
+    {
+        SoilCellBehavior selectedSoil = _selectedGrid as SoilCellBehavior;
+
+        int x = selectedSoil.gridX;
+        int y = selectedSoil.gridZ;
+        int floor = selectedSoil.parentFloor.floorNumber;
+        GameObject nBotObj = Instantiate(GameManager.Instance.puppetBot, GameManager.Instance.parentTower.floors[floor].Cells[x, y].transform.position, Quaternion.identity);
+        PlayerPuppetBot nBot = nBotObj.GetComponent<PlayerPuppetBot>();
+        nBot.InitBot(floor, x, y);
+        actionWheel.gameObject.SetActive(false);
+        _actionSelectionInProgress = false;
+    }
+
     #region Plant
 
     public void PlantSelected()
@@ -40,6 +57,7 @@ public class GameActionGoldenFinger : MonoBehaviour
         _plantConfig.gameObject.SetActive(true);
         GF_Info.gameObject.SetActive(true);
         actionWheel.gameObject.SetActive(false);
+        _actionSelectionInProgress = false;
     }
     
     public void DisplaySpeciesInfo()
@@ -127,18 +145,27 @@ public class GameActionGoldenFinger : MonoBehaviour
     /// </summary>
     void GetGridObjectAtMouse()
     {
-        //RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, gridLayerMask);
-        RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, gridLayerMask);
-
+        RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, botLayerMask);
         if (hit.collider != null)
         {
-            Debug.Log(hit.transform.gameObject.name);
+            PlayerPuppetBot bot = hit.collider.gameObject.GetComponent<PlayerPuppetBot>();
+            if (bot == null) return;
+            bot.PlayerEmbody();
+            return;
+        }
+
+        hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity, gridLayerMask);
+        if (hit.collider != null)
+        {
+            if (_actionSelectionInProgress) return;
             _selectedGrid = hit.collider.gameObject.GetComponent<GridCellBehavior>();
             ShowActionWheel(_selectedGrid.transform.position);
+            _actionSelectionInProgress = true;
         }
         else
         {
             actionWheel.gameObject.SetActive(false);
+            _actionSelectionInProgress = false;
         }
     }
 

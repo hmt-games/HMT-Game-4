@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5793272758729528340}
   - component: {fileID: 4192288840283444347}
   - component: {fileID: 2295100978297286010}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerPuppetBot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,15 +121,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e59b6fe22442db80b81bf6d837cb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SolutionInventoryCapacity: 100
-  PlantInventoryCapacity: 8
-  PlantInventory: []
-  WaterInventory:
-    water: 0
-    nutrients: {x: 0, y: 0, z: 0, w: 0}
   puppetIDPrefix: puppet
   progressBar: {fileID: 477217381972061746}
-  SensorRange: 1
+  reservoirCapacity: 100
+  plantInventoryCapacity: 8
+  plantInventory: []
+  reservoirInventory:
+    water: 0
+    nutrients: {x: 0, y: 0, z: 0, w: 0}
 --- !u!58 &2295100978297286010
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -177,7 +176,7 @@ GameObject:
   - component: {fileID: 4033564632221259305}
   - component: {fileID: 4330974058407979020}
   - component: {fileID: 5550294765680582137}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 619278790939568922}
   - component: {fileID: 477217381972061746}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +365,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1080883344463566693}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Handle Slide Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +403,7 @@ GameObject:
   - component: {fileID: 7076637406257725222}
   - component: {fileID: 7703863349249057735}
   - component: {fileID: 8248523233315514315}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,7 +476,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6881018799548868515}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +514,7 @@ GameObject:
   - component: {fileID: 4358386660729874816}
   - component: {fileID: 6740495525489000554}
   - component: {fileID: 7065556985542788492}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +589,7 @@ GameObject:
   - component: {fileID: 7625786995057883240}
   - component: {fileID: 1439513984652146304}
   - component: {fileID: 5773363612768357709}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}

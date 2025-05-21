@@ -45,6 +45,7 @@ public class FarmPuppetBot : PuppetBehavior
     {
         _botInfo.FloorIdx = floor;
         _botInfo.CellIdx = new Vector2Int(x, y);
+        GetCurrentTile().botOnGrid = true;
         //CurrentFloor.AddBotToFloor(this);
     }
     
@@ -462,8 +463,17 @@ public class FarmPuppetBot : PuppetBehavior
             _ => Vector2Int.zero
         };
 
-        if(!ValidTargetPosition(direct + _botInfo.CellIdx)) {
+        Vector2Int targetPos = direct + _botInfo.CellIdx;
+        if(!ValidTargetPosition(targetPos)) {
             command.SendIllegalActionResponse("Attempting to move bot out of bounds");
+            return;
+        }
+        
+        // check if there is already a bot on target tile
+        GridCellBehavior targetGrid = CurrentFloor.Cells[targetPos.x, targetPos.y];
+        if (targetGrid.botOnGrid)
+        {
+            command.SendIllegalActionResponse("Attempting to move on tile that also has a bot on it");
             return;
         }
 
@@ -471,9 +481,15 @@ public class FarmPuppetBot : PuppetBehavior
         StartCoroutine(MoveCoroutine(direct));
     }
 
-    IEnumerator MoveCoroutine(Vector2Int direction) {
+    IEnumerator MoveCoroutine(Vector2Int direction)
+    {
+        GetCurrentTile().botOnGrid = false;
+        GridCellBehavior targetGrid =
+            CurrentFloor.Cells[_botInfo.CellIdx.x + direction.x, _botInfo.CellIdx.y + direction.y];
+        targetGrid.botOnGrid = true;
+        
         _walking = true;
-        Vector3 target = CurrentFloor.Cells[_botInfo.CellIdx.x + direction.x, _botInfo.CellIdx.y + direction.y].transform.position;
+        Vector3 target = targetGrid.transform.position;
         if (GameManager.Instance.secondPerTick > 0) {
             float moveDuration = Vector3.Distance(transform.position, target) * GameManager.Instance.secondPerTick / (_botModeConfig == null ? 1.0f : _botModeConfig.movementSpeed);
             float startTime = Time.time;
