@@ -66,7 +66,6 @@ public class GameActions : MonoBehaviour
 
     public bool RequestPick(SoilCellBehavior tile, FarmPuppetBot bot)
     {
-        Debug.Log("request Harvest");
         List<PlantBehavior> fertilePlants = new List<PlantBehavior>();
         foreach (PlantBehavior plant in tile.plants)
         {
@@ -79,23 +78,45 @@ public class GameActions : MonoBehaviour
         return true;
     }
 
-
     private void StartPick(PlantBehavior plant, FarmPuppetBot bot)
     {
         StartCoroutine(bot.StartPick(plant));
     }
+    
+    public bool RequestHarvest(SoilCellBehavior tile, FarmPuppetBot bot)
+    {
+        Debug.Log("request Harvest");
+        List<PlantBehavior> plants = tile.plants;
+
+        if (plants.Count == 0) return false;
+
+        PlantSelectionUIManager.Instance.ShowSelection(plants, bot, StartHarvest);
+        return true;
+    }
+
+    private void StartHarvest(PlantBehavior plant, FarmPuppetBot bot)
+    {
+        StartCoroutine(bot.StartHarvest(plant));
+    }
+
+    public void Harvest(PlantBehavior plant, FarmPuppetBot bot)
+    {
+        SoilCellBehavior soil = plant.parentCell;
+        soil.plantCount -= 1;
+        soil.plants.Remove(plant);
+        
+        bot.plantInventory.Add(plant);
+        plant.transform.SetParent(bot.transform, true);
+        plant.transform.localPosition = Vector3.one * 9999.0f;
+    }
 
     public bool RequestPlant(FarmPuppetBot bot)
     {
-        List<PlantBehavior> seedPlants = new List<PlantBehavior>();
-        foreach (PlantBehavior plant in bot.plantInventory)
-        {
-            if (plant.Age == 0.0f) seedPlants.Add(plant);
-        }
+        List<PlantBehavior> plants = bot.plantInventory;
 
-        if (seedPlants.Count == 0) return false;
+        if (plants.Count == 0) return false;
 
-        PlantSelectionUIManager.Instance.ShowSelection(seedPlants, bot, StartPlant);
+        PlantSelectionUIManager.Instance.ShowSelection(plants, bot, StartPlant);
         return true;
     }
 
@@ -110,7 +131,7 @@ public class GameActions : MonoBehaviour
         tile.plants.Add(plant);
         tile.plantCount += 1;
 
-        plant.transform.SetParent(tile.transform.GetChild(1).GetChild(tile.plantCount - 1), false);
+        plant.transform.SetParent(tile.transform.GetChild(1).GetChild(tile.plantCount - 1), true);
         plant.transform.localPosition = Vector3.zero;
 
         bot.plantInventory.Remove(plant);
@@ -186,11 +207,6 @@ public class GameActions : MonoBehaviour
         nPlant.parentCell = targetGrid;
         targetGrid.plants.Add(nPlant);
         targetGrid.plantCount++;
-    }
-
-    public void Sample(PlantBehavior targetPlant)
-    {
-        
     }
 
     public void Sample(SoilCellBehavior targetGrid, FarmPuppetBot puppet)
