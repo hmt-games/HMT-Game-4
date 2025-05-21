@@ -31,11 +31,8 @@ public class GameManager : MonoBehaviour
 
     public void Tick()
     {
-        if (BasicSpawner._runner.IsServer)
-        {
-            parentTower.OnTick();
-        }
-
+        parentTower.OnTick();
+        
         //HeatMapSwicher.S.SwitchOnHeatMap();
         currentTick++;
     }

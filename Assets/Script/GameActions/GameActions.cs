@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Fusion;
 using UnityEngine;
 using GameConstant;
 using HMT.Puppetry;
@@ -32,7 +31,7 @@ public class GameActions : MonoBehaviour
         foreach (PlantBehavior plant in tile.plants)
         {
             nutrientSolution += plant.NutrientLevels;
-            plant.DespawnPlant();
+            Destroy(plant.gameObject);
         }
 
         tile.plantCount = 0;
@@ -52,8 +51,8 @@ public class GameActions : MonoBehaviour
         {
             if (bot.plantInventory.Count > bot.plantInventoryCapacity) break;
 
-            NetworkObject nPlantObj =
-                BasicSpawner._runner.Spawn(plantPrefab, new Vector3(9999, 9999, -9999), quaternion.identity);
+            GameObject nPlantObj =
+                Instantiate(plantPrefab, new Vector3(9999, 9999, -9999), quaternion.identity);
             PlantBehavior nPlant = nPlantObj.GetComponent<PlantBehavior>();
             nPlant.config = targetPlant.config;
             _plantInitInfo.Nutrient = nPlant.config.metabolismFactor;
@@ -112,7 +111,7 @@ public class GameActions : MonoBehaviour
         tile.plantCount += 1;
 
         plant.transform.SetParent(tile.transform.GetChild(1).GetChild(tile.plantCount - 1), false);
-        plant.transform.GetComponent<NetworkTransform>().Teleport(plant.transform.parent.position);
+        plant.transform.localPosition = Vector3.zero;
 
         bot.plantInventory.Remove(plant);
     }
@@ -158,16 +157,7 @@ public class GameActions : MonoBehaviour
     {
         
     }
-
-    /// <summary>
-    /// Add seed level plants to the tile
-    /// </summary>
-    /// <param name="species"></param>
-    /// <param name="targetGrid"></param>
-    public void Plant(PlantConfig species, GridCellBehavior targetGrid)
-    {
-        
-    }
+    
     
     /// <summary>
     /// An overload of the normal plant action. Plant plant with specific parameters.
@@ -187,8 +177,8 @@ public class GameActions : MonoBehaviour
         }
 
         Transform plantSlot = targetGrid.transform.GetChild(1).GetChild(plantSlotIdx);
-        NetworkObject plantObj = BasicSpawner._runner.Spawn(plantPrefab, Vector3.zero, Quaternion.identity);
-        plantObj.transform.SetParent(plantSlot);
+        GameObject plantObj = Instantiate(plantPrefab, plantSlot, false);
+        plantObj.transform.localPosition = Vector3.zero;
         PlantBehavior nPlant = plantObj.GetComponent<PlantBehavior>();
         nPlant.config = species;
         nPlant.SetInitialProperties(plantInitInfo);
@@ -196,7 +186,6 @@ public class GameActions : MonoBehaviour
         nPlant.parentCell = targetGrid;
         targetGrid.plants.Add(nPlant);
         targetGrid.plantCount++;
-        plantObj.transform.localScale = Vector3.one;
     }
 
     public void Sample(PlantBehavior targetPlant)
@@ -225,7 +214,7 @@ public class GameActions : MonoBehaviour
                 submittedPlant.TryAdd(plantName, 0);
                 submittedPlant[plantName] += 1;
                 bot.plantInventory.RemoveAt(i);
-                plant.DespawnPlant();
+                Destroy(plant.gameObject);
             }
         }
         

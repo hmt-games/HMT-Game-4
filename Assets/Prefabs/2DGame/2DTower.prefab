@@ -47,8 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floors: []
-  _width: 0
-  _depth: 0
 --- !u!114 &8248771331484095649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +64,6 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 6849845986495876969}
   - {fileID: 6192663151058750467}
 --- !u!114 &6192663151058750467
 MonoBehaviour:

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public class Tower: NetworkBehaviour
+public class Tower: MonoBehaviour
 {
 
     /// <summary>
@@ -14,12 +14,10 @@ public class Tower: NetworkBehaviour
     /// <summary>
     /// The number of cells in the x direction
     /// </summary>
-    [Networked]
     public int width { get; set; }
     /// <summary>
     /// The number of cells in the z direction
     /// </summary>
-    [Networked]
     public int depth { get; set; }
 
 

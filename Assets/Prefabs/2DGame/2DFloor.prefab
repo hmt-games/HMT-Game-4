@@ -47,9 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentTower: {fileID: 0}
-  _floorNumber: 0
-  _SizeX: 0
-  _SizeY: 0
 --- !u!114 &6143930268038059325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,7 +64,6 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 2120256925540992092}
   - {fileID: 2876352667691497223}
 --- !u!114 &2876352667691497223
 MonoBehaviour:

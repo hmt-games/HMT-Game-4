@@ -102,8 +102,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileType: 0
   parentFloor: {fileID: 0}
-  _gridX: 0
-  _gridZ: 0
   harvestBotModeSO: {fileID: 11400000, guid: d2212005799e142fbb2a6437a1aa93c4, type: 2}
   sprayBotModeSO: {fileID: 11400000, guid: ca376b38b7a114d50995a050e4d47bf0, type: 2}
   pickBotModeSO: {fileID: 11400000, guid: 06254ed14356d49f7bd2ce77c6de9155, type: 2}
@@ -128,7 +126,6 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 6106119669913260152}
   - {fileID: 5446520158115791712}
 --- !u!114 &5446520158115791712
 MonoBehaviour:

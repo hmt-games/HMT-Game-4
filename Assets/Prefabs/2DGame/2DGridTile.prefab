@@ -449,7 +449,6 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 1683917860028085507}
-  - {fileID: -7170111954412572750}
 --- !u!114 &1683917860028085507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,14 +522,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c0e9832230742899e1684175e7b2359, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileType: 0
   parentFloor: {fileID: 0}
-  _gridX: 0
-  _gridZ: 0
   plants: []
   soilConfig: {fileID: 0}
   plantCount: 0
   plantSlotOccupation: 000000000000000000
-  _NutrientLevels:
+  NutrientLevels:
     water: 0
     nutrients: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2505949527437129070

@@ -1,17 +1,11 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using Fusion;
 using GameConstant;
 using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
-using UnityEngine.Serialization;
 
-public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
+public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
     /// <summary>
     /// Plants can in principle reach to multiple cells to draw resources from, but need to figure out the best way to represent this
     /// </summary>
@@ -19,7 +13,6 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
 
     public string ObjectID { get; private set; } = IPuppet.GenerateUniquePuppetID("plant");
 
-    [Networked]
     private float _rootMass { get; set; } = 0;
     public float RootMass {
         get {
@@ -30,7 +23,6 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
         }
     }
 
-    [Networked]
     private float _surfaceMass { get; set; } = 0;
     public float SurfaceMass {
         get {
@@ -46,17 +38,13 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
             return NutrientLevels.water;
         }
     }
-    [Networked]
     public float EnergyLevel { get; private set; } = 0;
 
-    [Networked]
     public float Health { get; private set; } = 0;
 
-    [Networked]
     public float Age { get; private set; } = 0;
 
-    [Networked]
-    public ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
+    public NutrientSolution NutrientLevels = NutrientSolution.Empty;
 
     public PlantConfig config;
 
@@ -198,10 +186,5 @@ public class PlantBehavior : NetworkBehaviour, IPuppetPerceivable {
         }
 
         return state;
-    }
-
-    public void DespawnPlant()
-    {
-        Runner.Despawn(transform.GetComponent<NetworkObject>());
     }
 }

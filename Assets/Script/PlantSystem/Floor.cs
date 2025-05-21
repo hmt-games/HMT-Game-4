@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Fusion;
 using HMT.Puppetry;
 
-public class Floor : NetworkBehaviour
+public class Floor : MonoBehaviour
 {
 
     /// <summary>
@@ -18,7 +17,6 @@ public class Floor : NetworkBehaviour
     /// <summary>
     /// What floor in the tower this is (0 is the ground)
     /// </summary>
-    [Networked]
     public int floorNumber { get; set; }
 
 

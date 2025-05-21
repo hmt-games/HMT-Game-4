@@ -101,13 +101,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentCell: {fileID: 0}
-  _EnergyLevel: 0
-  _Health: 0
-  _Age: 0
+  NutrientLevels:
+    water: 0
+    nutrients: {x: 0, y: 0, z: 0, w: 0}
   config: {fileID: 0}
   plantCurrentStage: 0
+  stageTransitionThreshold:
+  - 0
+  - 1.5
+  - 3
+  - 5.3
   hasFruit: 0
   maxHealthHistory: 10
+  boxCollider2D: {fileID: 0}
+  spriteRenderer: {fileID: 0}
 --- !u!114 &-4956473806349571746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,7 +132,6 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: -4454653274443710318}
   - {fileID: 8289123353580376793}
 --- !u!114 &8289123353580376793
 MonoBehaviour:

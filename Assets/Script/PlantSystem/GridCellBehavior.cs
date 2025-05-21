@@ -1,9 +1,9 @@
-using Fusion;
 using GameConstant;
 using Newtonsoft.Json.Linq;
 using HMT.Puppetry;
+using UnityEngine;
 
-public abstract class GridCellBehavior : NetworkBehaviour, IPuppetPerceivable
+public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable
 {
     public TileType tileType = TileType.Soil;
     
@@ -16,10 +16,8 @@ public abstract class GridCellBehavior : NetworkBehaviour, IPuppetPerceivable
     /// The x and y coordinates of the cell in the grid.
     /// Keep it as x,y instead of row, column because that will make it eaiser to think ahout for the agent interface.
     /// </summary>
-    [Networked]
     public int gridX { get; set; }
     //[FormerlySerializedAs("gridY")]
-    [Networked]
     public int gridZ { get; set; }
 
     public string ObjectID => $"cell_{parentFloor.floorNumber}_{gridX}_{gridZ}";

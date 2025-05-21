@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Fusion;
 using GameConstant;
 using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
@@ -22,8 +21,7 @@ public class SoilCellBehavior : GridCellBehavior
     //TODO: use this
     public bool[] plantSlotOccupation = new bool[GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE];
 
-    [Networked]
-    public ref NutrientSolution NutrientLevels => ref MakeRef<NutrientSolution>(new NutrientSolution(0));
+    public NutrientSolution NutrientLevels = NutrientSolution.Empty;
 
     private void Awake() {
         //NutrientLevels = NutrientSolution.Empty;
