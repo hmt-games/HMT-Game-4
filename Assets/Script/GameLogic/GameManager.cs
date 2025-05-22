@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     }
 
     //TODO: score goal should be configable in a separate config file, supplied to map generator
-    public void InitScoring(Dictionary<string, PlantConfig> plantConfigs)
+    public void InitScoring(Dictionary<string, PlantConfigSO> plantConfigs)
     {
         _currentScore = new Dictionary<string, int>();
         StringBuilder sb = new StringBuilder();

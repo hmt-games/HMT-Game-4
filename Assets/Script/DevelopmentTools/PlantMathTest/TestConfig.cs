@@ -32,7 +32,7 @@ public class PlantMathTestUnit
 [Serializable]
 public class SoilInitConfig
 {
-    public SoilConfig soilConfig;
+    public SoilConfigSO soilConfig;
     public NutrientSolution nutrientSolution;
 }
 
@@ -40,6 +40,6 @@ public class SoilInitConfig
 public class PlantInitConfig
 {
     public bool enable = true;
-    public PlantConfig plantConfig;
+    public PlantConfigSO plantConfig;
     public PlantInitInfo plantInitInfo;
 }

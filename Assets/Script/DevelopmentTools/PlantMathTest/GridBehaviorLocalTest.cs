@@ -35,7 +35,7 @@ public class GridBehaviorLocalTest : MonoBehaviour
     /// This will also probalby play in to renderer information.
     /// Could also impact bot mobility on the tile
     /// </summary>
-    public SoilConfig soilConfig;
+    public SoilConfigSO soilConfig;
 
     //TODO: use this
     public bool[] plantSlotOccupation = new bool[GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE];

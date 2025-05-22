@@ -46,7 +46,7 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
 
     public NutrientSolution NutrientLevels = NutrientSolution.Empty;
 
-    public PlantConfig config;
+    public PlantConfigSO config;
 
     public int plantCurrentStage = 0;
     private int _plantMaxStage = 3;

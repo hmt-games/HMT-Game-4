@@ -187,7 +187,7 @@ public class GameActions : MonoBehaviour
     /// <param name="species"></param>
     /// <param name="plantInitInfo"></param>
     /// <param name="targetGrid"></param>
-    public void Plant(PlantConfig species, PlantInitInfo plantInitInfo, SoilCellBehavior targetGrid)
+    public void Plant(PlantConfigSO species, PlantInitInfo plantInitInfo, SoilCellBehavior targetGrid)
     {
         int plantSlotIdx = targetGrid.plantCount;
         if (plantSlotIdx >= GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE)

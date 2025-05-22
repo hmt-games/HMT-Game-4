@@ -2,8 +2,8 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(menuName = "Config/Soil")]
-public class SoilConfig: ScriptableObject {
+[CreateAssetMenu(fileName = "Soil_", menuName = "Config/Soil")]
+public class SoilConfigSO: ScriptableObject {
 
     /// <summary>
     /// The maximum amount of water and each compound the soil can hold

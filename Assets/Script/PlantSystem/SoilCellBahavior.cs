@@ -15,7 +15,7 @@ public class SoilCellBehavior : GridCellBehavior
     /// This will also probalby play in to renderer information.
     /// Could also impact bot mobility on the tile
     /// </summary>
-    public SoilConfig soilConfig;
+    public SoilConfigSO soilConfig;
 
     public int plantCount = 0;
     //TODO: use this

@@ -27,8 +27,8 @@ public class MapGeneratorJSON : NetworkBehaviour
 
 
     [FormerlySerializedAs("_plantConfigs")] 
-    public Dictionary<string, PlantConfig> plantConfigs;
-    private Dictionary<string, SoilConfig> _soilConfigs;
+    public Dictionary<string, PlantConfigSO> plantConfigs;
+    private Dictionary<string, SoilConfigSO> _soilConfigs;
     // private Dictionary<string, GameObject> _name2Plant;
 
     private JObject _configJObject;
@@ -45,8 +45,8 @@ public class MapGeneratorJSON : NetworkBehaviour
     {
         if (Instance) Destroy(this.gameObject);
         else Instance = this;
-        plantConfigs = new Dictionary<string, PlantConfig>();
-        _soilConfigs = new Dictionary<string, SoilConfig>();
+        plantConfigs = new Dictionary<string, PlantConfigSO>();
+        _soilConfigs = new Dictionary<string, SoilConfigSO>();
         // _name2Plant = new Dictionary<string, GameObject>();
         _configJObject = JObject.Parse(configJSON.text);
     }
@@ -295,7 +295,7 @@ public class MapGeneratorJSON : NetworkBehaviour
             return;
         }
         
-        PlantConfig plantConfig = ScriptableObject.CreateInstance<PlantConfig>();
+        PlantConfigSO plantConfig = ScriptableObject.CreateInstance<PlantConfigSO>();
 
         plantConfig.speciesName = configName;
         plantConfig.waterCapacity = (float)planConfigJToken["capacities"];
@@ -316,7 +316,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         JToken soilConfigJToken = _configJObject[configName];
         float water = (float)soilConfigJToken["capacities"];
 
-        SoilConfig nSoilConfig = ScriptableObject.CreateInstance<SoilConfig>();
+        SoilConfigSO nSoilConfig = ScriptableObject.CreateInstance<SoilConfigSO>();
         nSoilConfig.drainRate = (float)soilConfigJToken["drainTime"];
         nSoilConfig.waterCapacity = water;
 

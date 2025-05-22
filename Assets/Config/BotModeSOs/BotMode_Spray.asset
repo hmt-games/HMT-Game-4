@@ -20,5 +20,15 @@ MonoBehaviour:
   - move
   - moveto
   - spray
+  - useStation
   movementSpeed: 1
   sensingRange: {x: 3, y: 3}
+  actionTimeData:
+  - action: useStation
+    time: 0
+  - action: move
+    time: 1
+  - action: moveto
+    time: 1
+  - action: spray
+    time: 1
