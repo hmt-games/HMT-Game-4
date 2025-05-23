@@ -7,7 +7,6 @@ using GameConstant;
 using UnityEngine;
 using UnityEngine.UI;
 using WebSocketSharp;
-using GameConfig;
 
 public class FarmPuppetBot : PuppetBehavior
 {
@@ -32,10 +31,7 @@ public class FarmPuppetBot : PuppetBehavior
 
     #region External States
 
-    public float reservoirCapacity = 100.0f;
-    public int plantInventoryCapacity = 8;
-    public List<PlantBehavior> plantInventory;
-    public NutrientSolution reservoirInventory;
+    public BotInventory Inventory;
     
     #endregion
 
@@ -54,9 +50,8 @@ public class FarmPuppetBot : PuppetBehavior
         puppetIDPrefix = "farm_bot";
         _animator = GetComponent<Animator>();
         progressBar.gameObject.SetActive(false);
-        
-        plantInventory = new List<PlantBehavior>();
-        reservoirInventory = NutrientSolution.Empty;
+
+        Inventory = new BotInventory(false, false, 0, 0);
 
         _botModeConfig = GameManager.Instance.DefaultBotMode;
 
@@ -64,8 +59,6 @@ public class FarmPuppetBot : PuppetBehavior
         RegisterAction("interact", Interact);
 
         RegisterAction("move_to", ActionNotImplemented);
-        RegisterAction("pick_up", ActionNotImplemented);
-        RegisterAction("put_down", ActionNotImplemented);
         // RegisterAction("till", ActionNotImplemented);
 
     }
@@ -98,8 +91,8 @@ public class FarmPuppetBot : PuppetBehavior
             RegisterAction("move", Move);
             RegisterAction("interact", Interact);
             RegisterAction("move_to", ActionNotImplemented);
-            RegisterAction("pick_up", ActionNotImplemented);
-            RegisterAction("put_down", ActionNotImplemented);
+            RegisterAction("pick_up", PickUp);
+            RegisterAction("put_down", PutDown);
 
             foreach (string action in _botModeConfig.supportedActions) {
                 switch (action) {
@@ -126,6 +119,50 @@ public class FarmPuppetBot : PuppetBehavior
             }
 
         }
+    }
+
+    private IEnumerator PickUp(PuppetCommand command)
+    {
+        GridCellBehavior grid = GetCurrentTile();
+        if (!grid.hasInventoryDrop)
+        {
+            command.SendIllegalActionResponse("Tile does not have a inventory on it");
+            yield break;
+        }
+        
+        CurrentCommand = command;
+        float actionTime = _botModeConfig.GetActionTime("pick_up") * GameManager.Instance.secondPerTick;
+        yield return StartProgressTimer(actionTime);
+
+        if (CurrentCommand.Command == PuppetCommandType.STOP) {
+            CurrentCommand = PuppetCommand.IDLE;
+            yield break;
+        }
+
+        grid.TakeInventory(ref Inventory);
+        CurrentCommand = PuppetCommand.IDLE;
+    }
+
+    private IEnumerator PutDown(PuppetCommand command)
+    {
+        GridCellBehavior grid = GetCurrentTile();
+        if (grid.hasInventoryDrop)
+        {
+            command.SendIllegalActionResponse("Tile already has a inventory on it");
+            yield break;
+        }
+        
+        CurrentCommand = command;
+        float actionTime = _botModeConfig.GetActionTime("put_down") * GameManager.Instance.secondPerTick;
+        yield return StartProgressTimer(actionTime);
+
+        if (CurrentCommand.Command == PuppetCommandType.STOP) {
+            CurrentCommand = PuppetCommand.IDLE;
+            yield break;
+        }
+        
+        grid.DropInventory(Inventory.DrawOff(Inventory.ReservoirInventory.water, Inventory.PlantInventory.Count));
+        CurrentCommand = PuppetCommand.IDLE;
     }
 
     private IEnumerator Till(PuppetCommand command)
@@ -182,13 +219,13 @@ public class FarmPuppetBot : PuppetBehavior
         {
             int plantIdx = (int)command.ActionParams["target"];
             
-            if (plantIdx > plantInventory.Count - 1)
+            if (plantIdx > Inventory.PlantInventory.Count - 1)
             {
                 command.SendIllegalActionResponse("Target Index for plant out of bound of plant inventory");
                 return;
             }
             
-            PlantBehavior plant = plantInventory[plantIdx];
+            PlantBehavior plant = Inventory.PlantInventory[plantIdx];
             if (plant.Age != 0.0f)
             {
                 command.SendIllegalActionResponse("Target plant is not a seed");
@@ -222,7 +259,7 @@ public class FarmPuppetBot : PuppetBehavior
             return;
         }
         
-        if (plantInventory.Count >= plantInventoryCapacity)
+        if (Inventory.PlantInventory.Count >= Inventory.PlantInventoryCapacity)
         {
             command.SendIllegalActionResponse("inventory capacity reached");
             return;
@@ -286,7 +323,7 @@ public class FarmPuppetBot : PuppetBehavior
             return;
         }
 
-        if (plantInventory.Count >= plantInventoryCapacity)
+        if (Inventory.PlantInventory.Count >= Inventory.PlantInventoryCapacity)
         {
             command.SendIllegalActionResponse("inventory capacity reached");
             return;
@@ -356,13 +393,12 @@ public class FarmPuppetBot : PuppetBehavior
 
     private void SetBotInventory(float _reservoirCapacity, int _plantInventoryCapacity)
     {
-        reservoirCapacity = _reservoirCapacity;
-        plantInventoryCapacity = _plantInventoryCapacity;
+        NutrientSolution reservoirInventory = Inventory.ReservoirInventory.DrawOff(_reservoirCapacity);
+        List<PlantBehavior> plantInventory = Inventory.PlantInventoryCapacity == 0
+            ? new List<PlantBehavior>(_plantInventoryCapacity)
+            : Inventory.PlantInventory.Take(_plantInventoryCapacity).ToList();
 
-        reservoirInventory = reservoirCapacity == 0 ? NutrientSolution.Empty : reservoirInventory.DrawOff(reservoirCapacity);
-        plantInventory = plantInventoryCapacity == 0
-            ? new List<PlantBehavior>()
-            : plantInventory.Take(plantInventoryCapacity).ToList();
+        Inventory = new BotInventory(_reservoirCapacity, _plantInventoryCapacity, reservoirInventory, plantInventory);
     }
 
     public IEnumerator SprayUp()
@@ -409,7 +445,7 @@ public class FarmPuppetBot : PuppetBehavior
             yield break;
         }
 
-        if (reservoirInventory != NutrientSolution.Empty)
+        if (Inventory.ReservoirInventory != NutrientSolution.Empty)
         {
             command.SendIllegalActionResponse("water inventory must be empty before sample");
             yield break;
@@ -436,8 +472,8 @@ public class FarmPuppetBot : PuppetBehavior
 
     public void DumpInventory()
     {
-        plantInventory = new List<PlantBehavior>();
-        reservoirInventory = NutrientSolution.Empty;
+        Inventory.PlantInventory = new List<PlantBehavior>(Inventory.PlantInventoryCapacity);
+        Inventory.ReservoirInventory = NutrientSolution.Empty;
         //TODO: refresh the inventory UI here
     }
     
@@ -555,8 +591,8 @@ public class FarmPuppetBot : PuppetBehavior
                 resp["command_queue"] = new JArray(_currentQueue.Select(c => c.HMTStateRep()));
                 resp["sensing_range_x"] = _botModeConfig.sensingRange.x;
                 resp["sensing_range_y"] = _botModeConfig.sensingRange.y;
-                resp["reservoir"] = reservoirInventory.ToFlatJSON();
-                resp["inventory"] = new JArray(plantInventory.Select(p => p.HMTStateRep(HMTStateLevelOfDetail.Visible)));
+                resp["reservoir"] = Inventory.ReservoirInventory.ToFlatJSON();
+                resp["inventory"] = new JArray(Inventory.PlantInventory.Select(p => p.HMTStateRep(HMTStateLevelOfDetail.Visible)));
                 goto case HMTStateLevelOfDetail.Visible;
 
             case HMTStateLevelOfDetail.Visible:

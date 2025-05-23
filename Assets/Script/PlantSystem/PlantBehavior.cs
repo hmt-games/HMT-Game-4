@@ -145,7 +145,9 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
         }
         
         Debug.Log($"plant display stage {plantCurrentStage}");
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
+        if (boxCollider2D == null) boxCollider2D = GetComponent<BoxCollider2D>();
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;
         if (plantCurrentStage == _plantMaxStage) {
             hasFruit = true;

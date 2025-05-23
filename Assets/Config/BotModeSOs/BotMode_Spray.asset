@@ -21,6 +21,8 @@ MonoBehaviour:
   - moveto
   - spray
   - useStation
+  - pick_up
+  - put_down
   movementSpeed: 1
   sensingRange: {x: 3, y: 3}
   actionTimeData:
@@ -31,4 +33,8 @@ MonoBehaviour:
   - action: moveto
     time: 1
   - action: spray
+    time: 1
+  - action: pick_up
+    time: 1
+  - action: put_down
     time: 1

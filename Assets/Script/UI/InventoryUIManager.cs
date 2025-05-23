@@ -115,8 +115,8 @@ public class InventoryUIManager : MonoBehaviour
         }
         else
         {
-            UpdateWaterInventoryUI(playerBot.reservoirInventory, playerBot.reservoirCapacity);
-            UpdatePlantInventoryUI(playerBot.plantInventory, playerBot.plantInventoryCapacity);
+            UpdateWaterInventoryUI(playerBot.Inventory.ReservoirInventory, playerBot.Inventory.ReservoirCapacity);
+            UpdatePlantInventoryUI(playerBot.Inventory.PlantInventory, playerBot.Inventory.PlantInventoryCapacity);
         }
     }
     

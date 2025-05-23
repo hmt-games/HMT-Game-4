@@ -24,16 +24,16 @@ MonoBehaviour:
   - moveto
   - sample
   - spray
-  - pick
   - plant
   - pluck
   - till
   - useStation
+  - pick_up
+  - put_down
+  - pick
   movementSpeed: 3
   sensingRange: {x: 3, y: 3}
   actionTimeData:
-  - action: useStation
-    time: 0
   - action: move
     time: 1
   - action: pickUp
@@ -48,11 +48,17 @@ MonoBehaviour:
     time: 1
   - action: spray
     time: 1
-  - action: pick
-    time: 1
   - action: plant
     time: 1
   - action: pluck
     time: 1
   - action: till
+    time: 1
+  - action: useStation
+    time: 1
+  - action: pick_up
+    time: 1
+  - action: put_down
+    time: 1
+  - action: pick
     time: 1

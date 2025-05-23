@@ -44,6 +44,7 @@ public class PlayerPuppetBot : FarmPuppetBot
         MoveInput();
         InteractInput();
         PerformBotAction();
+        DropTakeInventory();
     }
 
     #region Player Input
@@ -91,6 +92,20 @@ public class PlayerPuppetBot : FarmPuppetBot
             PuppetCommand cmd = new PuppetCommand(PuppetID, actionString);
             HMTPuppetManager.Instance.EnqueueCommand(cmd);
         }
+    }
+
+    private void DropTakeInventory()
+    {
+        string actionString = "";
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            actionString = GetCurrentTile().hasInventoryDrop ? "pick_up" : "put_down";
+        }
+        
+        if (actionString.Length == 0) return;
+        
+        PuppetCommand cmd = new PuppetCommand(PuppetID, actionString);
+        HMTPuppetManager.Instance.EnqueueCommand(cmd);
     }
 
     #endregion

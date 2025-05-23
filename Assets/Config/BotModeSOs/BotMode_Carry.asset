@@ -19,9 +19,9 @@ MonoBehaviour:
   supportedActions:
   - move
   - moveto
-  - pickUp
   - putDown
   - useStation
+  - pickUp
   movementSpeed: 3
   sensingRange: {x: 3, y: 3}
   actionTimeData:
@@ -31,7 +31,7 @@ MonoBehaviour:
     time: 1
   - action: moveto
     time: 1
-  - action: pickUp
-    time: 1
   - action: putDown
+    time: 1
+  - action: pickUp
     time: 1

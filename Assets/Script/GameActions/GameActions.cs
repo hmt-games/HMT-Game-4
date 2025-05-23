@@ -49,7 +49,7 @@ public class GameActions : MonoBehaviour
         int yield = Random.Range(PickConfig.harvestAmountMin, PickConfig.harvestAmountMax + 1);
         for (int i = 0; i < yield; i++)
         {
-            if (bot.plantInventory.Count > bot.plantInventoryCapacity) break;
+            if (bot.Inventory.PlantInventory.Count > bot.Inventory.PlantInventoryCapacity) break;
 
             GameObject nPlantObj =
                 Instantiate(plantPrefab, new Vector3(9999, 9999, -9999), quaternion.identity);
@@ -60,7 +60,7 @@ public class GameActions : MonoBehaviour
             nPlant.SetInitialProperties(_plantInitInfo);
             nPlant.GetComponent<SpriteRenderer>().sprite = nPlant.config.plantSprites[0];
 
-            bot.plantInventory.Add(nPlant);
+            bot.Inventory.PlantInventory.Add(nPlant);
         }
     }
 
@@ -105,14 +105,14 @@ public class GameActions : MonoBehaviour
         soil.plantCount -= 1;
         soil.plants.Remove(plant);
         
-        bot.plantInventory.Add(plant);
+        bot.Inventory.PlantInventory.Add(plant);
         plant.transform.SetParent(bot.transform, true);
         plant.transform.localPosition = Vector3.one * 9999.0f;
     }
 
     public bool RequestPlant(FarmPuppetBot bot)
     {
-        List<PlantBehavior> plants = bot.plantInventory;
+        List<PlantBehavior> plants = bot.Inventory.PlantInventory;
 
         if (plants.Count == 0) return false;
 
@@ -134,7 +134,7 @@ public class GameActions : MonoBehaviour
         plant.transform.SetParent(tile.transform.GetChild(1).GetChild(tile.plantCount - 1), true);
         plant.transform.localPosition = Vector3.zero;
 
-        bot.plantInventory.Remove(plant);
+        bot.Inventory.PlantInventory.Remove(plant);
     }
 
     /// <summary>
@@ -144,9 +144,9 @@ public class GameActions : MonoBehaviour
     /// <param name="nutrientSolution"></param>
     public void Spray(SoilCellBehavior targetGrid, FarmPuppetBot bot)
     {
-        float sprayAmount = Mathf.Min(bot.reservoirInventory.water, SprayConfig.SprayAmountPerAction);
+        float sprayAmount = Mathf.Min(bot.Inventory.ReservoirInventory.water, SprayConfig.SprayAmountPerAction);
         sprayAmount = Mathf.Min(targetGrid.RemainingWaterCapacity, sprayAmount);
-        targetGrid.NutrientLevels += bot.reservoirInventory.DrawOff(sprayAmount);
+        targetGrid.NutrientLevels += bot.Inventory.ReservoirInventory.DrawOff(sprayAmount);
     }
 
     public void SprayUp(StationCellBehavior tile, FarmPuppetBot bot)
@@ -161,11 +161,11 @@ public class GameActions : MonoBehaviour
         };
 
         float sprayUpAmount = Mathf.Min(SprayConfig.WaterAmount,
-            bot.reservoirCapacity - bot.reservoirInventory.water);
+            bot.Inventory.ReservoirCapacity - bot.Inventory.ReservoirInventory.water);
         NutrientSolution sprayUpSolution = new NutrientSolution(sprayUpAmount,
             nutrients * (sprayUpAmount * SprayConfig.NutrientConcentration));
 
-        bot.reservoirInventory += sprayUpSolution;
+        bot.Inventory.ReservoirInventory += sprayUpSolution;
     }
     
     /// <summary>
@@ -211,25 +211,25 @@ public class GameActions : MonoBehaviour
 
     public void Sample(SoilCellBehavior targetGrid, FarmPuppetBot puppet)
     {
-        puppet.reservoirInventory = targetGrid.NutrientLevels.DrawOff(1.0f);
-        InventoryUIManager.Instance.UpdateWaterInventoryUI(puppet.reservoirInventory, 1.0f);
+        puppet.Inventory.ReservoirInventory = targetGrid.NutrientLevels.DrawOff(1.0f);
+        InventoryUIManager.Instance.UpdateWaterInventoryUI(puppet.Inventory.ReservoirInventory, 1.0f);
         InventoryUIManager.Instance.ShowInventory();
     }
 
     public void Score(FarmPuppetBot bot)
     {
-        if (bot.plantInventoryCapacity == 0) return;
+        if (bot.Inventory.PlantInventoryCapacity == 0) return;
 
         Dictionary<string, int> submittedPlant = new Dictionary<string, int>();
-        for (int i = bot.plantInventory.Count - 1; i > -1; i--)
+        for (int i = bot.Inventory.PlantInventory.Count - 1; i > -1; i--)
         {
-            PlantBehavior plant = bot.plantInventory[i];
+            PlantBehavior plant = bot.Inventory.PlantInventory[i];
             if (plant.Age == 0)
             {
                 string plantName = plant.config.speciesName;
                 submittedPlant.TryAdd(plantName, 0);
                 submittedPlant[plantName] += 1;
-                bot.plantInventory.RemoveAt(i);
+                bot.Inventory.PlantInventory.RemoveAt(i);
                 Destroy(plant.gameObject);
             }
         }

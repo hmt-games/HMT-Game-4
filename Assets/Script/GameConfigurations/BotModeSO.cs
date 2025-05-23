@@ -84,7 +84,7 @@ public class OptionSelectorEditor : Editor
     private static readonly string[] allOptions = new[]
     {
         "move", "moveto", "harvest", "sample",
-        "spray", "pick", "pickUp", "putDown",
+        "spray", "pick", "pick_up", "put_down",
         "plant", "pluck", "till", "useStation"
     };
 

@@ -1,3 +1,4 @@
+using System;
 using GameConstant;
 using Newtonsoft.Json.Linq;
 using HMT.Puppetry;
@@ -24,6 +25,10 @@ public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable
     // this flag is checked so that bot will not walk onto another bot
     public bool botOnGrid = false;
 
+    [SerializeField] private GameObject inventoryDropSprite;
+    public bool hasInventoryDrop = false;
+    private BotInventory InventoryDrop;
+    
     public string ObjectID => $"cell_{parentFloor.floorNumber}_{gridX}_{gridZ}";
 
     /// <summary>
@@ -42,5 +47,22 @@ public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable
             {"bot_on_grid", botOnGrid}
         };
     }
-  
+
+    public void DropInventory(BotInventory botInventory)
+    {
+        hasInventoryDrop = true;
+        inventoryDropSprite.SetActive(true);
+        InventoryDrop = botInventory;
+    }
+
+    public void TakeInventory(ref BotInventory botInventory)
+    {
+        botInventory.TopOff(ref InventoryDrop);
+
+        if (InventoryDrop.ReservoirInventory.water == 0.0f && InventoryDrop.PlantInventory.Count == 0)
+        {
+            hasInventoryDrop = false;
+            inventoryDropSprite.SetActive(false);
+        }
+    }
 }
