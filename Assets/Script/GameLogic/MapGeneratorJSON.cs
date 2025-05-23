@@ -15,8 +15,8 @@ using UnityEngine.Serialization;
 
 public class MapGeneratorJSON : NetworkBehaviour
 {
-    [SerializeField] private TextAsset configJSON;
-    [SerializeField] private TextAsset towerJSON;
+    private TextAsset configJSON;
+    private TextAsset towerJSON;
     [SerializeField] private GameObject soilPrefab;
     [SerializeField] private GameObject stationPrefab;
     [SerializeField] private GridTheme grid2DTheme;
@@ -43,16 +43,21 @@ public class MapGeneratorJSON : NetworkBehaviour
     
     private void Awake()
     {
+        
+    }
+
+    private void Start()
+    {
+        configJSON = GameManager.Instance.gameConfig.configJSON;
+        towerJSON = GameManager.Instance.gameConfig.towerJSON;
+        
         if (Instance) Destroy(this.gameObject);
         else Instance = this;
         plantConfigs = new Dictionary<string, PlantConfigSO>();
         _soilConfigs = new Dictionary<string, SoilConfigSO>();
         // _name2Plant = new Dictionary<string, GameObject>();
         _configJObject = JObject.Parse(configJSON.text);
-    }
-
-    private void Start()
-    {
+        
         CreateTower();
     }
 

@@ -52,6 +52,20 @@ public class BotModeSO : ScriptableObject
         else
             actionTimeData.Add(new ActionTimeEntry { action = action, time = time });
     }
+    
+    internal void RemoveActionTime(string action)
+    {
+        _actionTimes.Remove(action);
+
+        for (int i = 0; i < actionTimeData.Count; i++)
+        {
+            if (actionTimeData[i].action == action)
+            {
+                actionTimeData.RemoveAt(i);
+                break;
+            }
+        }
+    }
 
     internal void ClearActionTimes()
     {
@@ -110,9 +124,15 @@ public class OptionSelectorEditor : Editor
                 Undo.RecordObject(botModeSO, "Toggle Action");
 
                 if (newIsEnabled)
+                {
                     botModeSO.supportedActions.Add(action);
+                    botModeSO.SetActionTime(action, 1.0f); // default
+                }
                 else
+                {
                     botModeSO.supportedActions.Remove(action);
+                    botModeSO.RemoveActionTime(action); // 🧠 Add this line!
+                }
             }
 
             if (newIsEnabled)

@@ -11,25 +11,31 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public Tower parentTower;
-    public PlayerPuppetBot player;
-    public long currentTick = 0;
-    public float secondPerTick = 1.0f;
+    [HideInInspector] public Tower parentTower;
+    [HideInInspector] public PlayerPuppetBot player;
 
-    public BotModeSO DefaultBotMode;
-
-    // Game Score
+    [Header("Game Config")]
+    public GameConfigSO gameConfig;
+    
+    [Header("Game Score Text")]
     [SerializeField] private TMP_Text scoreGoalText;
     [SerializeField] private TMP_Text scoreCurrentText;
     private Dictionary<string, int> _currentScore;
 
     [Header("bots")]
+    public BotModeSO DefaultBotMode;
     public GameObject puppetBot;
+    
+    [Header("Ticks")]
+    public long currentTick = 0;
+    public float secondPerTick = 1.0f;
     
     private void Awake()
     {
         if (Instance) Destroy(this.gameObject);
         else Instance = this;
+
+        secondPerTick = gameConfig.secondPerTick;
     }
 
     public void Tick()
@@ -48,12 +54,12 @@ public class GameManager : MonoBehaviour
         sb.Append("Goal: ");
         bool separator = false;
         
-        foreach (var kvp in plantConfigs)
+        foreach (var kvp in gameConfig.GetGameGoalDict())
         {
             if (separator) sb.Append(" | ");
             
             string plantName = kvp.Key;
-            sb.Append($"{plantName}: {10}");
+            sb.Append($"{plantName}: {kvp.Value}");
             _currentScore[plantName] = 0;
             
             if (!separator) separator = true;
@@ -92,39 +98,6 @@ public class GameManager : MonoBehaviour
     }
 
     #region temperary testing scripts
-
-    // golden finger for testing
-    private int plantStages = 0;
-    public void PlantNextStage()
-    {
-        plantStages = (plantStages + 1) % 4;
-        foreach (Floor floor in parentTower.floors)
-        {
-            GridCellBehavior[,] Cells = floor.Cells;
-            for (int i = 0; i < Cells.GetLength(0); i++)
-            {
-                for (int j = 0; j < Cells.GetLength(1); j++)
-                {
-                    SoilCellBehavior cell = Cells[i, j] as SoilCellBehavior;
-                    if (cell != null)
-                    {
-                        foreach (PlantBehavior plant in cell.plants)
-                        {
-                            plant.GetComponent<SpriteRenderer>().sprite = plant.config.plantSprites[plantStages];
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // Test script for bot Spawn
-    // TODO: Delete this later
-    [SerializeField] private GameObject bot;
-    public void SpawnBot()
-    {
-        Instantiate(bot, parentTower.floors[0].Cells[0, 0].transform.position, Quaternion.identity);
-    }
 
     public void SpawnPlayerPuppet()
     {

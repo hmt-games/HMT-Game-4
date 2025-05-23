@@ -18,7 +18,6 @@ MonoBehaviour:
   plantInventoryCapacity: 50
   supportedActions:
   - move
-  - moveto
   - pickUp
   - putDown
   - plant
@@ -29,8 +28,6 @@ MonoBehaviour:
   - action: useStation
     time: 0
   - action: move
-    time: 1
-  - action: moveto
     time: 1
   - action: pickUp
     time: 1

@@ -138,7 +138,7 @@ public class FarmPuppetBot : PuppetBehavior
         }
         
         CurrentCommand = command;
-        float actionTime = ActionTickTimeCost.Till * GameManager.Instance.secondPerTick;
+        float actionTime = _botModeConfig.GetActionTime("till") * GameManager.Instance.secondPerTick;
         yield return StartProgressTimer(actionTime);
 
         if (CurrentCommand.Command == PuppetCommandType.STOP) {
@@ -202,7 +202,7 @@ public class FarmPuppetBot : PuppetBehavior
 
     public IEnumerator StartPlant(PlantBehavior plant)
     {
-        float actionTime = ActionTickTimeCost.PlantPerStage * GameManager.Instance.secondPerTick;
+        float actionTime = _botModeConfig.GetActionTime("plant") * GameManager.Instance.secondPerTick;
         yield return StartProgressTimer(actionTime);
         if(CurrentCommand.Command == PuppetCommandType.IDLE || CurrentCommand.Command == PuppetCommandType.STOP) {
             CurrentCommand = PuppetCommand.IDLE;
@@ -266,7 +266,7 @@ public class FarmPuppetBot : PuppetBehavior
 
     public IEnumerator StartPick(PlantBehavior plant)
     {
-        float actionTime = ActionTickTimeCost.PluckPerStage * GameManager.Instance.secondPerTick;
+        float actionTime = _botModeConfig.GetActionTime("pick") * GameManager.Instance.secondPerTick;
         yield return StartProgressTimer(actionTime);
         if (CurrentCommand.Command == PuppetCommandType.STOP) {
             CurrentCommand = PuppetCommand.IDLE;
@@ -325,7 +325,7 @@ public class FarmPuppetBot : PuppetBehavior
 
     public IEnumerator StartHarvest(PlantBehavior plant)
     {
-        float actionTime = ActionTickTimeCost.Harvest * GameManager.Instance.secondPerTick;
+        float actionTime = _botModeConfig.GetActionTime("harvest") * GameManager.Instance.secondPerTick * plant.plantCurrentStage;
         yield return StartProgressTimer(actionTime);
         if (CurrentCommand.Command == PuppetCommandType.STOP) {
             CurrentCommand = PuppetCommand.IDLE;
@@ -367,7 +367,7 @@ public class FarmPuppetBot : PuppetBehavior
 
     public IEnumerator SprayUp()
     {
-        float actionTime = ActionTickTimeCost.SprayUp * GameManager.Instance.secondPerTick;
+        float actionTime = _botModeConfig.GetActionTime("spray") * GameManager.Instance.secondPerTick;
         yield return StartProgressTimer(actionTime);
 
         if (CurrentCommand.Command == PuppetCommandType.STOP) {
@@ -389,7 +389,7 @@ public class FarmPuppetBot : PuppetBehavior
         }
         
         CurrentCommand = command;
-        float actionTime = ActionTickTimeCost.Spray * GameManager.Instance.secondPerTick;
+        float actionTime = _botModeConfig.GetActionTime("spray") * GameManager.Instance.secondPerTick;
         yield return StartProgressTimer(actionTime);
 
         if (CurrentCommand.Command == PuppetCommandType.STOP) {
@@ -423,7 +423,7 @@ public class FarmPuppetBot : PuppetBehavior
         }
         
         CurrentCommand = command;
-        float actionTime = ActionTickTimeCost.Sample * GameManager.Instance.secondPerTick;
+        float actionTime = _botModeConfig.GetActionTime("sample") * GameManager.Instance.secondPerTick;
         yield return StartProgressTimer(actionTime);
         if (CurrentCommand.Command == PuppetCommandType.STOP) {
             CurrentCommand = PuppetCommand.IDLE;

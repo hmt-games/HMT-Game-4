@@ -263,8 +263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa39593c53264294a9f6eeba97af5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configJSON: {fileID: 4900000, guid: 2874a7f83d514353b7f25dcfa7fb36ef, type: 3}
-  towerJSON: {fileID: 4900000, guid: 216d1c12db89477aaa41eefc090e77bf, type: 3}
   soilPrefab: {fileID: 2505949527415372711, guid: b0d9a3063d2cf4f0c9d81c821a9dfac1,
     type: 3}
   stationPrefab: {fileID: 4141611712455103029, guid: 18303503c683b0b44acf391dea77682d,
@@ -11679,14 +11677,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentTower: {fileID: 0}
   player: {fileID: 0}
-  currentTick: 0
-  secondPerTick: 1
-  DefaultBotMode: {fileID: 11400000, guid: b6f7cdbc01dee3a4a96ed116bbca92b6, type: 2}
+  gameConfig: {fileID: 11400000, guid: 90669995ebdd6f246b07e11ad592fc30, type: 2}
   scoreGoalText: {fileID: 2125121191}
   scoreCurrentText: {fileID: 182560086}
+  DefaultBotMode: {fileID: 11400000, guid: b6f7cdbc01dee3a4a96ed116bbca92b6, type: 2}
   puppetBot: {fileID: 1553247983956851260, guid: 137e7a3f5d1a50846b03a813fe457bf8,
     type: 3}
-  bot: {fileID: 1553247983956851260, guid: 38a38a5b619c04ad7bcff75e127ad6a7, type: 3}
+  currentTick: 0
+  secondPerTick: 1
 --- !u!4 &1518213130
 Transform:
   m_ObjectHideFlags: 0

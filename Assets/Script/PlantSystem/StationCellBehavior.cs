@@ -6,14 +6,6 @@ using UnityEngine.Serialization;
 
 public class StationCellBehavior : GridCellBehavior
 {
-    [SerializeField] private BotModeSO harvestBotModeSO;
-    [SerializeField] private BotModeSO sprayBotModeSO;
-    [SerializeField] private BotModeSO pickBotModeSO;
-    [SerializeField] private BotModeSO plantBotModeSO;
-    [SerializeField] private BotModeSO tillBotModeSO;
-    [SerializeField] private BotModeSO sampleBotModeSO;
-    [SerializeField] private BotModeSO carryBotModeSO;
-    
     public BotModeSO Interact(FarmPuppetBot bot)
     {
         if (tileType == TileType.SprayAStation | tileType == TileType.SprayBStation |
@@ -30,18 +22,19 @@ public class StationCellBehavior : GridCellBehavior
             GameActions.Instance.Score(bot);
         }
 
+        GameConfigSO gameConfig = GameManager.Instance.gameConfig;
+        
         return tileType switch
         {
-            TileType.HarvestStation => harvestBotModeSO,
+            TileType.HarvestStation => gameConfig.harvest,
                TileType.SprayAStation 
             or TileType.SprayBStation
             or TileType.SprayCStation
-            or TileType.SprayDStation => sprayBotModeSO,
-            TileType.PluckStation => pickBotModeSO,
-            TileType.PlantStation => plantBotModeSO,
-            TileType.TillStation => tillBotModeSO,
-            TileType.SampleStation => sampleBotModeSO,
-            TileType.CarryStation => carryBotModeSO,
+            or TileType.SprayDStation => gameConfig.spray,
+            TileType.PluckStation => gameConfig.pick,
+            TileType.PlantStation => gameConfig.plant,
+            TileType.TillStation => gameConfig.till,
+            TileType.SampleStation => gameConfig.sample,
             _ => null
         };
     }
