@@ -127,10 +127,17 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] private GameObject puppetBot;
-    public void SpawnPlayerPuppet()
+    public void SpawnPlayerPuppet(bool randomPosition)
     {
-        int x = Random.Range(0, parentTower.floors[0].Cells.GetLength(0));
-        int y = Random.Range(0, parentTower.floors[0].Cells.GetLength(1));
+        int x, y;
+        if (randomPosition) {
+            x = Random.Range(0, parentTower.floors[0].Cells.GetLength(0));
+            y = Random.Range(0, parentTower.floors[0].Cells.GetLength(1));
+        }
+        else {
+            x = parentTower.width / 2;
+            y = parentTower.depth / 2;
+        }
         Debug.Log($"{parentTower == null}");
         Debug.Log($"{parentTower.floors == null}");
         GameObject nBotObj = Instantiate(puppetBot, parentTower.floors[0].Cells[x, y].transform.position, Quaternion.identity);

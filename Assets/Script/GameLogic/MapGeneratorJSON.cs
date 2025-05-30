@@ -15,11 +15,14 @@ using UnityEngine.Serialization;
 
 public class MapGeneratorJSON : NetworkBehaviour
 {
+    [Header("Asset References")]
     [SerializeField] private TextAsset configJSON;
     [SerializeField] private TextAsset towerJSON;
+    [SerializeField] private GridTheme grid2DTheme;
+
+    [Header("Prefabs")]
     [SerializeField] private GameObject soilPrefab;
     [SerializeField] private GameObject stationPrefab;
-    [SerializeField] private GridTheme grid2DTheme;
     [SerializeField] private GameObject plantPrefab;
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private GameObject floorPrefab;
@@ -32,7 +35,11 @@ public class MapGeneratorJSON : NetworkBehaviour
     // private Dictionary<string, GameObject> _name2Plant;
 
     private JObject _configJObject;
-    
+
+    [Header("Bot Spawning")]
+    public int botCount = 1; // Number of bots to spawn, can be set in the inspector
+    public bool randomizeBotLocation = true; // Whether to randomize bot spawn location
+
     public int _width;
     public int _depth;
     public int _height;
@@ -82,8 +89,8 @@ public class MapGeneratorJSON : NetworkBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         //GameManager.Instance.SpawnBot();
-        for (int i = 0; i < 1; i++)
-            GameManager.Instance.SpawnPlayerPuppet();
+        for (int i = 0; i < botCount; i++)
+            GameManager.Instance.SpawnPlayerPuppet(randomizeBotLocation);
     }
 
 
