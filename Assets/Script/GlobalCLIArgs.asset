@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f4d206b12e09c341ab85a8284949b1c, type: 3}
+  m_Name: GlobalCLIArgs
+  m_EditorClassIdentifier: 
+  FlagMarker: '-'
+  enableHelpFlag: 0
+  HelpFlag: help
+  helpMessage: 
+  argSpecs:
+  - flag: hmtsocketport
+    type: 1
+    helpMessage: The port used by the HMTPuppetryInterface to listen on for the server.
+  - flag: hmtapikeys
+    type: 0
+    helpMessage: Whether to issue api keys to authenticate requests on sockets or
+      not.
+  - flag: hmtsequentialservices
+    type: 0
+    helpMessage: Whether to assign sequential service targets for puppets, or to
+      assign them as random UUIDs

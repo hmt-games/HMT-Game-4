@@ -11,11 +11,19 @@ namespace HMT.Puppetry {
     public class HMTPuppetManager : MonoBehaviour {
         public static HMTPuppetManager Instance { get; private set; }
         private static int SERVICE_TARGET_COUNTER = 0;
+                     
 
         public enum PuppetryStatus {
             Intializing,
             Running,
             Paused
+        }
+
+        public enum PriorityCollisionPolicy {
+            Duplicates,
+            Unique,
+            NextHighest,
+            NextLowest,
         }
 
         public PuppetryStatus Status { get; private set; } = PuppetryStatus.Intializing;
@@ -31,15 +39,18 @@ namespace HMT.Puppetry {
         public bool useSequentialServiceTargets = false;
         [Tooltip("Whether the puppet manager should use API keys to authenticate calls to service targets.")]
         public bool useAPIKeys = true;
+        [Tooltip("How the system should treat multiple agent connections using the same priority level. If Duplicates is selected, multiple agents can connect with the same priority level. If Unique is selected, the first agent to connect will be allowed and all others will be rejected. If NextHighest or NextLowest are selected, the system will assign the next highest or lowest priority level to the new connection.")]
+        public PriorityCollisionPolicy priorityCollisionPolicy = PriorityCollisionPolicy.Duplicates;
         [Tooltip("The threshold for automatic responses to commands. If a Command is not responded to by the target puppet in this time, a generic acknoweldgement will be sent. Note that this is in terms of unscaledTime not regular time so it does not respect speed up or pausing.")]
         public float autoResponseThreshold = 3f;
         [Tooltip("The default priority level for agent commands that do not specify on registration. Must be within a byte range.")]
         [Range(0, 255)]
         public int defaultCommandPriority = 128;
 
+        public CLIArgParser argParser = null;
+
         internal HttpServer server = null;
 
-        private ArgParser Args;
         private ConcurrentQueue<PuppetCommand> commandQueue;
         private List<(float time, PuppetCommand puppet)> commandsInFlight;
         private Dictionary<string, IPuppet> PuppetIndex = new Dictionary<string, IPuppet>();
@@ -76,14 +87,9 @@ namespace HMT.Puppetry {
             } else {
                 Destroy(this);
             }
-            Args = new ArgParser();
-            Args.AddArg("hmtsocketport", ArgParser.ArgType.One);
-            Args.AddArg("hmtapikeys", ArgParser.ArgType.Flag);
-            Args.AddArg("hmtsequentialservices", ArgParser.ArgType.Flag);
-            Args.ParseArgs();
 
-            useSequentialServiceTargets = Args.GetArgValue("hmtsequentialservices", useSequentialServiceTargets);
-            useAPIKeys = Args.GetArgValue("hmtapikeys", useAPIKeys);
+            useSequentialServiceTargets |= argParser.Get("hmtsequentialservices").IsSet;
+            useAPIKeys |= argParser.Get("hmtapikeys").IsSet;
 
             PuppetIndex = new Dictionary<string, IPuppet>();
 
@@ -106,7 +112,7 @@ namespace HMT.Puppetry {
         }
 
         public void StartHMTServer() {
-            socketPort = Args.GetArgValue("hmtsocketport", socketPort);
+            socketPort = argParser.Get("hmtsocketport").GetValue(socketPort);
 
             if (socketPort == 80) {
                 Debug.LogWarning("HMTPuppetManager Socket set to Port 80, this might cause permissions issues.");
@@ -141,7 +147,42 @@ namespace HMT.Puppetry {
                         e.SendBasicResponse((int)HttpStatusCode.BadRequest, "Puppet ID not found in Puppet Index");
                         return;
                     }
-                    
+
+                    switch(priorityCollisionPolicy) {
+                        case PriorityCollisionPolicy.Duplicates:
+                            break;
+                        case PriorityCollisionPolicy.Unique:
+                            if (configsByPuppet.ContainsKey(puppetId)) {
+                                foreach(AgentServiceRecord record in configsByPuppet[puppetId]) {
+                                    if (record.CommandPriority == priority) {
+                                        e.SendBasicResponse((int)HttpStatusCode.Conflict, $"Puppet already has an agent connection with priority {priority}. Choose a different level.");
+                                    }
+                                }
+                                return;
+                            }
+                            break;
+                        case PriorityCollisionPolicy.NextHighest:
+                            if (configsByPuppet.ContainsKey(puppetId)) {
+                                foreach (AgentServiceRecord record in configsByPuppet[puppetId]) {
+                                    if (record.CommandPriority == priority) {
+                                        priority--;
+                                    }
+                                }
+                            }
+                            break;
+                        case PriorityCollisionPolicy.NextLowest:
+                            if (configsByPuppet.ContainsKey(puppetId)) {
+                                foreach (AgentServiceRecord record in configsByPuppet[puppetId]) {
+                                    if (record.CommandPriority == priority) {
+                                        priority++;
+                                    }
+                                }
+                            }
+                            break;
+                    }
+
+
+
                     AgentServiceRecord config = LaunchNewServiceTarget(agentId, puppetId, priority);
 
                     JObject response = new JObject {
