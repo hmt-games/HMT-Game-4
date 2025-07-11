@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using GameConstant;
 using UnityEngine;
 
-public class PlayerPuppetBot : FarmPuppetBot
+public class PlayerPuppetBot : OldFarmPuppetBot
 {
     private bool _playerEmbodied = false;
 

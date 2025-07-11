@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public GameObject puppetBot;
     
     [Header("Ticks")]
-    public long currentTick = 0;
+    public ulong currentTick = 0; //At 1 sec/this, this should allow for several millenia of game time
     public float secondPerTick = 1.0f;
     
     private void Awake()

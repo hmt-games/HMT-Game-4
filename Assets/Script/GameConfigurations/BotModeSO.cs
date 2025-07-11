@@ -14,15 +14,18 @@ public class ActionTimeEntry
 [CreateAssetMenu(fileName = "BotMode_", menuName = "Config/BotMode")]
 public class BotModeSO : ScriptableObject
 {
+
+
+
     [Header("Bot Mode")]
-    public BotMode botMode;
     public string botModeName;
 
     [Header("Inventory Capacity")]
     [Range(0, 100)] public float reservoirCapacity;
     [Range(0, 100)] public int plantInventoryCapacity;
 
-    public List<string> supportedActions = new List<string>();
+    [SerializeField]
+    public List<ActionTimeEntry> supportedActions = new List<ActionTimeEntry>();
     // defined in tiles per game tick
     // e.g. game tick rate = 1 sec / tick
     //      movementSpeed = 2
@@ -32,45 +35,59 @@ public class BotModeSO : ScriptableObject
     public Vector2Int sensingRange;
     
     // bot action speed
-    public List<ActionTimeEntry> actionTimeData = new();
+    //public List<ActionTimeEntry> actionTimeData = new();
 
-    private Dictionary<string, float> _actionTimes = new();
+    [Header("Bot Appearance")]
+    public Sprite hatSprite;
 
-    public float GetActionTime(string action)
-    {
-        return _actionTimes.TryGetValue(action, out var value) ? value : 1.0f;
+    public bool ActionSupported(string action) {
+        // Check if the action is supported by this bot mode
+        return supportedActions.Exists(entry => entry.action == action && !float.IsNaN(entry.time));
     }
 
-    internal void SetActionTime(string action, float time)
-    {
-        _actionTimes[action] = time;
-
-        // Maintain serialized data for persistence
-        var entry = actionTimeData.Find(e => e.action == action);
-        if (entry != null)
-            entry.time = time;
-        else
-            actionTimeData.Add(new ActionTimeEntry { action = action, time = time });
-    }
-    
-    internal void RemoveActionTime(string action)
-    {
-        _actionTimes.Remove(action);
-
-        for (int i = 0; i < actionTimeData.Count; i++)
-        {
-            if (actionTimeData[i].action == action)
-            {
-                actionTimeData.RemoveAt(i);
-                break;
-            }
-        }
+    public float GetActionTime(string action) {
+        // Get the time for the specified action, or return NaN if not supported
+        var entry = supportedActions.Find(e => e.action == action);
+        return entry != null ? entry.time : float.NaN;
     }
 
-    internal void ClearActionTimes()
-    {
-        _actionTimes.Clear();
-    }
+    //private Dictionary<string, float> _actionTimes = new();
+
+    //public float GetActionTime(string action)
+    //{
+    //    return _actionTimes.TryGetValue(action, out var value) ? value : 1.0f;
+    //}
+
+    //internal void SetActionTime(string action, float time)
+    //{
+    //    _actionTimes[action] = time;
+
+    //    // Maintain serialized data for persistence
+    //    var entry = actionTimeData.Find(e => e.action == action);
+    //    if (entry != null)
+    //        entry.time = time;
+    //    else
+    //        actionTimeData.Add(new ActionTimeEntry { action = action, time = time });
+    //}
+
+    //internal void RemoveActionTime(string action)
+    //{
+    //    _actionTimes.Remove(action);
+
+    //    for (int i = 0; i < actionTimeData.Count; i++)
+    //    {
+    //        if (actionTimeData[i].action == action)
+    //        {
+    //            actionTimeData.RemoveAt(i);
+    //            break;
+    //        }
+    //    }
+    //}
+
+    //internal void ClearActionTimes()
+    //{
+    //    _actionTimes.Clear();
+    //}
 }
 
 #if UNITY_EDITOR
@@ -81,12 +98,7 @@ public class BotModeSO : ScriptableObject
 [CustomEditor(typeof(BotModeSO))]
 public class OptionSelectorEditor : Editor
 {
-    private static readonly string[] allOptions = new[]
-    {
-        "move", "moveto", "harvest", "sample",
-        "spray", "pick", "pick_up", "put_down",
-        "plant", "pluck", "till", "useStation"
-    };
+
 
     private BotModeSO botModeSO;
 
@@ -94,10 +106,17 @@ public class OptionSelectorEditor : Editor
     {
         botModeSO = (BotModeSO)target;
 
-        foreach (var entry in botModeSO.actionTimeData)
-        {
-            botModeSO.SetActionTime(entry.action, entry.time);
+        if(botModeSO.supportedActions.Count < GLOBAL_CONSTANTS.ACTION_NAMES.Length) {
+            // Initialize supportedActions with all actions if not already set
+            foreach (var action in GLOBAL_CONSTANTS.ACTION_NAMES) {
+                botModeSO.supportedActions.Add(new ActionTimeEntry() { action = action, time = float.NaN });
+            }
         }
+
+        //foreach (var entry in botModeSO.actionTimeData)
+        //{
+        //    botModeSO.SetActionTime(entry.action, entry.time);
+        //}
     }
 
     public override void OnInspectorGUI()
@@ -110,10 +129,10 @@ public class OptionSelectorEditor : Editor
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Supported Actions & Times", EditorStyles.boldLabel);
 
-        for (int i = 0; i < allOptions.Length; i++)
+        for (int i = 0; i < botModeSO.supportedActions.Count; i++)
         {
-            string action = allOptions[i];
-            bool isEnabled = botModeSO.supportedActions.Contains(action);
+            string action = botModeSO.supportedActions[i].action;
+            bool isEnabled = botModeSO.supportedActions[i].time != float.NaN;
 
             EditorGUILayout.BeginHorizontal();
 
@@ -125,50 +144,47 @@ public class OptionSelectorEditor : Editor
 
                 if (newIsEnabled)
                 {
-                    botModeSO.supportedActions.Add(action);
-                    botModeSO.SetActionTime(action, 1.0f); // default
+                    botModeSO.supportedActions[i].time = 1.0f; // default time
                 }
                 else
                 {
-                    botModeSO.supportedActions.Remove(action);
-                    botModeSO.RemoveActionTime(action); // 🧠 Add this line!
+                    botModeSO.supportedActions[i].time = float.NaN; // disable action
                 }
             }
 
             if (newIsEnabled)
             {
-                float time = botModeSO.GetActionTime(action);
+                float time = botModeSO.supportedActions[i].time;
                 float newTime = EditorGUILayout.FloatField(time, GUILayout.Width(60));
                 if (!Mathf.Approximately(newTime, time))
-                    botModeSO.SetActionTime(action, newTime);
+                    botModeSO.supportedActions[i].time = newTime;
             }
 
             EditorGUILayout.EndHorizontal();
         }
 
-        if (GUI.changed)
-        {
-            ApplyTimeToSO();
+        if (GUI.changed) {
+            //ApplyTimeToSO();
             EditorUtility.SetDirty(botModeSO);
         }
 
         serializedObject.ApplyModifiedProperties();
     }
 
-    private void ApplyTimeToSO()
-    {
-        botModeSO.ClearActionTimes();
-        foreach (var action in botModeSO.supportedActions)
-        {
-            float time = 1.0f;
+    //private void ApplyTimeToSO()
+    //{
+    //    botModeSO.ClearActionTimes();
+    //    foreach (var action in botModeSO.supportedActions)
+    //    {
+    //        float time = 1.0f;
 
-            var entry = botModeSO.actionTimeData.Find(e => e.action == action);
-            if (entry != null)
-                time = entry.time;
+    //        var entry = botModeSO.actionTimeData.Find(e => e.action == action);
+    //        if (entry != null)
+    //            time = entry.time;
 
-            botModeSO.SetActionTime(action, time);
-        }
-    }
+    //        botModeSO.SetActionTime(action, time);
+    //    }
+    //}
 }
 
 #endif

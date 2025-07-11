@@ -5,11 +5,12 @@ using GameConstant;
 using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
 
-public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
+[RequireComponent(typeof(BoxCollider2D), typeof(SpriteRenderer))]
+public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
     /// <summary>
     /// Plants can in principle reach to multiple cells to draw resources from, but need to figure out the best way to represent this
     /// </summary>
-    public SoilCellBehavior parentCell;
+    public SoilCellBehavior parentCell { get; set; }
 
     public string ObjectID { get; private set; } = IPuppet.GenerateUniquePuppetID("plant");
 
@@ -42,7 +43,7 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
 
     public float Health { get; private set; } = 0;
 
-    public float Age { get; private set; } = 0;
+    public int Age { get; private set; } = 0;
 
     public NutrientSolution NutrientLevels = NutrientSolution.Empty;
 
@@ -51,37 +52,87 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
     public int plantCurrentStage = 0;
     private int _plantMaxStage = 3;
     //TODO: make this configurable in JSON spec
-    public List<float> stageTransitionThreshold = new List<float> { 0.0f, 1.5f, 3.0f, 5.3f };
+    //public List<float> stageTransitionThreshold = new List<float> { 0.0f, 1.5f, 3.0f, 5.3f };
     public bool hasFruit = false;
 
-    public int maxHealthHistory = 10;
+    private bool _inInventory = false;
+    public bool InInventory {
+        get {
+            return _inInventory;
+        }
+        set {
+            _inInventory = value;
+            if (spriteRenderer != null) {
+                spriteRenderer.enabled = !value;
+            }
+        }
+    }
 
-    private float healthTotal = 0;
-    private Queue<float> healthHistory;
+    public Sprite CurrentStageSprite {
+        get {
+            return config.plantSprites[plantCurrentStage];
+        }
+    }
 
-    public BoxCollider2D boxCollider2D;
-    public SpriteRenderer spriteRenderer;
+
+    public float[] healthHistory;
+    public int currentHealthIndex { get; private set; }
+
+    private BoxCollider2D boxCollider2D;
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
         boxCollider2D = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        SetPlantState(new PlantStateData(config));
     }
 
-    public void SetInitialProperties(PlantInitInfo plantInitInfo) {
-        _rootMass = plantInitInfo.RootMass;
-        _surfaceMass = plantInitInfo.Height;
-        EnergyLevel = plantInitInfo.EnergyLevel;
-        healthHistory = new Queue<float>();
-        for (int i = 0; i < maxHealthHistory; i++) {
-            healthHistory.Enqueue(plantInitInfo.Health);
+    public void SetPlantState(PlantStateData state) {
+        RootMass = state.rootMass;
+        SurfaceMass = state.surfaceMass;
+        NutrientLevels = state.nutrientLevels;
+        EnergyLevel = state.energyLevel;
+        Age = state.age;
+        plantCurrentStage = state.currentStage;
+
+        healthHistory = state.healthHistory;
+        currentHealthIndex = state.currentHealthIndex;
+        
+        var tot = 0f;
+        var count = 0;
+        for (int i = 0; i < healthHistory.Length; i++) {
+            if (!float.IsNaN(healthHistory[i])) {
+                tot += healthHistory[i];
+                count++;
+            }
         }
+        Health = count > 0 ? tot / count : float.NaN; // Calculate average health from history
 
-        Age = plantInitInfo.Age;
-        NutrientLevels = new NutrientSolution(plantInitInfo.Water, plantInitInfo.Nutrient);
-
-        PlantNextStage();
+        spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
+        boxCollider2D.size = spriteRenderer.sprite.bounds.size;
+        CheckPlantStage();
     }
+
+    public PlantStateData GetPlantState() {
+        return new PlantStateData(config, NutrientLevels, RootMass, SurfaceMass, EnergyLevel, healthHistory, currentHealthIndex, Age, plantCurrentStage);
+    }
+
+
+    //public void SetInitialProperties(PlantInitInfo plantInitInfo) {
+    //    _rootMass = plantInitInfo.RootMass;
+    //    _surfaceMass = plantInitInfo.Height;
+    //    EnergyLevel = plantInitInfo.EnergyLevel;
+    //    healthHistory = new Queue<float>();
+    //    for (int i = 0; i < maxHealthHistory; i++) {
+    //        healthHistory.Enqueue(plantInitInfo.Health);
+    //    }
+
+    //    Age = plantInitInfo.Age;
+    //    NutrientLevels = new NutrientSolution(plantInitInfo.Water, plantInitInfo.Nutrient);
+
+    //    CheckPlantStage();
+    //}
 
 
     public NutrientSolution OnTick(NutrientSolution allocation) {
@@ -95,11 +146,20 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
         float tick_energy = Vector4.Dot(metabolismDraw.nutrients, config.metabolismFactor);
         Vector4 idealDraw = Vector4.one * config.metabolismRate;
         float tick_health = Mathf.Clamp01(tick_energy / Vector4.Dot(config.metabolismFactor.Positives(), idealDraw));
-        
+
         //HEALTH
-        if (healthHistory.Count == maxHealthHistory) healthHistory.Dequeue();
-        healthHistory.Enqueue(tick_health);
-        Health = healthHistory.Sum() / healthHistory.Count;
+        healthHistory[currentHealthIndex] = tick_health;
+        currentHealthIndex = (currentHealthIndex + 1) % healthHistory.Length;
+        var tot = 0f;
+        var count = 0;
+        for (int i = 0; i < healthHistory.Length; i++) {
+            if (!float.IsNaN(healthHistory[i])) {
+                tot += healthHistory[i];
+                count++;
+            }
+        }
+        Health = count > 0 ? tot / count : float.NaN; // Calculate average health from history
+
 
         //GROWTH
         //TODO: height cap stop grow
@@ -109,7 +169,7 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
             RootMass += growth * config.PercentToRoots(Age);
             SurfaceMass += growth * (1 - config.PercentToRoots(Age));
         }
-        PlantNextStage();
+        CheckPlantStage();
 
         //LEECH
         EnergyLevel += tick_energy;
@@ -124,6 +184,8 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
         return allocation;
     }
 
+    #region Bot Action Responses
+
     /// <summary>
     /// Handles when water lands on the plant.
     /// 
@@ -131,30 +193,60 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
     /// </summary>
     /// <param name="waterVolume"></param>
     /// <returns></returns>
-    public NutrientSolution OnWater(NutrientSolution waterVolume) {
+    public NutrientSolution OnSpray(NutrientSolution waterVolume) {
         if (config.onWaterCallbackBypass) return waterVolume;
         return waterVolume; //TODO do something meaningful here
     }
 
-    public void PlantNextStage() {
+    public PlantStateData OnHarvest() {
+        parentCell.RemovePlant(this);
+        PrefabPooler.Instance.ReleasePrefabInstance("plant", gameObject);
+        return this.GetPlantState();
+    }
+
+    public List<PlantStateData> OnPick() {
+        if(!hasFruit)
+            return new List<PlantStateData>();
+        List<PlantStateData> fruits = new List<PlantStateData>();
+        int yield = config.GenerateYield();
+        for(int i = 0; i < yield; i++) {
+            fruits.Add(new PlantStateData(config));
+        }
+
+        ClearFruits();
+        return fruits;
+    }
+
+    public NutrientSolution OnTill () {
+        parentCell.RemovePlant(this);
+        PrefabPooler.Instance.ReleasePrefabInstance("plant", gameObject);
+        return NutrientLevels;
+    }
+
+    #endregion
+
+    public void CheckPlantStage() {
         if (plantCurrentStage == _plantMaxStage) return;
 
-        while (SurfaceMass >= stageTransitionThreshold[plantCurrentStage + 1]) {
+        while (SurfaceMass >= config.stageTransitionThreshold[plantCurrentStage + 1]) {
             plantCurrentStage++;
             if (plantCurrentStage == _plantMaxStage) break;
         }
         
         Debug.Log($"plant display stage {plantCurrentStage}");
-        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
-        if (boxCollider2D == null) boxCollider2D = GetComponent<BoxCollider2D>();
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;
-        if (plantCurrentStage == _plantMaxStage) {
-            hasFruit = true;
-        }
-        else
-        {
+        hasFruit = plantCurrentStage == _plantMaxStage;
+    }
+
+    public void ClearFruits() {
+        if (hasFruit) {
             hasFruit = false;
+            plantCurrentStage = Mathf.Min(plantCurrentStage, _plantMaxStage - 1);
+            spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
+            boxCollider2D.size = spriteRenderer.sprite.bounds.size;
+            //TODO - Not sure about this change
+            SurfaceMass = config.stageTransitionThreshold[plantCurrentStage];
         }
     }
 
@@ -188,5 +280,25 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable {
         }
 
         return state;
+    }
+
+    public void OnInstantiateFromPool() {
+        return;
+    }
+
+    public void OnReleaseToPool() {
+        config = null;
+        parentCell = null;
+        NutrientLevels = NutrientSolution.Empty;
+        RootMass = 0;
+        SurfaceMass = 0;
+        EnergyLevel = 0;
+        Health = 0;
+        Age = 0;
+        plantCurrentStage = 0;
+        healthHistory = new float[0];
+        currentHealthIndex = 0;
+        hasFruit = false;
+        _inInventory = false;
     }
 }

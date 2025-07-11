@@ -6,7 +6,7 @@ using GameConstant;
 using UnityEngine;
 using WebSocketSharp;
 
-public class DefaultPuppetBot : FarmPuppetBot
+public class DefaultPuppetBot : OldFarmPuppetBot
 {
 
 }

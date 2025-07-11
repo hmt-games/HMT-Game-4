@@ -53,6 +53,15 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""d9334f8b-bcba-4065-b878-45e5b0d9b520"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -201,12 +210,45 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""749a1d41-5585-444c-b39c-b0b86ce72c60"",
+                    ""path"": ""<Keyboard>/pageUp"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FloorCamUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8202ced6-d7e3-4eb8-b20c-c4e425a8aa99"",
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FloorCamDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""925203a7-b0d6-4d57-94b8-96a360c85f8b"",
+                    ""path"": ""<Keyboard>/pageDown"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FloorCamDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8af2be22-a314-4704-9475-5ac3caec11cb"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -281,6 +323,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_FloorCamUp = m_Player.FindAction("FloorCamUp", throwIfNotFound: true);
         m_Player_FloorCamDown = m_Player.FindAction("FloorCamDown", throwIfNotFound: true);
+        m_Player_Select = m_Player.FindAction("Select", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -345,6 +388,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_FloorCamUp;
     private readonly InputAction m_Player_FloorCamDown;
+    private readonly InputAction m_Player_Select;
     public struct PlayerActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -352,6 +396,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @FloorCamUp => m_Wrapper.m_Player_FloorCamUp;
         public InputAction @FloorCamDown => m_Wrapper.m_Player_FloorCamDown;
+        public InputAction @Select => m_Wrapper.m_Player_Select;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -370,6 +415,9 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             @FloorCamDown.started += instance.OnFloorCamDown;
             @FloorCamDown.performed += instance.OnFloorCamDown;
             @FloorCamDown.canceled += instance.OnFloorCamDown;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -383,6 +431,9 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             @FloorCamDown.started -= instance.OnFloorCamDown;
             @FloorCamDown.performed -= instance.OnFloorCamDown;
             @FloorCamDown.canceled -= instance.OnFloorCamDown;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -450,5 +501,6 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnFloorCamUp(InputAction.CallbackContext context);
         void OnFloorCamDown(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
     }
 }

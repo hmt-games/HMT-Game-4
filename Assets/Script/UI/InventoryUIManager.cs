@@ -82,7 +82,7 @@ public class InventoryUIManager : MonoBehaviour
         }
     }
 
-    public void UpdatePlantInventoryUI(List<PlantBehavior> plants, int plantInventoryCapacity)
+    public void UpdatePlantInventoryUI(List<PlantStateData> plants, int plantInventoryCapacity)
     {
         for (int i = plantSlotParent.transform.childCount - 1; i >= 0; i--)
         {
@@ -96,12 +96,12 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         capacityText.text = $"{plants.Count} / {plantInventoryCapacity}";
-        foreach (PlantBehavior plant in plants)
+        foreach (PlantStateData plant in plants)
         {
             GameObject nSlot = Instantiate(plantSlotPrefab, plantSlotParent.transform);
             Image plantImage = nSlot.transform.GetChild(0).GetComponent<Image>();
 
-            plantImage.sprite = plant.spriteRenderer.sprite;
+            plantImage.sprite = plant.CurrentStageSprite;
             ScaleToFit(plantImage);
         }
     }

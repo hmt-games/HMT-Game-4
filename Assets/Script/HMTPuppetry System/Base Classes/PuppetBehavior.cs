@@ -42,6 +42,12 @@ namespace HMT.Puppetry {
             }
         }
 
+        protected virtual void OnDestroy() {
+            HMTPuppetManager.Instance.RemovePuppet(this);
+            ClearActionSet();
+            _currentQueue.Clear();
+        }
+
         #endregion
 
         #region Action Delegate Management
@@ -102,7 +108,7 @@ namespace HMT.Puppetry {
 
         #region BuiltInActions
 
-        public void ActionNotImplemented(PuppetCommand command) {
+        public void PuppetActionNotImplemented(PuppetCommand command) {
             command.SendActionNotImplementedResponse();
         }
 

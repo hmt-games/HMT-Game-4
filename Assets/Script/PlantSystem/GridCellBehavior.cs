@@ -4,10 +4,9 @@ using Newtonsoft.Json.Linq;
 using HMT.Puppetry;
 using UnityEngine;
 
-public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable
-{
+public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable {
     public TileType tileType = TileType.Soil;
-    
+
     /// <summary>
     /// The floor of a tower that this cell is on. 
     /// </summary>
@@ -21,13 +20,17 @@ public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable
     //[FormerlySerializedAs("gridY")]
     public int gridZ { get; set; }
 
+    public FarmBot botOccupant { get; set; } = null;
+
     // true if there is a bot currently on the tile.
     // this flag is checked so that bot will not walk onto another bot
     public bool botOnGrid = false;
 
+    public abstract bool AllowsDrops {get;}
+
     [SerializeField] private GameObject inventoryDropSprite;
     public bool hasInventoryDrop = false;
-    private BotInventory InventoryDrop;
+    public BotInventory InventoryDrop = BotInventory.None;
     
     public string ObjectID => $"cell_{parentFloor.floorNumber}_{gridX}_{gridZ}";
 
@@ -48,11 +51,17 @@ public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable
         };
     }
 
-    public void DropInventory(BotInventory botInventory)
+    public void AddInventoryBox(BotInventory botInventory)
     {
         hasInventoryDrop = true;
         inventoryDropSprite.SetActive(true);
         InventoryDrop = botInventory;
+    }
+
+    public void RemoveInventoryBox() {
+        hasInventoryDrop = false;
+        inventoryDropSprite.SetActive(false);
+        InventoryDrop = BotInventory.None;
     }
 
     public void TakeInventory(ref BotInventory botInventory)

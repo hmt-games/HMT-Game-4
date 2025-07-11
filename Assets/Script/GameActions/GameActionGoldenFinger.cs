@@ -82,7 +82,7 @@ public class GameActionGoldenFinger : MonoBehaviour
             float.Parse(_water.text),
             String2Vector4(_nutrients.text));
         
-        GameActions.Instance.Plant(species, plantInitInfo, _selectedSoil);
+        //GameActions.Instance.Plant(species, plantInitInfo, _selectedSoil);
         
         _plantConfig.gameObject.SetActive(false);
         GF_Info.gameObject.SetActive(false);

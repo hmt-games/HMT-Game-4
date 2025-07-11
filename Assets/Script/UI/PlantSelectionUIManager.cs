@@ -14,7 +14,7 @@ public class PlantSelectionUIManager : MonoBehaviour
     [SerializeField] private GameObject plantSlotParent;
     [SerializeField] private GameObject plantSlotPrefab;
 
-    private Action<PlantBehavior, FarmPuppetBot> _onSelectedCallback;
+    private Action<PlantStateData, OldFarmPuppetBot> _onSelectedCallback;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class PlantSelectionUIManager : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void ShowSelection(List<PlantBehavior> plants, FarmPuppetBot bot, Action<PlantBehavior, FarmPuppetBot> onSelectedCallback)
+    public void ShowSelection(List<PlantStateData> plants, OldFarmPuppetBot bot, Action<PlantStateData, OldFarmPuppetBot> onSelectedCallback)
     {
         _onSelectedCallback = onSelectedCallback;
 
@@ -33,13 +33,13 @@ public class PlantSelectionUIManager : MonoBehaviour
             Destroy(plantSlotParent.transform.GetChild(i).gameObject);
         }
 
-        foreach (PlantBehavior plant in plants)
+        foreach (PlantStateData plant in plants)
         {
             GameObject nSlot = Instantiate(plantSlotPrefab, plantSlotParent.transform);
             Image plantImage = nSlot.transform.GetChild(0).GetComponent<Image>();
             Button selectBtn = nSlot.transform.GetChild(1).GetComponent<Button>();
 
-            plantImage.sprite = plant.spriteRenderer.sprite;
+            plantImage.sprite = plant.CurrentStageSprite;
             ScaleToFit(plantImage);
             selectBtn.onClick.AddListener(delegate { PlantSelected(plant, bot); });
         }
@@ -47,7 +47,7 @@ public class PlantSelectionUIManager : MonoBehaviour
         Show();
     }
 
-    public void PlantSelected(PlantBehavior plant, FarmPuppetBot bot)
+    public void PlantSelected(PlantStateData plant, OldFarmPuppetBot bot)
     {
         _onSelectedCallback(plant, bot);
         _onSelectedCallback = null;
@@ -57,7 +57,8 @@ public class PlantSelectionUIManager : MonoBehaviour
     public void Cancel()
     {
         if (_onSelectedCallback != null)
-            _onSelectedCallback(null, null);
+            //_onSelectedCallback(null, null);
+            // We want to actually do something here.
         Hide();
     }
 

@@ -1,3 +1,4 @@
+using GameConstant;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,6 +50,13 @@ public class PlantConfigSO : ScriptableObject {
     public float leachingEnergyThreshold;
     public Vector4 leachingFactor;
 
+    public float fruitYieldAvg;
+    public float fruitYieldStdDev;
+
+    public int maxHealthHistory = 10;
+    public List<float> stageTransitionThreshold = new List<float> { 0.0f, 1.5f, 3.0f, 5.3f };
+
+
     /// <summary>
     /// Special plants that do not receive water should set this to true
     /// </summary>
@@ -64,6 +72,10 @@ public class PlantConfigSO : ScriptableObject {
         else {
             return 1 - Mathf.Clamp01((float)age / rootHeightTransition);
         }
+    }
+
+    public int GenerateYield() {
+        return Mathf.RoundToInt(MathF.Max(0, GLOBAL_FUNCTIONS.GausianRandom(fruitYieldAvg, fruitYieldStdDev, 3)));
     }
     
     public override string ToString()

@@ -15,6 +15,8 @@ using UnityEngine.Serialization;
 
 public class MapGeneratorJSON : NetworkBehaviour
 {
+    public static MapGeneratorJSON Instance { get; private set; }
+
     private TextAsset configJSON;
     private TextAsset towerJSON;
     [SerializeField] private GameObject soilPrefab;
@@ -37,13 +39,14 @@ public class MapGeneratorJSON : NetworkBehaviour
     public int depth;
     public int height;
 
-    public static MapGeneratorJSON Instance;
+
 
     public bool mapUpdated;
     
     private void Awake()
     {
-        
+        if (Instance) Destroy(this.gameObject);
+        else Instance = this;
     }
 
     private void Start()
@@ -51,8 +54,7 @@ public class MapGeneratorJSON : NetworkBehaviour
         configJSON = GameManager.Instance.gameConfig.configJSON;
         towerJSON = GameManager.Instance.gameConfig.towerJSON;
         
-        if (Instance) Destroy(this.gameObject);
-        else Instance = this;
+        
         plantConfigs = new Dictionary<string, PlantConfigSO>();
         _soilConfigs = new Dictionary<string, SoilConfigSO>();
         // _name2Plant = new Dictionary<string, GameObject>();
@@ -228,15 +230,15 @@ public class MapGeneratorJSON : NetworkBehaviour
         gridObj.GetComponent<SpriteRenderer>().color = (x + z + parentFloor.floorNumber) % 2 == 0 ? grid2DTheme.lightColor : grid2DTheme.darkColor;
         gridObj.transform.parent = parentFloor.gameObject.transform;
 
-        SoilCellBehavior nGrid = gridObj.GetComponent<SoilCellBehavior>();
-        nGrid.parentFloor = parentFloor;
-        nGrid.gridX = x;
-        nGrid.gridZ = z;
+        SoilCellBehavior nSoilCell = gridObj.GetComponent<SoilCellBehavior>();
+        nSoilCell.parentFloor = parentFloor;
+        nSoilCell.gridX = x;
+        nSoilCell.gridZ = z;
         
         // add soil config
         string soilConfig = (string)gridJObject["SoilConfig"];
         if (!_soilConfigs.ContainsKey(soilConfig)) CreateSoilConfig(soilConfig);
-        nGrid.soilConfig = _soilConfigs[soilConfig];
+        nSoilCell.soilConfig = _soilConfigs[soilConfig];
         
         // set properties
         Vector4 nutrients = Vector4FromJTokenList(gridJObject["NutrientLevels"]["nutrients"].ToList());
@@ -244,51 +246,41 @@ public class MapGeneratorJSON : NetworkBehaviour
             new NutrientSolution((float)gridJObject["NutrientLevels"]["water"], nutrients);
 
         //not sure if this works in networked version (INetworkStruct)
-        nGrid.NutrientLevels = nutrientSolution;
+        nSoilCell.NutrientLevels = nutrientSolution;
         
-        // add all plants
-        int plantIdx = 0;
-        nGrid.plants = new List<PlantBehavior>();
-        Transform plantsSlot = gridObj.transform.GetChild(1);
         JToken plants = gridJObject["Plants"];
-        if (plants is JObject plantsObj)
-        {
-            foreach (var property in plantsObj.Properties())
-            {
+        if (plants is JObject plantsObj) {
+            foreach (var property in plantsObj.Properties()) {
                 JToken plantJToken = property.Value;
-                CreatePlant(plantJToken, nGrid, plantsSlot.GetChild(plantIdx), plantIdx);
-                plantIdx++;
-                nGrid.plantCount++;
+                CreatePlant(plantJToken, nSoilCell);
             }
         }
 
-        parentFloor.Cells[x, z] = nGrid;
+        parentFloor.Cells[x, z] = nSoilCell;
     }
 
-    private void CreatePlant(JToken plantJToken, SoilCellBehavior parentGrid, Transform plantSlot, int plantIdx)
+    private void CreatePlant(JToken plantJToken, SoilCellBehavior parentCell)
     {
         string plantConfigName = (string)plantJToken["config"];
         if (!plantConfigs.ContainsKey(plantConfigName)) CreatePlantConfig(plantConfigName);
 
         //GameObject plantObj = Instantiate(plantPrefab, plantSlot.position, quaternion.identity, plantSlot);
-        GameObject plantObj = Instantiate(plantPrefab, plantSlot.position, Quaternion.identity);
-
-        plantObj.transform.SetParent(plantSlot);
+        GameObject plantObj = PrefabPooler.Instance.InstantiatePrefab("plant");
         PlantBehavior nPlant = plantObj.GetComponent<PlantBehavior>();
-        nPlant.config = plantConfigs[plantConfigName];
-        nPlant.SetInitialProperties(new PlantInitInfo(
+
+        NutrientSolution nutrientSolution = new NutrientSolution(
+            (float)plantJToken["water"],
+            Vector4FromJTokenList(plantJToken["nutrient"].ToList()));
+
+        nPlant.SetPlantState(new PlantStateData(
+            plantConfigs[plantConfigName],
+            nutrientSolution,
             (float)plantJToken["rootMass"],
             (float)plantJToken["height"],
             (float)plantJToken["energyLevel"],
-            (float)plantJToken["health"],
-            (float)plantJToken["age"],
-            (float)plantJToken["water"],
-            Vector4FromJTokenList(plantJToken["nutrient"].ToList())));
+            (int)plantJToken["age"]));
 
-        nPlant.GetComponent<SpriteRenderer>().sprite = nPlant.config.plantSprites[0];
-        nPlant.parentCell = parentGrid;
-
-        parentGrid.plants.Add(nPlant);
+        parentCell.AddPlant(nPlant);
     }
 
     private void CreatePlantConfig(string configName)

@@ -9,6 +9,10 @@ public class SoilCellBehavior : GridCellBehavior
 {
     public List<PlantBehavior> plants;
 
+    public int PlantCount { get => plants.Count; }
+
+    public Transform plantChildContainer;
+
     /// <summary>
     /// Soil configurations will contain stull like water capacity and maybe implications for nutrient levels.
     /// 
@@ -17,11 +21,13 @@ public class SoilCellBehavior : GridCellBehavior
     /// </summary>
     public SoilConfigSO soilConfig;
 
-    public int plantCount = 0;
+
     //TODO: use this
     public bool[] plantSlotOccupation = new bool[GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE];
 
     public NutrientSolution NutrientLevels = NutrientSolution.Empty;
+
+    public override bool AllowsDrops => true;
 
     private void Awake() {
         //NutrientLevels = NutrientSolution.Empty;
@@ -32,6 +38,8 @@ public class SoilCellBehavior : GridCellBehavior
             return soilConfig.waterCapacity - NutrientLevels.water;
         }
     }
+
+
 
     /// <summary>
     /// This is called as a regular heartbeat of the cellular automata game.
@@ -76,6 +84,9 @@ public class SoilCellBehavior : GridCellBehavior
 
     public override NutrientSolution OnWater(NutrientSolution volumes)
     {
+        foreach(PlantBehavior plant in plants.OrderBy(p => -p.SurfaceMass)) {
+            volumes = plant.OnSpray(volumes);
+        }
         NutrientLevels += volumes;
         return NutrientSolution.Empty;
     }
@@ -89,7 +100,7 @@ public class SoilCellBehavior : GridCellBehavior
                 goto case HMTStateLevelOfDetail.Visible;
             case HMTStateLevelOfDetail.Visible:
                 rep["saturation"] = NutrientLevels.water / soilConfig.waterCapacity;
-                rep["plant_count"] = plantCount;
+                rep["plant_count"] = PlantCount;
                 rep["plants"] = new JArray(plants.Select(p => p.HMTStateRep(lod)));
                 goto case HMTStateLevelOfDetail.Seen;
             case HMTStateLevelOfDetail.Seen:
@@ -97,5 +108,41 @@ public class SoilCellBehavior : GridCellBehavior
                 break;
         }
         return rep;
+    }
+
+    public void AddPlant(PlantStateData plantState) {
+        if (plants.Count >= GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE) {
+            Debug.LogWarning("Attempted to add plant to full soil cell");
+            return;
+        }
+        PlantBehavior newPlant = PrefabPooler.Instance.InstantiatePrefab("plant").GetComponent<PlantBehavior>();
+        newPlant.SetPlantState(plantState);
+        newPlant.transform.localPosition = Vector3.zero;
+        newPlant.parentCell = this;
+        plants.Add(newPlant);
+    }
+
+    public void AddPlant(PlantBehavior plant) {
+        if(plants.Count >= GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE) {
+            Debug.LogWarning("Attempted to add plant to full soil cell");
+            return;
+        }
+        
+        plants.Add(plant);
+        plant.transform.parent = plantChildContainer.GetChild(transform.childCount-1);
+        plant.transform.localPosition = Vector3.zero;
+        plant.parentCell = this;
+    }
+
+    public PlantBehavior RemovePlant(PlantBehavior plant) {
+        if (!plants.Contains(plant)) {
+            Debug.LogWarning("Attempted to remove plant that is not in the soil cell");
+            return null;
+        }
+
+        plants.Remove(plant);
+        plant.transform.parent = null;
+        plant.parentCell = null;
+        return plant;
     }
 }
