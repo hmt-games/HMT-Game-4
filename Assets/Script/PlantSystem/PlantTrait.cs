@@ -1,17 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using util.GameRepresentation;
 
 namespace PlantSystem.Traits {
 
-    public abstract class PlantTrait {
+    public abstract class PlantTrait : ScriptableObject {
 
         public abstract string TraitName { get; }
 
         public virtual int Order { get; }
+
+        public int MinStage = 0;
+
 
         /// <summary>
         /// Called when PlantData is set on the plant, for resetting any internal state
@@ -67,6 +67,10 @@ namespace PlantSystem.Traits {
         override public string TraitName => "Hearty Roots";
         override public int Order => 0;
 
+        public override void Setup(PlantBehavior plant) {
+            MinStage = 1;
+        }
+
         public override bool OnHarvest(PlantBehavior plant, FarmBot bot, ref PlantStateData altReturn) {
             PlantStateData currData = plant.GetPlantState();
 
@@ -106,10 +110,12 @@ namespace PlantSystem.Traits {
         override public string TraitName => "Filter Leaves";
         override public int Order => 0;
 
+        [SerializeField]
         // There needs to be a mechanism to set this from the config
         private Vector4 filterFactor = new Vector4(0.1f, 0.1f, 0.1f, 0.1f);
 
         public override void Setup(PlantBehavior plant) {
+            MinStage = plant.config.stageTransitionThreshold.Count / 2;
             filterFactor = new Vector4(.1f, .1f, .1f, .1f);
         }
 
@@ -120,6 +126,11 @@ namespace PlantSystem.Traits {
 
     public class SturdyTrunk : PlantTrait {
         override public string TraitName => "Sturdy Trunk";
+
+        public override void Setup(PlantBehavior plant) {
+            MinStage = plant.config.stageTransitionThreshold.Count / 2;
+            base.Setup(plant);
+        }
 
         public override bool OnBotEnter(PlantBehavior plant, FarmBot bot) {
             return false;

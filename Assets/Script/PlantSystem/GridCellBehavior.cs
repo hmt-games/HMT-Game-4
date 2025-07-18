@@ -22,10 +22,6 @@ public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable {
 
     public FarmBot botOccupant { get; set; } = null;
 
-    // true if there is a bot currently on the tile.
-    // this flag is checked so that bot will not walk onto another bot
-    public bool botOnGrid = false;
-
     public abstract bool AllowsDrops {get;}
 
     [SerializeField] private GameObject inventoryDropSprite;
@@ -42,12 +38,16 @@ public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable {
 
     public abstract NutrientSolution OnWater(NutrientSolution volumes);
 
+    public virtual bool CanBotEnter(FarmBot bot) {
+        return botOccupant == null;
+    }
+
     public virtual JObject HMTStateRep(HMTStateLevelOfDetail level) {
         return new JObject {
             {"x", gridX},
             {"y", gridZ},
             {"floor", parentFloor.floorNumber},
-            {"bot_on_grid", botOnGrid}
+            {"bot_on_grid", botOccupant != null}
         };
     }
 

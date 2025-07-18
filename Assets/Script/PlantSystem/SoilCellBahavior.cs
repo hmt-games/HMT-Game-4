@@ -39,6 +39,14 @@ public class SoilCellBehavior : GridCellBehavior
         }
     }
 
+    public override bool CanBotEnter(FarmBot bot) {
+        foreach (PlantBehavior plant in plants) {
+            if (!plant.OnBotEnter(bot)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     /// <summary>

@@ -139,17 +139,22 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
 
         // check if there is already a bot on target tile
         GridCellBehavior targetGrid = CurrentFloor.Cells[targetPos.x, targetPos.y];
-        if (targetGrid.botOnGrid) {
+        if (targetGrid.botOccupant != null) {
             command.SendIllegalActionResponse("Attempting to move on tile that also has a bot on it");
             return;
         }
-
-        CurrentCommand = command;
-        StartCoroutine(MoveCoroutine(direct));
+        else if (targetGrid.CanBotEnter(this)) {
+            command.SendIllegalActionResponse("Cannot move to tile, something is preventing it.");
+            return;
+        }
+        else {
+            CurrentCommand = command;
+            StartCoroutine(MoveCoroutine(direct));
+        }
     }
 
     IEnumerator MoveCoroutine(Vector2Int direction) {
-        CurrentTile.botOnGrid = false;
+        CurrentTile.botOccupant = null;
         GridCellBehavior targetGrid =
             CurrentFloor.Cells[CellIdx.x + direction.x, CellIdx.y + direction.y];
         //targetGrid.botOnGrid = true;
@@ -167,7 +172,6 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
         CellIdx += direction;
         transform.position = target;
         CurrentTile.botOccupant = this;
-        CurrentTile.botOnGrid = true;
 
         CurrentCommand = PuppetCommand.IDLE;
         //ActionState = BotActionState.Idle;
