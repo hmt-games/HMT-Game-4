@@ -5,7 +5,7 @@ using HMT.Puppetry;
 using UnityEngine;
 
 public abstract class GridCellBehavior : MonoBehaviour, IPuppetPerceivable {
-    public TileType tileType = TileType.Soil;
+    //public TileType tileType = TileType.Soil;
 
     /// <summary>
     /// The floor of a tower that this cell is on. 

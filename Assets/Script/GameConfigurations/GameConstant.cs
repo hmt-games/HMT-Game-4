@@ -13,22 +13,22 @@ namespace GameConstant
         D = 3
     }
 
-    public enum TileType
-    {
-        Soil,
-        HarvestStation,
-        PluckStation,
-        PlantStation,
-        SampleStation,
-        SprayAStation,
-        SprayBStation,
-        SprayCStation,
-        SprayDStation,
-        TillStation,
-        CarryStation,
-        DiscardStation,
-        ScoreStation
-    }
+    //public enum TileType
+    //{
+    //    Soil,
+    //    HarvestStation,
+    //    PluckStation,
+    //    PlantStation,
+    //    SampleStation,
+    //    SprayAStation,
+    //    SprayBStation,
+    //    SprayCStation,
+    //    SprayDStation,
+    //    TillStation,
+    //    CarryStation,
+    //    DiscardStation,
+    //    ScoreStation
+    //}
     
     public enum BotMode {
         Normal,
@@ -47,6 +47,20 @@ namespace GameConstant
         Reservoir,
         PlantInventory,
         Hybrid
+    }
+
+    public enum StationInteraction {
+        Score,
+        Trash,
+        SwitchBotMode,
+        Reservoir,
+        SeedBank
+    }
+
+    public enum StationInventoryRule {
+        None,
+        RequireEmpty,
+        DumpFirst
     }
 
 

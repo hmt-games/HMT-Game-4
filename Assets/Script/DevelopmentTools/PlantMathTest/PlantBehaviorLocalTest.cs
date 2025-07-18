@@ -133,7 +133,7 @@ public class PlantBehaviorLocalTest : MonoBehaviour
     /// <param name="waterVolume"></param>
     /// <returns></returns>
     public NutrientSolution OnWater(NutrientSolution waterVolume) {
-        if (config.onWaterCallbackBypass) return waterVolume;
+        //if (config.onWaterCallbackBypass) return waterVolume;
         return waterVolume; //TODO do something meaningful here
     }
     

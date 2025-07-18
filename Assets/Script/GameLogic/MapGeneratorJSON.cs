@@ -163,6 +163,7 @@ public class MapGeneratorJSON : NetworkBehaviour
                 break;
         }
 
+        //TODO - this will need to be rebuilt for the new station system
         // setup stations
         if (tileType != "Soil")
         {
@@ -174,53 +175,53 @@ public class MapGeneratorJSON : NetworkBehaviour
             nStation.gridZ = z;
 
             SpriteRenderer spriteRenderer = gridObj.GetComponent<SpriteRenderer>();
-            switch (tileType)
-            {
-                case "Harvest":
-                    nStation.tileType = TileType.HarvestStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.harvestStation;
-                    break;
-                case "Pluck":
-                    nStation.tileType = TileType.PluckStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.pluckStation;
-                    break;
-                case "Plant":
-                    nStation.tileType = TileType.PlantStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.plantStation;
-                    break;
-                case "Sample":
-                    nStation.tileType = TileType.SampleStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.sampleStation;
-                    break;
-                case "SprayA":
-                    nStation.tileType = TileType.SprayAStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.sprayAStation;
-                    break;
-                case "SprayB":
-                    nStation.tileType = TileType.SprayBStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.sprayBStation;
-                    break;
-                case "SprayC":
-                    nStation.tileType = TileType.SprayCStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.sprayCStation;
-                    break;
-                case "SprayD":
-                    nStation.tileType = TileType.SprayDStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.sprayDStation;
-                    break;
-                case "Till":
-                    nStation.tileType = TileType.TillStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.tillStation;
-                    break;
-                case "Discard":
-                    nStation.tileType = TileType.DiscardStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.discardStation;
-                    break;
-                case "Score":
-                    nStation.tileType = TileType.ScoreStation;
-                    spriteRenderer.sprite = SpriteResources.Instance.scoreStation;
-                    break;
-            }
+            //switch (tileType)
+            //{
+            //    case "Harvest":
+            //        nStation.tileType = TileType.HarvestStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.harvestStation;
+            //        break;
+            //    case "Pluck":
+            //        nStation.tileType = TileType.PluckStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.pluckStation;
+            //        break;
+            //    case "Plant":
+            //        nStation.tileType = TileType.PlantStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.plantStation;
+            //        break;
+            //    case "Sample":
+            //        nStation.tileType = TileType.SampleStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.sampleStation;
+            //        break;
+            //    case "SprayA":
+            //        nStation.tileType = TileType.SprayAStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.sprayAStation;
+            //        break;
+            //    case "SprayB":
+            //        nStation.tileType = TileType.SprayBStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.sprayBStation;
+            //        break;
+            //    case "SprayC":
+            //        nStation.tileType = TileType.SprayCStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.sprayCStation;
+            //        break;
+            //    case "SprayD":
+            //        nStation.tileType = TileType.SprayDStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.sprayDStation;
+            //        break;
+            //    case "Till":
+            //        nStation.tileType = TileType.TillStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.tillStation;
+            //        break;
+            //    case "Discard":
+            //        nStation.tileType = TileType.DiscardStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.discardStation;
+            //        break;
+            //    case "Score":
+            //        nStation.tileType = TileType.ScoreStation;
+            //        //spriteRenderer.sprite = SpriteResources.Instance.scoreStation;
+            //        break;
+            //}
 
             parentFloor.Cells[x, z] = nStation;
             return;
@@ -303,7 +304,6 @@ public class MapGeneratorJSON : NetworkBehaviour
         plantConfig.growthToleranceThreshold = (float)planConfigJToken["growthToleranceThreshold"];
         plantConfig.leachingEnergyThreshold = (float)planConfigJToken["leachingEnergyThreshold"];
         plantConfig.leachingFactor = Vector4FromJTokenList(planConfigJToken["leachingFactor"].ToList());
-        plantConfig.onWaterCallbackBypass = Convert.ToBoolean((int)planConfigJToken["onWaterCallbackBypass"]);
         plantConfig.plantSprites = PlantToSpriteCapturer.Instance.CaptureAllStagesAtOnce();
         plantConfigs[configName] = plantConfig;
     }

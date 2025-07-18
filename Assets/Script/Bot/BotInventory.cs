@@ -85,8 +85,9 @@ public struct BotInventory {
         return new BotInventory(reservoirCapacity, plantInventoryCapacity, newReservoir, newPlantInventory);
     }
 
-    public BotInventory Clear() {
-        return new BotInventory(ReservoirCapacity, PlantInventoryCapacity);
+    public void Clear() {
+        PlantInventory.Clear();
+        ReservoirInventory = NutrientSolution.Empty;
     }
 
     public bool IsEmpty => ReservoirInventory.water <= 0.0f && PlantInventory.Count <= 0;

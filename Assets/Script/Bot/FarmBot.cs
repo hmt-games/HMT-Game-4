@@ -179,7 +179,7 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
                 //ActionState = BotActionState.Interacting;
                 //do the wait time thing
 
-                yield return WaitAnimation("interact", stationCell.interactionTime);
+                yield return WaitAnimation("interact", stationCell.config.interactionTime);
 
                 if (CurrentCommand.Command != PuppetCommandType.IDLE && CurrentCommand.Command != PuppetCommandType.STOP) {
                     stationCell.Interact(this);

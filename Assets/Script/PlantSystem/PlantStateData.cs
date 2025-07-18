@@ -19,7 +19,7 @@ public struct PlantStateData {
     public PlantConfigSO config;
 
     public float[] healthHistory;
-    public int currentHealthIndex { get; private set; }
+    public int currentHealthIndex { get; set; }
 
     public Sprite CurrentStageSprite {
         get {

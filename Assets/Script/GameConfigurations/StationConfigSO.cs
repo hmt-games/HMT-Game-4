@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics.Contracts;
-
+using GameConstant;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,17 +11,15 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "StationConfig", menuName = "Config/Station", order = 1)]
 public class StationConfigSO : ScriptableObject {
 
-    public enum StationInteraction {
-        Score,
-        Trash,
-        SwitchBotMode,
-        Reservoir,
-        SeedBank
-    }
+
+
 
     public StationInteraction interaction;
 
     public float interactionTime = 1f;
+
+    [HideInInspector]
+    public StationInventoryRule inventoryRule;
 
     [HideInInspector]
     public List<BotModeSO> botModes;
@@ -42,15 +40,19 @@ public class StationConfigSOEditor : Editor {
         StationConfigSO config = (StationConfigSO)target;
 
         switch (config.interaction) {
-            case StationConfigSO.StationInteraction.Score:
-            case StationConfigSO.StationInteraction.Trash:
+            case StationInteraction.Score:
+            case StationInteraction.Trash:
                 break;
-            case StationConfigSO.StationInteraction.SwitchBotMode:
+            case StationInteraction.SwitchBotMode:
                 SerializedObject serializedObject = new SerializedObject(config);
+                config.inventoryRule = (StationInventoryRule)EditorGUILayout.EnumPopup("Inventory Rule", config.inventoryRule);
+
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("botModes"));
 
                 break;
-            case StationConfigSO.StationInteraction.Reservoir:
+            case StationInteraction.Reservoir:
+                config.inventoryRule = (StationInventoryRule)EditorGUILayout.EnumPopup("Inventory Rule", config.inventoryRule);
+
                 Vector4 nutirients = config.reservoirAddition.nutrients;
                 nutirients.x = EditorGUILayout.Slider("A", nutirients.x, 0, 1.0f);
                 nutirients.y = EditorGUILayout.Slider("B", nutirients.y, 0, 1.0f);
@@ -61,7 +63,9 @@ public class StationConfigSOEditor : Editor {
 
 
                 break;
-            case StationConfigSO.StationInteraction.SeedBank:
+            case StationInteraction.SeedBank:
+
+                config.inventoryRule = (StationInventoryRule)EditorGUILayout.EnumPopup("Inventory Rule", config.inventoryRule);
                 config.seedConfig = (PlantConfigSO)EditorGUILayout.ObjectField("Seed Config", config.seedConfig, typeof(PlantConfigSO), false);
                 break;
         }

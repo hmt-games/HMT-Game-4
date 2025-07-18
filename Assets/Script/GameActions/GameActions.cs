@@ -54,11 +54,11 @@ public class GameActions : MonoBehaviour
 
     public void Pick(PlantBehavior targetPlant, OldFarmPuppetBot bot)
     {
-        List<PlantStateData> fruits = targetPlant.OnPick();
-        for(int i = 0; i < fruits.Count; i++) {
-            if (bot.Inventory.PlantInventory.Count >= bot.Inventory.PlantInventoryCapacity) break;
-            bot.Inventory.PlantInventory.Add(fruits[i]);
-        }
+        //List<PlantStateData> fruits = targetPlant.OnPick();
+        //for(int i = 0; i < fruits.Count; i++) {
+        //    if (bot.Inventory.PlantInventory.Count >= bot.Inventory.PlantInventoryCapacity) break;
+        //    bot.Inventory.PlantInventory.Add(fruits[i]);
+        //}
 
         //targetPlant.SurfaceMass = targetPlant.stageTransitionThreshold[2];
         //targetPlant.plantCurrentStage = 0;
@@ -122,7 +122,7 @@ public class GameActions : MonoBehaviour
     public void Harvest(PlantBehavior plant, OldFarmPuppetBot bot)
     {
 
-        bot.Inventory.PlantInventory.Add(plant.OnHarvest());
+        //bot.Inventory.PlantInventory.Add(plant.OnHarvest());
 
         //SoilCellBehavior soil = plant.parentCell;
         ////soil.PlantCount -= 1;
@@ -175,21 +175,27 @@ public class GameActions : MonoBehaviour
 
     public void SprayUp(StationCellBehavior tile, OldFarmPuppetBot bot)
     {
-        Vector4 nutrients = tile.tileType switch
-        {
-            TileType.SprayAStation => new Vector4(1.0f, 0.0f, 0.0f, 0.0f),
-            TileType.SprayBStation => new Vector4(0.0f, 1.0f, 0.0f, 0.0f),
-            TileType.SprayCStation => new Vector4(0.0f, 0.0f, 1.0f, 0.0f),
-            TileType.SprayDStation => new Vector4(0.0f, 0.0f, 0.0f, 1.0f),
-            _ => throw new InvalidOperationException("Trying to spray up while not on spray station, this should never happen?")
-        };
+        if(tile.config.interaction != StationInteraction.Reservoir) {
+            Debug.LogWarning($"Trying to spray up while not on spray station: {tile.ObjectID}");
+        }
 
-        float sprayUpAmount = Mathf.Min(SprayConfig.WaterAmount,
-            bot.Inventory.ReservoirCapacity - bot.Inventory.ReservoirInventory.water);
-        NutrientSolution sprayUpSolution = new NutrientSolution(sprayUpAmount,
-            nutrients * (sprayUpAmount * SprayConfig.NutrientConcentration));
+        //Vector4 nutrients = tile.tileType switch
+        //{
+        //    TileType.SprayAStation => new Vector4(1.0f, 0.0f, 0.0f, 0.0f),
+        //    TileType.SprayBStation => new Vector4(0.0f, 1.0f, 0.0f, 0.0f),
+        //    TileType.SprayCStation => new Vector4(0.0f, 0.0f, 1.0f, 0.0f),
+        //    TileType.SprayDStation => new Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+        //    _ => throw new InvalidOperationException("Trying to spray up while not on spray station, this should never happen?")
+        //};
 
-        bot.Inventory.ReservoirInventory += sprayUpSolution;
+        
+
+        //float sprayUpAmount = Mathf.Min(SprayConfig.WaterAmount,
+        //    bot.Inventory.ReservoirCapacity - bot.Inventory.ReservoirInventory.water);
+        //NutrientSolution sprayUpSolution = new NutrientSolution(sprayUpAmount,
+        //    nutrients * (sprayUpAmount * SprayConfig.NutrientConcentration));
+
+        bot.Inventory.ReservoirInventory += tile.config.reservoirAddition*(bot.Inventory.ReservoirCapacity - bot.Inventory.ReservoirInventory.water);
     }
 
 
@@ -267,7 +273,7 @@ public class GameActions : MonoBehaviour
     #region FarmBot Actions
 
     public void DumpInventory(FarmBot bot) {
-        bot.Inventory.Clear();
+       bot.Inventory.Clear();
     }
 
     public void Score(FarmBot bot) {
@@ -368,12 +374,12 @@ public class GameActions : MonoBehaviour
     public void Pick(FarmBot bot, SoilCellBehavior tile, int plantIdx) {
         PlantBehavior targetPlant = tile.plants[plantIdx];
 
-        List<PlantStateData> fruits = targetPlant.OnPick();
+        List<PlantStateData> fruits = targetPlant.OnPick(bot);
         for (int i = 0; i < fruits.Count; i++) {
             if (bot.Inventory.PlantInventory.Count >= bot.Inventory.PlantInventoryCapacity) break;
             bot.Inventory.PlantInventory.Add(fruits[i]);
         }
-    }
+    }   
 
     public void Plant(FarmBot bot, SoilCellBehavior soilTile, int inventoryIdx) {
         if (inventoryIdx < 0) {
@@ -391,13 +397,14 @@ public class GameActions : MonoBehaviour
 
     public void Harvest(FarmBot bot, SoilCellBehavior soilTile, int targetPlantIdx) {
         PlantBehavior targetPlant = soilTile.plants[targetPlantIdx];
-        bot.Inventory.PlantInventory.Add(targetPlant.OnHarvest());
+        PlantStateData plantStateData = targetPlant.OnHarvest(bot);
+        bot.Inventory.PlantInventory.Add(plantStateData);
     }
 
     public void Till(FarmBot bot, SoilCellBehavior soilTile) {
         NutrientSolution nutrientSolution = NutrientSolution.Empty;
         foreach (PlantBehavior plant in soilTile.plants) {
-            nutrientSolution += plant.OnTill();
+            nutrientSolution += plant.OnTill(bot);
         }
         soilTile.OnWater(nutrientSolution);
     }

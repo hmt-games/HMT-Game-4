@@ -4,6 +4,7 @@ using UnityEngine;
 using GameConstant;
 using HMT.Puppetry;
 using Newtonsoft.Json.Linq;
+using PlantSystem.Traits;
 
 [RequireComponent(typeof(BoxCollider2D), typeof(SpriteRenderer))]
 public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
@@ -48,6 +49,8 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
     public NutrientSolution NutrientLevels = NutrientSolution.Empty;
 
     public PlantConfigSO config;
+
+    public List<PlantTrait> Traits { get; private set; }
 
     public int plantCurrentStage = 0;
     private int _plantMaxStage = 3;
@@ -136,6 +139,14 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
 
 
     public NutrientSolution OnTick(NutrientSolution allocation) {
+        bool proceed = true;
+        foreach(PlantTrait trait in Traits) {
+            proceed &= trait.OnTickPre(this, ref allocation);
+        }
+        if (!proceed) {
+            return allocation;
+        }
+
         // UPTAKE
         float uptakeVolume = Mathf.Min(config.waterCapacity - NutrientLevels.water, config.uptakeRate);
         NutrientLevels += allocation.DrawOff(uptakeVolume);
@@ -181,6 +192,10 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
 
         Age++;
 
+        foreach(PlantTrait trait in Traits) {
+            trait.OnTickPost(this, ref allocation);
+        }
+
         return allocation;
     }
 
@@ -194,33 +209,74 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
     /// <param name="waterVolume"></param>
     /// <returns></returns>
     public NutrientSolution OnSpray(NutrientSolution waterVolume) {
-        if (config.onWaterCallbackBypass) return waterVolume;
+        foreach (PlantTrait trait in Traits) {
+            trait.OnSpray(this, ref waterVolume);
+        }
         return waterVolume; //TODO do something meaningful here
     }
 
-    public PlantStateData OnHarvest() {
-        parentCell.RemovePlant(this);
-        PrefabPooler.Instance.ReleasePrefabInstance("plant", gameObject);
-        return this.GetPlantState();
+    public PlantStateData OnHarvest(FarmBot farmBot) {
+        bool proceed = true;
+        PlantStateData altReturn = PlantStateData.Empty;
+        foreach(PlantTrait trait in Traits) {
+            proceed &= trait.OnHarvest(this, farmBot, ref altReturn);
+        }
+        if (!proceed) {
+            return altReturn;
+        }
+        else {
+            parentCell.RemovePlant(this);
+            PrefabPooler.Instance.ReleasePrefabInstance("plant", gameObject);
+            return this.GetPlantState();
+        }
     }
 
-    public List<PlantStateData> OnPick() {
+    public List<PlantStateData> OnPick(FarmBot farmBot) {
         if(!hasFruit)
             return new List<PlantStateData>();
         List<PlantStateData> fruits = new List<PlantStateData>();
-        int yield = config.GenerateYield();
-        for(int i = 0; i < yield; i++) {
-            fruits.Add(new PlantStateData(config));
+
+        bool proceed = true;
+        foreach(PlantTrait trait in Traits) {
+            proceed &= trait.OnPick(this, farmBot, fruits);
         }
 
-        ClearFruits();
-        return fruits;
+        if (!proceed) { 
+            return fruits; 
+        }
+        else {
+            int yield = config.GenerateYield();
+            for (int i = 0; i < yield; i++) {
+                fruits.Add(new PlantStateData(config));
+            }
+
+            ClearFruits();
+            return fruits;
+        }
     }
 
-    public NutrientSolution OnTill () {
-        parentCell.RemovePlant(this);
-        PrefabPooler.Instance.ReleasePrefabInstance("plant", gameObject);
-        return NutrientLevels;
+    public NutrientSolution OnTill (FarmBot farmBot) {
+        bool proceed = true;
+        NutrientSolution altReturn = NutrientSolution.Empty;
+        foreach(PlantTrait trait in Traits) {
+            proceed &= trait.OnTill(this, farmBot, ref altReturn);
+        }
+        if (!proceed) {
+            return altReturn;
+        }
+        else {
+            parentCell.RemovePlant(this);
+            PrefabPooler.Instance.ReleasePrefabInstance("plant", gameObject);
+            return NutrientLevels;
+        }
+    }
+
+    public bool OnBotEnter(FarmBot farmBot) {
+        bool proceed = true;
+        foreach(PlantTrait trait in Traits) {
+            proceed &= trait.OnBotEnter(this, farmBot);
+        }
+        return proceed;
     }
 
     #endregion
@@ -228,11 +284,22 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
     public void CheckPlantStage() {
         if (plantCurrentStage == _plantMaxStage) return;
 
+        var currentStage = plantCurrentStage;
         while (SurfaceMass >= config.stageTransitionThreshold[plantCurrentStage + 1]) {
             plantCurrentStage++;
             if (plantCurrentStage == _plantMaxStage) break;
         }
-        
+
+        if (currentStage != plantCurrentStage) {
+            bool proceed = true;
+            foreach(PlantTrait trait in Traits) {
+                proceed &= trait.OnStageTransition(this, currentStage, plantCurrentStage);
+            }
+            if (!proceed) {
+                return;
+            }
+        }
+
         Debug.Log($"plant display stage {plantCurrentStage}");
         spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
         boxCollider2D.size = spriteRenderer.sprite.bounds.size;
@@ -242,7 +309,17 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
     public void ClearFruits() {
         if (hasFruit) {
             hasFruit = false;
+            var currentStage = plantCurrentStage;
             plantCurrentStage = Mathf.Min(plantCurrentStage, _plantMaxStage - 1);
+            if(currentStage != plantCurrentStage) {
+                bool proceed = true;
+                foreach(PlantTrait trait in Traits) {
+                    proceed &= trait.OnStageTransition(this, currentStage, plantCurrentStage);
+                }
+                if (!proceed) {
+                    return;
+                }
+            }
             spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
             boxCollider2D.size = spriteRenderer.sprite.bounds.size;
             //TODO - Not sure about this change

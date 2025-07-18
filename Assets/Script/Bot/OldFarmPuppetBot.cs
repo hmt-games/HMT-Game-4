@@ -74,48 +74,48 @@ public class OldFarmPuppetBot : PuppetBehavior
     private void SwitchBotMode()
     {
         StationCellBehavior station = GetCurrentTile() as StationCellBehavior;
-        BotModeSO newBotMode = station.Interact(this);
-        if (newBotMode != null)
-        {
-            _botModeConfig = newBotMode;
-            //CurrentActionSet = new HashSet<string>(_botModeConfig.supportedActions);
-            _animator.SetTrigger(_botModeConfig.botModeName);
-            //_botInfo.CurrentBotMode = _botModeConfig.botMode;
+        //BotModeSO newBotMode = station.Interact(this);
+        //if (newBotMode != null)
+        //{
+        //    _botModeConfig = newBotMode;
+        //    //CurrentActionSet = new HashSet<string>(_botModeConfig.supportedActions);
+        //    _animator.SetTrigger(_botModeConfig.botModeName);
+        //    //_botInfo.CurrentBotMode = _botModeConfig.botMode;
             
-            // reset inventory
-            SetBotInventory(_botModeConfig.reservoirCapacity, _botModeConfig.plantInventoryCapacity);
-            ClearActionSet();
-            RegisterAction("move", Move);
-            RegisterAction("interact", Interact);
-            RegisterAction("move_to", PuppetActionNotImplemented);
-            RegisterAction("pick_up", PickUp);
-            RegisterAction("put_down", PutDown);
+        //    // reset inventory
+        //    SetBotInventory(_botModeConfig.reservoirCapacity, _botModeConfig.plantInventoryCapacity);
+        //    ClearActionSet();
+        //    RegisterAction("move", Move);
+        //    RegisterAction("interact", Interact);
+        //    RegisterAction("move_to", PuppetActionNotImplemented);
+        //    RegisterAction("pick_up", PickUp);
+        //    RegisterAction("put_down", PutDown);
 
-            foreach (var actionEntry in _botModeConfig.supportedActions) {
-                switch (actionEntry.action) {
-                    case "sample":
-                        RegisterAction("sample", Sample);
-                        break;
-                    case "spray":
-                        RegisterAction("spray", Spray);
-                        break;
-                    case "pick":
-                    case "pluck":
-                        RegisterAction("pluck", Pick);
-                        break;
-                    case "plant":
-                        RegisterAction("plant", Plant);
-                        break;
-                    case "harvest":
-                        RegisterAction("harvest", Harvest);
-                        break;
-                    case "till":
-                        RegisterAction("till", Till);
-                        break;
-                }
-            }
+        //    foreach (var actionEntry in _botModeConfig.supportedActions) {
+        //        switch (actionEntry.action) {
+        //            case "sample":
+        //                RegisterAction("sample", Sample);
+        //                break;
+        //            case "spray":
+        //                RegisterAction("spray", Spray);
+        //                break;
+        //            case "pick":
+        //            case "pluck":
+        //                RegisterAction("pluck", Pick);
+        //                break;
+        //            case "plant":
+        //                RegisterAction("plant", Plant);
+        //                break;
+        //            case "harvest":
+        //                RegisterAction("harvest", Harvest);
+        //                break;
+        //            case "till":
+        //                RegisterAction("till", Till);
+        //                break;
+        //        }
+        //    }
 
-        }
+        //}
     }
 
     private IEnumerator PickUp(PuppetCommand command)
@@ -165,72 +165,67 @@ public class OldFarmPuppetBot : PuppetBehavior
     private IEnumerator Till(PuppetCommand command)
     {
         GridCellBehavior grid = GetCurrentTile();
-        if (grid.tileType != TileType.Soil)
-        {
+        if(grid is SoilCellBehavior soilCell) {
+            CurrentCommand = command;
+            float actionTime = _botModeConfig.GetActionTime("till") * GameManager.Instance.secondPerTick;
+            yield return StartProgressTimer(actionTime);
+
+            if (CurrentCommand.Command == PuppetCommandType.STOP) {
+                CurrentCommand = PuppetCommand.IDLE;
+                yield break;
+            }
+
+            GameActions.Instance.Till(soilCell, this);
+            CurrentCommand = PuppetCommand.IDLE;
+        }
+        else{
             command.SendIllegalActionResponse("till can only target soil tile");
             yield break;
         }
         
-        CurrentCommand = command;
-        float actionTime = _botModeConfig.GetActionTime("till") * GameManager.Instance.secondPerTick;
-        yield return StartProgressTimer(actionTime);
-
-        if (CurrentCommand.Command == PuppetCommandType.STOP) {
-            CurrentCommand = PuppetCommand.IDLE;
-            yield break;
-        }
-
-        GameActions.Instance.Till(grid as SoilCellBehavior, this);
-        CurrentCommand = PuppetCommand.IDLE;
+        
     }
 
     private void Plant(PuppetCommand command)
     {
         GridCellBehavior grid = GetCurrentTile();
-        if (grid.tileType != TileType.Soil)
-        {
+        if(grid is SoilCellBehavior soilCell) {
+            if (soilCell.PlantCount >= GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE) {
+                command.SendIllegalActionResponse("tile is at max capacity");
+                return;
+            }
+
+            // for human players
+            if (command.ActionParams == null) {
+                if (!GameActions.Instance.RequestPlant(this)) {
+                    command.SendIllegalActionResponse("none of the plant in inventory is seed");
+                }
+                else {
+                    CurrentCommand = command;
+                }
+            }
+            //for bots
+            else {
+                int plantIdx = (int)command.ActionParams["target"];
+
+                if (plantIdx > Inventory.PlantInventory.Count - 1) {
+                    command.SendIllegalActionResponse("Target Index for plant out of bound of plant inventory");
+                    return;
+                }
+
+                PlantStateData plant = Inventory.PlantInventory[plantIdx];
+                if (plant.age != 0.0f) {
+                    command.SendIllegalActionResponse("Target plant is not a seed");
+                    return;
+                }
+
+                CurrentCommand = command;
+                StartCoroutine(StartPlant(plant));
+            }
+        }
+        else {
             command.SendIllegalActionResponse("plant can only target soil tile");
             return;
-        }
-
-        if ((grid as SoilCellBehavior).PlantCount >= GLOBAL_CONSTANTS.MAX_PLANT_COUNT_PER_TILE)
-        {
-            command.SendIllegalActionResponse("tile is at max capacity");
-            return;
-        }
-        
-        // for human players
-        if (command.ActionParams == null)
-        {
-            if (!GameActions.Instance.RequestPlant(this))
-            {
-                command.SendIllegalActionResponse("none of the plant in inventory is seed");
-            }
-            else
-            {
-                CurrentCommand = command;
-            }
-        }
-        //for bots
-        else
-        {
-            int plantIdx = (int)command.ActionParams["target"];
-            
-            if (plantIdx > Inventory.PlantInventory.Count - 1)
-            {
-                command.SendIllegalActionResponse("Target Index for plant out of bound of plant inventory");
-                return;
-            }
-            
-            PlantStateData plant = Inventory.PlantInventory[plantIdx];
-            if (plant.age != 0.0f)
-            {
-                command.SendIllegalActionResponse("Target plant is not a seed");
-                return;
-            }
-
-            CurrentCommand = command;
-            StartCoroutine(StartPlant(plant));
         }
     }
 
@@ -250,52 +245,48 @@ public class OldFarmPuppetBot : PuppetBehavior
     private void Pick(PuppetCommand command)
     {
         GridCellBehavior grid = GetCurrentTile();
-        if (grid.tileType != TileType.Soil)
-        {
+        if(grid is SoilCellBehavior soilCell) {
+            if (Inventory.PlantInventory.Count >= Inventory.PlantInventoryCapacity) {
+                command.SendIllegalActionResponse("inventory capacity reached");
+                return;
+            }
+
+            // for human players
+            if (command.ActionParams == null) {
+                if (!GameActions.Instance.RequestPick(soilCell, this)) {
+                    command.SendIllegalActionResponse("none of the target tile's plants has fruit");
+                }
+                else {
+                    CurrentCommand = command;
+                }
+            }
+            //for bots
+            else {
+                int plantIdx = (int)command.ActionParams["target"];
+
+                if (plantIdx > soilCell.PlantCount - 1) {
+                    command.SendIllegalActionResponse("Target Index for pluck out of bound of tile plant list");
+                    return;
+                }
+
+                PlantBehavior plant = soilCell.plants[plantIdx];
+                if (!plant.hasFruit) {
+                    command.SendIllegalActionResponse("Target plant does not bear fruit");
+                    return;
+                }
+
+                CurrentCommand = command;
+                StartCoroutine(StartPick(plant));
+            }
+
+        }
+
+        else { 
             command.SendIllegalActionResponse("pick can only target soil tile");
             return;
         }
         
-        if (Inventory.PlantInventory.Count >= Inventory.PlantInventoryCapacity)
-        {
-            command.SendIllegalActionResponse("inventory capacity reached");
-            return;
-        }
-
-        // for human players
-        if (command.ActionParams == null)
-        {
-            if (!GameActions.Instance.RequestPick(grid as SoilCellBehavior, this))
-            {
-                command.SendIllegalActionResponse("none of the target tile's plants has fruit");
-            }
-            else
-            {
-                CurrentCommand = command;
-            }
-        }
-        //for bots
-        else
-        {
-            SoilCellBehavior tile = grid as SoilCellBehavior;
-            int plantIdx = (int)command.ActionParams["target"];
-            
-            if (plantIdx > tile.PlantCount - 1)
-            {
-                command.SendIllegalActionResponse("Target Index for pluck out of bound of tile plant list");
-                return;
-            }
-            
-            PlantBehavior plant = tile.plants[plantIdx];
-            if (!plant.hasFruit)
-            {
-                command.SendIllegalActionResponse("Target plant does not bear fruit");
-                return;
-            }
-
-            CurrentCommand = command;
-            StartCoroutine(StartPick(plant));
-        }
+       
     }
 
     public IEnumerator StartPick(PlantBehavior plant)
@@ -314,47 +305,43 @@ public class OldFarmPuppetBot : PuppetBehavior
     private void Harvest(PuppetCommand command)
     {
         GridCellBehavior grid = GetCurrentTile();
-        if (grid.tileType != TileType.Soil)
-        {
+        if(grid is SoilCellBehavior soilCell) {
+            if (Inventory.PlantInventory.Count >= Inventory.PlantInventoryCapacity) {
+                command.SendIllegalActionResponse("inventory capacity reached");
+                return;
+            }
+
+            // for human players
+            if (command.ActionParams == null) {
+                if (!GameActions.Instance.RequestHarvest(soilCell, this)) {
+                    command.SendIllegalActionResponse("target tile has no plant on it");
+                }
+                else {
+                    CurrentCommand = command;
+                }
+            }
+            //for bots
+            else {
+                int plantIdx = (int)command.ActionParams["target"];
+
+                if (plantIdx > soilCell.PlantCount - 1) {
+                    command.SendIllegalActionResponse("Target Index for pluck out of bound of tile plant list");
+                    return;
+                }
+
+                PlantBehavior plant = soilCell.plants[plantIdx];
+
+                CurrentCommand = command;
+                StartCoroutine(StartHarvest(plant));
+            }
+        }
+
+        else {
             command.SendIllegalActionResponse("harvest can only target soil tile");
             return;
         }
 
-        if (Inventory.PlantInventory.Count >= Inventory.PlantInventoryCapacity)
-        {
-            command.SendIllegalActionResponse("inventory capacity reached");
-            return;
-        }
-
-        // for human players
-        if (command.ActionParams == null)
-        {
-            if (!GameActions.Instance.RequestHarvest(grid as SoilCellBehavior, this))
-            {
-                command.SendIllegalActionResponse("target tile has no plant on it");
-            }
-            else
-            {
-                CurrentCommand = command;
-            }
-        }
-        //for bots
-        else
-        {
-            SoilCellBehavior tile = grid as SoilCellBehavior;
-            int plantIdx = (int)command.ActionParams["target"];
-            
-            if (plantIdx > tile.PlantCount - 1)
-            {
-                command.SendIllegalActionResponse("Target Index for pluck out of bound of tile plant list");
-                return;
-            }
-            
-            PlantBehavior plant = tile.plants[plantIdx];
-
-            CurrentCommand = command;
-            StartCoroutine(StartHarvest(plant));
-        }
+     
     }
 
     public IEnumerator StartHarvest(PlantBehavior plant)
@@ -372,20 +359,23 @@ public class OldFarmPuppetBot : PuppetBehavior
 
     private void Interact(PuppetCommand command)
     {
-        TileType tileType = GetCurrentTile().tileType;
-        if (tileType == TileType.Soil)
-        {
+        
+        if(GetCurrentTile() is SoilCellBehavior soilCell) {
+           
+        }
+        else {
             command.SendIllegalActionResponse("Cannot perform interact on soil tiles");
             return;
         }
+
 
         CurrentCommand = command;
 
         SwitchBotMode();
 
-        if (tileType != TileType.SprayAStation && tileType != TileType.SprayBStation
-            && tileType != TileType.SprayCStation && tileType != TileType.SprayDStation)
-            CurrentCommand = PuppetCommand.IDLE;
+        //if (tileType != TileType.SprayAStation && tileType != TileType.SprayBStation
+        //    && tileType != TileType.SprayCStation && tileType != TileType.SprayDStation)
+        //    CurrentCommand = PuppetCommand.IDLE;
     }
 
     private void SetBotInventory(float _reservoirCapacity, int _plantInventoryCapacity)
@@ -415,23 +405,27 @@ public class OldFarmPuppetBot : PuppetBehavior
     private IEnumerator Spray(PuppetCommand command)
     {
         GridCellBehavior grid = GetCurrentTile();
-        if (grid.tileType != TileType.Soil)
-        {
+        if(grid is SoilCellBehavior soilCell) {
+            CurrentCommand = command;
+            float actionTime = _botModeConfig.GetActionTime("spray") * GameManager.Instance.secondPerTick;
+            yield return StartProgressTimer(actionTime);
+
+            if (CurrentCommand.Command == PuppetCommandType.STOP) {
+                CurrentCommand = PuppetCommand.IDLE;
+                yield break;
+            }
+
+            GameActions.Instance.Spray(soilCell, this);
+            CurrentCommand = PuppetCommand.IDLE;
+
+        }
+
+        else {
             command.SendIllegalActionResponse("can only spray to soil tile");
             yield break;
         }
         
-        CurrentCommand = command;
-        float actionTime = _botModeConfig.GetActionTime("spray") * GameManager.Instance.secondPerTick;
-        yield return StartProgressTimer(actionTime);
-
-        if (CurrentCommand.Command == PuppetCommandType.STOP) {
-            CurrentCommand = PuppetCommand.IDLE;
-            yield break;
-        }
-
-        GameActions.Instance.Spray(grid as SoilCellBehavior, this);
-        CurrentCommand = PuppetCommand.IDLE;
+       
     }
 
     private IEnumerator Sample(PuppetCommand command)
@@ -449,22 +443,25 @@ public class OldFarmPuppetBot : PuppetBehavior
         }
 
         GridCellBehavior grid = GetCurrentTile();
-        if (grid.tileType != TileType.Soil)
-        {
+        if(grid is SoilCellBehavior soilCell) {
+            CurrentCommand = command;
+            float actionTime = _botModeConfig.GetActionTime("sample") * GameManager.Instance.secondPerTick;
+            yield return StartProgressTimer(actionTime);
+            if (CurrentCommand.Command == PuppetCommandType.STOP) {
+                CurrentCommand = PuppetCommand.IDLE;
+                yield break;
+            }
+
+            GameActions.Instance.Sample(grid as SoilCellBehavior, this);
+            CurrentCommand = PuppetCommand.IDLE;
+        }
+
+        else {
             command.SendIllegalActionResponse("must sample on a soil grid");
             yield break;
         }
         
-        CurrentCommand = command;
-        float actionTime = _botModeConfig.GetActionTime("sample") * GameManager.Instance.secondPerTick;
-        yield return StartProgressTimer(actionTime);
-        if (CurrentCommand.Command == PuppetCommandType.STOP) {
-            CurrentCommand = PuppetCommand.IDLE;
-            yield break;
-        }
-
-        GameActions.Instance.Sample(grid as SoilCellBehavior, this);
-        CurrentCommand = PuppetCommand.IDLE;
+        
     }
 
     public void DumpInventory()

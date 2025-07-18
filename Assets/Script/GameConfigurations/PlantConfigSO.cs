@@ -56,12 +56,6 @@ public class PlantConfigSO : ScriptableObject {
     public int maxHealthHistory = 10;
     public List<float> stageTransitionThreshold = new List<float> { 0.0f, 1.5f, 3.0f, 5.3f };
 
-
-    /// <summary>
-    /// Special plants that do not receive water should set this to true
-    /// </summary>
-    public bool onWaterCallbackBypass;
-
     public List<Sprite> plantSprites;
 
     //TODO: maybe cap at < 100%
