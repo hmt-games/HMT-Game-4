@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour {
             if (cell == null) return;
             
             if(FocusBot == null) {
-                if(cell.botOnGrid) {
+                if(cell.botOccupant != null) {
                     if (FocusBot == null) return;
                 }
                 else {

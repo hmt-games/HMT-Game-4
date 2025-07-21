@@ -41,7 +41,7 @@ public class OldFarmPuppetBot : PuppetBehavior
     {
         _botInfo.FloorIdx = floor;
         _botInfo.CellIdx = new Vector2Int(x, y);
-        GetCurrentTile().botOnGrid = true;
+        //GetCurrentTile() = true;
         //CurrentFloor.AddBotToFloor(this);
     }
     
@@ -502,7 +502,7 @@ public class OldFarmPuppetBot : PuppetBehavior
         
         // check if there is already a bot on target tile
         GridCellBehavior targetGrid = CurrentFloor.Cells[targetPos.x, targetPos.y];
-        if (targetGrid.botOnGrid)
+        if (targetGrid.botOccupant != null)
         {
             command.SendIllegalActionResponse("Attempting to move on tile that also has a bot on it");
             return;
@@ -514,10 +514,10 @@ public class OldFarmPuppetBot : PuppetBehavior
 
     IEnumerator MoveCoroutine(Vector2Int direction)
     {
-        GetCurrentTile().botOnGrid = false;
+        //GetCurrentTile().botOnGrid = false;
         GridCellBehavior targetGrid =
             CurrentFloor.Cells[_botInfo.CellIdx.x + direction.x, _botInfo.CellIdx.y + direction.y];
-        targetGrid.botOnGrid = true;
+        //targetGrid.botOnGrid = true;
         
         _walking = true;
         Vector3 target = targetGrid.transform.position;
