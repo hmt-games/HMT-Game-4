@@ -7260,12 +7260,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3e80ce329232ec459c0ce6b59e8330e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  discardStation: {fileID: -1143710983, guid: 80201d44c5be4c148846475993580ce6, type: 3}
-  scoreStation: {fileID: -2015279863, guid: 80201d44c5be4c148846475993580ce6, type: 3}
-  modeChangeStation: {fileID: -748130886, guid: 80201d44c5be4c148846475993580ce6,
+  discardStation: {fileID: -1445998580, guid: d3aeeb8f0c7e51e4faa17101a2b93310, type: 3}
+  scoreStation: {fileID: 509193104, guid: d3aeeb8f0c7e51e4faa17101a2b93310, type: 3}
+  modeChangeStation: {fileID: -2092183656, guid: d3aeeb8f0c7e51e4faa17101a2b93310,
     type: 3}
-  reservoirStation: {fileID: 1385982230, guid: 80201d44c5be4c148846475993580ce6, type: 3}
-  seedBankStation: {fileID: 1828831731, guid: 80201d44c5be4c148846475993580ce6, type: 3}
+  reservoirStation: {fileID: -1835634992, guid: d3aeeb8f0c7e51e4faa17101a2b93310,
+    type: 3}
+  seedBankStation: {fileID: 991656641, guid: d3aeeb8f0c7e51e4faa17101a2b93310, type: 3}
 --- !u!4 &852369536
 Transform:
   m_ObjectHideFlags: 0

@@ -769,19 +769,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6087a3a2f443f185ed2d6774b4d002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileType: 0
   parentFloor: {fileID: 0}
-  botOnGrid: 0
   inventoryDropSprite: {fileID: 0}
   hasInventoryDrop: 0
-  interaction: 2
-  inventoryRule: 0
-  interactionTime: 1
-  botModes: []
-  reservoirSolution:
-    water: 0
-    nutrients: {x: 0, y: 0, z: 0, w: 0}
-  seedBankPlantConfig: {fileID: 0}
+  config: {fileID: 0}
+  BaseSprite: {fileID: 0}
   IconSprite: {fileID: 5071812346908970342}
   ALevelBar: {fileID: 2975497042534496983}
   BLevelBar: {fileID: 8284306107674664445}
@@ -944,12 +936,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1385982230, guid: 80201d44c5be4c148846475993580ce6, type: 3}
+  m_Sprite: {fileID: 97210580, guid: d3aeeb8f0c7e51e4faa17101a2b93310, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.0009775, y: 1}
+  m_Size: {x: 1, y: 1.001465}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
