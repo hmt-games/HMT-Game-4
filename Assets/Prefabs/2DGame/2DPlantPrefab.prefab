@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 7892613395736536890}
   - component: {fileID: 5413959946408050086}
   - component: {fileID: -4454653274443710318}
-  - component: {fileID: -4956473806349571746}
-  - component: {fileID: 8289123353580376793}
   - component: {fileID: 7033722431197941913}
   m_Layer: 6
   m_Name: 2DPlantPrefab
@@ -100,55 +98,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bdc91c8d8684b6e9f0fd2d5675d49e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentCell: {fileID: 0}
   NutrientLevels:
     water: 0
     nutrients: {x: 0, y: 0, z: 0, w: 0}
   config: {fileID: 0}
   plantCurrentStage: 0
-  stageTransitionThreshold:
-  - 0
-  - 1.5
-  - 3
-  - 5.3
   hasFruit: 0
-  maxHealthHistory: 10
-  boxCollider2D: {fileID: 0}
-  spriteRenderer: {fileID: 0}
---- !u!114 &-4956473806349571746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8738970323915121554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 3274285546
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 8289123353580376793}
---- !u!114 &8289123353580376793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8738970323915121554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 1
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
+  healthHistory: []
 --- !u!61 &7033722431197941913
 BoxCollider2D:
   m_ObjectHideFlags: 0

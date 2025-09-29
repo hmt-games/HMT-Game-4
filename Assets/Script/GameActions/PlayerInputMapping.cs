@@ -62,6 +62,15 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""QuickAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""a88ff463-b064-4707-a4c7-9baeb0d61ae1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -245,10 +254,21 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""8af2be22-a314-4704-9475-5ac3caec11cb"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d18250ad-b04c-421e-85d9-b6f442538008"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -324,6 +344,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         m_Player_FloorCamUp = m_Player.FindAction("FloorCamUp", throwIfNotFound: true);
         m_Player_FloorCamDown = m_Player.FindAction("FloorCamDown", throwIfNotFound: true);
         m_Player_Select = m_Player.FindAction("Select", throwIfNotFound: true);
+        m_Player_QuickAction = m_Player.FindAction("QuickAction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -389,6 +410,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_FloorCamUp;
     private readonly InputAction m_Player_FloorCamDown;
     private readonly InputAction m_Player_Select;
+    private readonly InputAction m_Player_QuickAction;
     public struct PlayerActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -397,6 +419,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         public InputAction @FloorCamUp => m_Wrapper.m_Player_FloorCamUp;
         public InputAction @FloorCamDown => m_Wrapper.m_Player_FloorCamDown;
         public InputAction @Select => m_Wrapper.m_Player_Select;
+        public InputAction @QuickAction => m_Wrapper.m_Player_QuickAction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -418,6 +441,9 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             @Select.started += instance.OnSelect;
             @Select.performed += instance.OnSelect;
             @Select.canceled += instance.OnSelect;
+            @QuickAction.started += instance.OnQuickAction;
+            @QuickAction.performed += instance.OnQuickAction;
+            @QuickAction.canceled += instance.OnQuickAction;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -434,6 +460,9 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             @Select.started -= instance.OnSelect;
             @Select.performed -= instance.OnSelect;
             @Select.canceled -= instance.OnSelect;
+            @QuickAction.started -= instance.OnQuickAction;
+            @QuickAction.performed -= instance.OnQuickAction;
+            @QuickAction.canceled -= instance.OnQuickAction;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -502,5 +531,6 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         void OnFloorCamUp(InputAction.CallbackContext context);
         void OnFloorCamDown(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
+        void OnQuickAction(InputAction.CallbackContext context);
     }
 }

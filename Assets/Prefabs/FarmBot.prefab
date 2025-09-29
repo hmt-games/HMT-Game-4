@@ -616,9 +616,10 @@ GameObject:
   - component: {fileID: 1488522072086211189}
   - component: {fileID: 7750093726059577691}
   - component: {fileID: 5470439618193914259}
+  - component: {fileID: -6119871155814824403}
   m_Layer: 0
   m_Name: FarmBot
-  m_TagString: Untagged
+  m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -686,6 +687,41 @@ MonoBehaviour:
   progressBarFill: {fileID: 1135402827094147762}
   emoteBubble: {fileID: 2446116996244771037}
   emote: {fileID: 9215924997779882146}
+--- !u!58 &-6119871155814824403
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4684069394202087741}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.76
 --- !u!1 &6506078467916886254
 GameObject:
   m_ObjectHideFlags: 0

@@ -59,7 +59,7 @@ public struct BotInventory {
         ReservoirCapacity = reservoirCapacity;
         PlantInventoryCapacity = plantInventoryCapacity;
         ReservoirInventory = NutrientSolution.Empty;
-        PlantInventory = new List<PlantStateData>(PlantInventoryCapacity);
+        PlantInventory = new List<PlantStateData>();
     }
 
     private BotInventory(float reservoirCapacity, int plantInventoryCapacity, NutrientSolution reservoirInventory,
@@ -79,8 +79,11 @@ public struct BotInventory {
             newReservoir = ReservoirInventory.DrawOff(ReservoirInventory.water - reservoirCapacity);
         }
         List<PlantStateData> newPlantInventory = new List<PlantStateData>(plantInventoryCapacity);
-        for (int i = 0; i < Mathf.Min(PlantInventory.Count, plantInventoryCapacity); i++) {
-            newPlantInventory.Add(PlantInventory[i]);
+        if (PlantInventory != null)
+        {
+            for (int i = 0; i < Mathf.Min(PlantInventory.Count, plantInventoryCapacity); i++) {
+                newPlantInventory.Add(PlantInventory[i]);
+            }
         }
         return new BotInventory(reservoirCapacity, plantInventoryCapacity, newReservoir, newPlantInventory);
     }

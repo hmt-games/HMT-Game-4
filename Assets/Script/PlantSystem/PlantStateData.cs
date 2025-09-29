@@ -87,6 +87,24 @@ public struct PlantStateData {
         this.age = age;
         this.currentStage = currentStage;
     }
+    
+    public PlantStateData(PlantConfigSO config, NutrientSolution initalNutrients, 
+        float initialRootMass, float initialSurfaceMass,
+        float energyLevel,
+        int age, int currentStage) {
+        this.config = config;
+        rootMass = initialRootMass;
+        surfaceMass = initialSurfaceMass;
+        nutrientLevels = initalNutrients;
+        this.energyLevel = energyLevel;
+        healthHistory = new float[config.maxHealthHistory];
+        for (int i = 0; i < config.maxHealthHistory; i++) {
+            healthHistory[i] = 1;
+        }
+        currentHealthIndex = 0;
+        this.age = age;
+        this.currentStage = currentStage;
+    }
 
     public PlantStateData(PlantConfigSO config, NutrientSolution initalNutrients,
                       float initialRootMass, float initialSurfaceMass,

@@ -88,10 +88,12 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
     {
         boxCollider2D = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        SetPlantState(new PlantStateData(config));
+        // SetPlantState(new PlantStateData(config));
     }
 
-    public void SetPlantState(PlantStateData state) {
+    public void SetPlantState(PlantStateData state)
+    {
+        config = state.config;
         RootMass = state.rootMass;
         SurfaceMass = state.surfaceMass;
         NutrientLevels = state.nutrientLevels;
@@ -112,9 +114,12 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
         }
         Health = count > 0 ? tot / count : float.NaN; // Calculate average health from history
 
-        spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
-        boxCollider2D.size = spriteRenderer.sprite.bounds.size;
-        CheckPlantStage();
+        if (config)
+        {
+            spriteRenderer.sprite = config.plantSprites[plantCurrentStage];
+            boxCollider2D.size = spriteRenderer.sprite.bounds.size;
+            CheckPlantStage();
+        }
     }
 
     public PlantStateData GetPlantState() {
@@ -218,8 +223,11 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
     public PlantStateData OnHarvest(FarmBot farmBot) {
         bool proceed = true;
         PlantStateData altReturn = PlantStateData.Empty;
-        foreach(PlantTrait trait in Traits) {
-            proceed &= trait.OnHarvest(this, farmBot, ref altReturn);
+        if (Traits != null)
+        {
+            foreach(PlantTrait trait in Traits) {
+                proceed &= trait.OnHarvest(this, farmBot, ref altReturn);
+            }
         }
         if (!proceed) {
             return altReturn;
@@ -273,8 +281,12 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
 
     public bool OnBotEnter(FarmBot farmBot) {
         bool proceed = true;
-        foreach(PlantTrait trait in Traits) {
-            proceed &= trait.OnBotEnter(this, farmBot);
+        //TODO: implement plant traits
+        if (Traits != null)
+        {
+            foreach(PlantTrait trait in Traits) {
+                proceed &= trait.OnBotEnter(this, farmBot);
+            }
         }
         return proceed;
     }
@@ -282,7 +294,11 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
     #endregion
 
     public void CheckPlantStage() {
-        if (plantCurrentStage == _plantMaxStage) return;
+        if (plantCurrentStage == _plantMaxStage)
+        {
+            hasFruit = true;
+            return;
+        }
 
         var currentStage = plantCurrentStage;
         while (SurfaceMass >= config.stageTransitionThreshold[plantCurrentStage + 1]) {
@@ -290,7 +306,7 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
             if (plantCurrentStage == _plantMaxStage) break;
         }
 
-        if (currentStage != plantCurrentStage) {
+        /*if (currentStage != plantCurrentStage) {
             bool proceed = true;
             foreach(PlantTrait trait in Traits) {
                 proceed &= trait.OnStageTransition(this, currentStage, plantCurrentStage);
@@ -298,7 +314,7 @@ public class PlantBehavior : MonoBehaviour, IPuppetPerceivable, IPoolCallbacks {
             if (!proceed) {
                 return;
             }
-        }
+        }*/
 
         Debug.Log($"plant display stage {plantCurrentStage}");
         spriteRenderer.sprite = config.plantSprites[plantCurrentStage];

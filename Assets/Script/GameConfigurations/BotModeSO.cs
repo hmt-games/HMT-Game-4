@@ -132,7 +132,7 @@ public class OptionSelectorEditor : Editor
         for (int i = 0; i < botModeSO.supportedActions.Count; i++)
         {
             string action = botModeSO.supportedActions[i].action;
-            bool isEnabled = botModeSO.supportedActions[i].time != float.NaN;
+            bool isEnabled = !float.IsNaN(botModeSO.supportedActions[i].time);
 
             EditorGUILayout.BeginHorizontal();
 
@@ -164,7 +164,6 @@ public class OptionSelectorEditor : Editor
         }
 
         if (GUI.changed) {
-            //ApplyTimeToSO();
             EditorUtility.SetDirty(botModeSO);
         }
 

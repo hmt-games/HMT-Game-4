@@ -45,9 +45,12 @@ public class StationConfigSOEditor : Editor {
                 break;
             case StationInteraction.SwitchBotMode:
                 SerializedObject serializedObject = new SerializedObject(config);
+                serializedObject.Update();
+                
                 config.inventoryRule = (StationInventoryRule)EditorGUILayout.EnumPopup("Inventory Rule", config.inventoryRule);
 
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("botModes"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("botModes"), true);
+                serializedObject.ApplyModifiedProperties();
 
                 break;
             case StationInteraction.Reservoir:

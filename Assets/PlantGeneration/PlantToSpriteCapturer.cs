@@ -9,7 +9,6 @@ public class PlantToSpriteCapturer : MonoBehaviour
 {
     [SerializeField] private Camera captureCamera;
     [SerializeField] private GameObject targetSpriteObject;
-    [SerializeField] private List<GameObject> quadDisplays;
     [SerializeField] private int iterations = 4;
     [SerializeField] private Plants2d plants2d;
     [SerializeField] private int TestQuadAmount = 1000;
@@ -35,7 +34,9 @@ public class PlantToSpriteCapturer : MonoBehaviour
 
     public List<Sprite> CaptureAllStagesAtOnce()
     {
-        int posStep = Random.Range(500, 99999);
+        captureCamera.gameObject.SetActive(true);
+        
+        float posStep = Random.Range(999f, 9999f);
         List<PlantToSpriteCamera> plantToSpriteCameras = new List<PlantToSpriteCamera>();
         plantToSpriteCameras.Add(targetSpriteObject.GetComponentInChildren<PlantToSpriteCamera>());
 
@@ -47,7 +48,7 @@ public class PlantToSpriteCapturer : MonoBehaviour
         Dictionary<char, string> ruleSet = plants2d.ruleSet;
         for (int i = 1; i < iterations; i++)
         {
-            Debug.Log($"Iteration {i} with max iteration {iterations}");
+            // Debug.Log($"Iteration {i} with max iteration {iterations}");
             Vector3 nPlantPos = originalPos + Vector3.up * (i * posStep);
             GameObject nPlant = Instantiate(targetSpriteObject, nPlantPos, quaternion.identity);
             nPlants.Add(nPlant);
@@ -55,7 +56,6 @@ public class PlantToSpriteCapturer : MonoBehaviour
             nPlant2d.ruleSet = ruleSet;
             for (int j = 0; j < i; j++)
             {
-                Debug.Log($"stage {j+1} with max stage {i}");
                 nPlant2d.IncreaseIterations();
             }
             plantToSpriteCameras.Add(nPlant.GetComponentInChildren<PlantToSpriteCamera>());
@@ -72,6 +72,7 @@ public class PlantToSpriteCapturer : MonoBehaviour
             Destroy(plant);
         }
         
+        captureCamera.gameObject.SetActive(false);
         return _capturedSprite;
     }
 
@@ -99,10 +100,6 @@ public class PlantToSpriteCapturer : MonoBehaviour
             Destroy(child.gameObject);
         }
         
-        foreach (var quad in quadDisplays)
-        {
-            quad.SetActive(false);
-        }
         plants2d.OnButtonPress();
         yield return new WaitForEndOfFrame();
         
@@ -113,8 +110,6 @@ public class PlantToSpriteCapturer : MonoBehaviour
             plants2d.IncreaseIterations();
             yield return new WaitForEndOfFrame();
         }
-
-        DisplayAllSpriteOnQuad();
     }
 
     private void CaptureStage(List<Sprite> sprites = null)
@@ -218,14 +213,7 @@ public class PlantToSpriteCapturer : MonoBehaviour
         material.mainTexture = sprite.texture;
         quad.GetComponent<Renderer>().material = material;
     }
-
-    private void DisplayAllSpriteOnQuad()
-    {
-        for (int i = 0; i < iterations; i++)
-        {
-            DisplaySpriteOnQuad(_capturedSprite[i], quadDisplays[i]);
-        }
-    }
+    
 
     public void PerformanceTest()
     {

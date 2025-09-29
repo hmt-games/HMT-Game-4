@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 
 public class StationCellBehavior : GridCellBehavior {
-    private const float ICON_CYCLE_TIME = .3f;
+    private const float ICON_CYCLE_TIME = .6f;
 
     public StationConfigSO config;
 

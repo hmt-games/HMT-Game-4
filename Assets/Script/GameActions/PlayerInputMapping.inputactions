@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interact",
+                    "name": "QuickAction",
                     "type": "Button",
                     "id": "a88ff463-b064-4707-a4c7-9baeb0d61ae1",
                     "expectedControlType": "Button",
@@ -232,7 +232,7 @@
                     "name": "",
                     "id": "8af2be22-a314-4704-9475-5ac3caec11cb",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Select",
@@ -246,7 +246,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
+                    "action": "QuickAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

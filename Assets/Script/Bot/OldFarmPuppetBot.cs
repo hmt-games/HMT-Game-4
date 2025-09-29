@@ -53,7 +53,7 @@ public class OldFarmPuppetBot : PuppetBehavior
 
         Inventory = BotInventory.None;
 
-        _botModeConfig = GameManager.Instance.DefaultBotMode;
+        // _botModeConfig = GameManager.Instance.DefaultBotMode;
 
         RegisterAction("move", Move);
         RegisterAction("interact", Interact);

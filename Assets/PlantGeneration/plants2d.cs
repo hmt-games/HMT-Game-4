@@ -204,8 +204,6 @@ public class Plants2d : MonoBehaviour
     void SetRule(int i)
     {
         ruleSet.Clear();
-        Debug.Log("This is rule " + i);
-        Debug.Log(rules[i]);
 
         ruleSet.Add('F', rules[i]);
 
@@ -244,7 +242,6 @@ public class Plants2d : MonoBehaviour
 
         for (int i = 0; i < iterations; i++)
         {
-            Debug.Log($"updating curString iteration: {i}");
             string res = "";
 
             foreach (char c in curString)
@@ -254,12 +251,10 @@ public class Plants2d : MonoBehaviour
 
 
                     res += ruleSet[c];
-                    Debug.Log("updated from ruleset");
                 }
                 else
                 {
                     res += c.ToString();
-                    Debug.Log("updated from string");
                 }
             }
 
@@ -271,15 +266,12 @@ public class Plants2d : MonoBehaviour
 
     void GenerateTree()
     {
-        Debug.Log($"iterCount: {iterCount}");
         curString = GenerateString(startAxiom, ruleSet, iterCount);
-        Debug.Log($"curString: {curString}");
         DrawTree();
     }
 
     void DrawTree()
     {
-        Debug.Log("stage" + iterCount);
         foreach (GameObject obj in sp)
         {
             Destroy(obj);

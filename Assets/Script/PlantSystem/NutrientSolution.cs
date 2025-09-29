@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using GameConstant;
 using Fusion;
@@ -31,6 +32,21 @@ public struct NutrientSolution : INetworkStruct {
     public NutrientSolution(NutrientSolution waterVolume) {
         water = waterVolume.water;
         nutrients = waterVolume.nutrients;
+    }
+
+    public NutrientSolution(List<float> fromJToken)
+    {
+        if (fromJToken.Count != 5)
+        {
+            Debug.LogError($"can only create NutrientSolution and not {fromJToken}");
+            water = 0;
+            nutrients = Vector4.zero;
+        }
+        else
+        {
+            water = fromJToken[0];
+            nutrients = new Vector4(fromJToken[1], fromJToken[2], fromJToken[3], fromJToken[4]);
+        }
     }
 
     public float GetNutrient(NutrientType type) {

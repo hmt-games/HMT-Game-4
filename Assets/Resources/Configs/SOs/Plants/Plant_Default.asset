@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2241131829f248acbd4fc4ccc6db3d7, type: 3}
+  m_Name: Plant_Default
+  m_EditorClassIdentifier: 
+  speciesName: DefaultPlant
+  waterCapacity: 100
+  uptakeRate: 10
+  metabolismRate: 10
+  metabolismFactor: {x: 1, y: 1, z: 1, w: 1}
+  rootHeightTransition: 1
+  growthToleranceThreshold: 0.1
+  leachingEnergyThreshold: 10000
+  leachingFactor: {x: 0.25, y: 0.25, z: 0.25, w: 0.25}
+  fruitYieldAvg: 3
+  fruitYieldStdDev: 2
+  maxHealthHistory: 10
+  stageTransitionThreshold:
+  - 0
+  - 1.5
+  - 3
+  - 5.3
+  plantSprites: []

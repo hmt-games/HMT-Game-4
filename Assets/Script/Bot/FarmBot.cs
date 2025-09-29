@@ -60,11 +60,20 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
 
 
     #region Protected Fields
+    
+    protected struct BotInfo {
+        public int FloorIdx;
+        public Vector2Int CellIdx;
+        public BotMode CurrentBotMode;
+    }
 
     protected int FloorIdx;
     protected Vector2Int CellIdx;
     protected Animator _animator;
     protected BotModeSO _botModeConfig;
+    protected BotInfo _botInfo;
+
+    protected bool _isFocusedBot = false;
 
     #endregion
 
@@ -86,8 +95,19 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
         selectionCircleStripe.gameObject.SetActive(false);
         progressBar.SetActive(false);
         emoteBubble.SetActive(false);
-        Inventory = BotInventory.None;
+        //Inventory = BotInventory.None;
         RegisterStandardActions();
+    }
+    
+    public void InitBot(int floor, int x, int y, BotModeSO botModeSo = null)
+    {
+        _botInfo.FloorIdx = floor;
+        FloorIdx = floor;
+        _botInfo.CellIdx = new Vector2Int(x, y);
+        if (botModeSo != null)
+        {
+            ChangeMode(botModeSo);
+        }
     }
 
     private void RegisterStandardActions() {
@@ -99,11 +119,7 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
         RegisterAction("drop", PutDown);
         RegisterAction("put_down", PickUp);
     }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
+    
 
     #region Bot Actions
 
@@ -143,7 +159,7 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
             command.SendIllegalActionResponse("Attempting to move on tile that also has a bot on it");
             return;
         }
-        else if (targetGrid.CanBotEnter(this)) {
+        else if (!targetGrid.CanBotEnter(this)) {
             command.SendIllegalActionResponse("Cannot move to tile, something is preventing it.");
             return;
         }
@@ -175,6 +191,7 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
 
         CurrentCommand = PuppetCommand.IDLE;
         //ActionState = BotActionState.Idle;
+        PlayerController.Instance.ChangeQuickActionCue();
     }
 
     private IEnumerator Interact(PuppetCommand command) {
@@ -377,14 +394,18 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
     private IEnumerator Harvest(PuppetCommand command) {
         if(CurrentTile is SoilCellBehavior soilCell) {
             if (!Inventory.HasPlantInventory) {
+                Debug.Log("1");
+                Debug.Log($"{Inventory.PlantInventoryCapacity}, {Inventory.ReservoirCapacity}");
                 command.SendIllegalActionResponse("Bot does not have a plant inventory to harvest into.");
                 yield break;
             }
             if(Inventory.IsFull) {
+                Debug.Log("2");
                 command.SendIllegalActionResponse("Bot's plant inventory is full.");
                 yield break;
             }
             if (soilCell.PlantCount == 0) {
+                Debug.Log("3");
                 command.SendIllegalActionResponse("Soil cell does not have any plants to harvest.");
                 yield break;
             }
@@ -395,6 +416,7 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
                 target = 0;
             }
             if (target >= soilCell.plants.Count) {
+                Debug.Log("4");
                 command.SendIllegalActionResponse($"Invalid target plant {target}.");
                 yield break;
             }
@@ -462,11 +484,15 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
     #region Public Functions
 
     public void ChangeMode(BotModeSO newBotMode) {
+        if (newBotMode == null) return;
+        
         _botModeConfig = newBotMode;
         hatSprite.sprite = newBotMode.hatSprite;
 
         //NOTE there is a possibility for plants and or nutrients to be lost here.
+        Debug.Log($"reservoirCapacity {newBotMode.reservoirCapacity}, plantInventoryCapacity {newBotMode.plantInventoryCapacity}");
         Inventory = Inventory.Resize(newBotMode.reservoirCapacity, newBotMode.plantInventoryCapacity);
+        Debug.Log($"{Inventory.PlantInventoryCapacity}, {Inventory.ReservoirCapacity}");
 
         ClearActionSet();
         RegisterStandardActions();
@@ -510,11 +536,15 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
         selectionCircleBase.gameObject.SetActive(true);
         selectionCircleStripe.color = stripeColor;
         selectionCircleStripe.gameObject.SetActive(true);
+
+        _isFocusedBot = true;
     }
 
     public void UnfocusBot() {
         selectionCircleBase.gameObject.SetActive(false);
         selectionCircleStripe.gameObject.SetActive(false);
+
+        _isFocusedBot = false;
     }
 
     #endregion
@@ -529,7 +559,7 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
         return position.x < CurrentFloor.SizeX && position.y < CurrentFloor.SizeY && position.x >= 0 && position.y >= 0;
     }
 
-    protected GridCellBehavior CurrentTile => CurrentFloor.Cells[CellIdx.x, CellIdx.y];
+    public GridCellBehavior CurrentTile => CurrentFloor.Cells[CellIdx.x, CellIdx.y];
 
     #endregion
 
