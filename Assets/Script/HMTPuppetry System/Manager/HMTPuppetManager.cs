@@ -108,6 +108,8 @@ namespace HMT.Puppetry {
         public void StartHMTServer() {
             socketPort = Args.GetArgValue("hmtsocketport", socketPort);
 
+            //TODO: trying to run multiple instances of the game on the same machine for testing
+            //      setting the port the same will result in a conflict
             if (socketPort == 80) {
                 Debug.LogWarning("HMTPuppetManager Socket set to Port 80, this might cause permissions issues.");
             }

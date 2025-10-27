@@ -18,6 +18,7 @@ public class PlantSelectionUIManager : MonoBehaviour
 
     private void Awake()
     {
+        
         if (Instance) Destroy(this);
         else Instance = this;
 

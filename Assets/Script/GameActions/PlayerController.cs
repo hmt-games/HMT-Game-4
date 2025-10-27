@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using GameConstant;
+using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -169,12 +170,16 @@ public class PlayerController : MonoBehaviour
             FocusBot = _currentGrid.botOccupant;
             FocusBot.FocusBot(playerColor);
             focusTxt.text = "Unfocus";
+            
+            PlayerNetworkLocalSync.Instance.SendLocalFocusBot(FocusBot);
         }
         else
         {
             FocusBot.UnfocusBot();
             FocusBot = null;
             focusTxt.text = "Focus";
+            
+            PlayerNetworkLocalSync.Instance.SendLocalUnFocusBot();
         }
         
         HideActionPage();
@@ -197,6 +202,7 @@ public class PlayerController : MonoBehaviour
                     { "direction", directionString },    
                 },
                 actionPriority));
+        PlayerNetworkLocalSync.Instance.SendLocalMove(directionString);
     }
 
     private void Interact(InputAction.CallbackContext ctx) {
@@ -240,6 +246,14 @@ public class PlayerController : MonoBehaviour
                         { "target", idx },    
                     },
                     actionPriority));
+
+            JObject matchStateJson = new JObject
+            {
+                {"actionString", _currentActionString},
+                {"param", idx}
+            };
+            
+            PlayerNetworkLocalSync.Instance.SendLocalParamsAction(_currentActionString, idx);
         }
         
         Deselect();

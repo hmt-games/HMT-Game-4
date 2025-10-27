@@ -5,7 +5,6 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using Unity.Mathematics;
 using UnityEngine;
-using Fusion;
 using Cinemachine;
 using UnityEngine.Serialization;
 

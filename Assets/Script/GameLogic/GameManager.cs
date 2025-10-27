@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
-using Fusion;
 using TMPro;
 using Random = UnityEngine.Random;
 
@@ -29,13 +28,17 @@ public class GameManager : MonoBehaviour
     [Header("Ticks")]
     public ulong currentTick = 0; //At 1 sec/this, this should allow for several millenia of game time
     public float secondPerTick = 1.0f;
-    
+
+    [HideInInspector] public Dictionary<string, FarmBot> puppetID2FarmBot;
+
     private void Awake()
     {
         if (Instance) Destroy(this.gameObject);
         else Instance = this;
 
         secondPerTick = gameConfig.secondPerTick;
+
+        puppetID2FarmBot = new Dictionary<string, FarmBot>();
     }
 
     public void Tick()

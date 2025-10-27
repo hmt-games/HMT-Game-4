@@ -60,14 +60,14 @@ public class GameActionGoldenFinger : MonoBehaviour
         _actionSelectionInProgress = false;
     }
     
-    public void DisplaySpeciesInfo()
+    /*public void DisplaySpeciesInfo()
     {
         GF_Info.gameObject.SetActive(true);
         string optionText = _speciesSelect.options[_speciesSelect.value].text;
         _infoText.text = MapGeneratorJSON.Instance.plantConfigs[optionText].ToString();
-    }
+    }*/
 
-    public void PlantSubmit()
+    /*public void PlantSubmit()
     {
         SoilCellBehavior _selectedSoil = _selectedGrid as SoilCellBehavior;
         if (_selectedSoil == null) return;
@@ -86,7 +86,7 @@ public class GameActionGoldenFinger : MonoBehaviour
         
         _plantConfig.gameObject.SetActive(false);
         GF_Info.gameObject.SetActive(false);
-    }
+    }*/
 
     #endregion
 
@@ -117,14 +117,14 @@ public class GameActionGoldenFinger : MonoBehaviour
         actionWheel.gameObject.SetActive(false);
     }
 
-    public void Init()
+    /*public void Init()
     {
         _speciesSelect.options = new List<TMP_Dropdown.OptionData>();
         foreach (var kvp in MapGeneratorJSON.Instance.plantConfigs)
         {
             _speciesSelect.options.Add(new TMP_Dropdown.OptionData(kvp.Key));
         }
-    }
+    }*/
 
     #endregion
 

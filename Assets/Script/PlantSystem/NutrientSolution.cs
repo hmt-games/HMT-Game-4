@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using GameConstant;
-using Fusion;
 using Newtonsoft.Json.Linq;
 
 [Serializable]
-public struct NutrientSolution : INetworkStruct {
+public struct NutrientSolution  {
 
     /// <summary>
     /// The actual volume of water

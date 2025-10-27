@@ -97,6 +97,8 @@ public class FarmBot : PuppetBehavior, IPoolCallbacks {
         emoteBubble.SetActive(false);
         //Inventory = BotInventory.None;
         RegisterStandardActions();
+        
+        GameManager.Instance.puppetID2FarmBot.Add(PuppetID, this);
     }
     
     public void InitBot(int floor, int x, int y, BotModeSO botModeSo = null)
