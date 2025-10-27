@@ -10,13 +10,16 @@ public class SampleStore : MonoBehaviour
 {
 public static SampleStore Instance { get; private set; }
 
-    private List<SoilSample> samples = new List<SoilSample>();
+    //TODO currentlty this is holding on to all samples, we don't need to maintain this duplicate list
+    private List<SoilSample> allSamples = new List<SoilSample>();
+
+    private Dictionary<Vector3Int, List<SoilSample>> positionedSamples = new Dictionary<Vector3Int, List<SoilSample>>();
 
     private void Awake() {
         if (Instance == null) {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            samples = new List<SoilSample>();
+            allSamples = new List<SoilSample>();
         }
         else {
             Destroy(gameObject);
@@ -24,7 +27,15 @@ public static SampleStore Instance { get; private set; }
     }
 
     public void AddSample(SoilSample sample) {
-        samples.Add(sample);
+        allSamples.Add(sample);
+        if (!positionedSamples.ContainsKey(sample.tileAddress)) {
+            positionedSamples[sample.tileAddress] = new List<SoilSample>();
+        }
+        positionedSamples[sample.tileAddress].Add(sample);
+
+        if (positionedSamples[sample.tileAddress].Count > 2) {
+            // TODO Run Observation Agent logic here
+        }
     }
 
     // Update is called once per frame

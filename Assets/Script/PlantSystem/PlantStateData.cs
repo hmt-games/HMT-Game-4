@@ -143,4 +143,32 @@ public struct PlantStateData {
         }
         return rep;
     }
+
+    public VisiablePlantStateSnapshot ToVisibleSnapshot() {
+        return new VisiablePlantStateSnapshot(this);
+    }
+}
+
+
+[Serializable]
+public struct VisiablePlantStateSnapshot {
+
+    public float surfaceMass;
+    public float health;
+    public int age;
+    public int currentStage;
+    public string plantSpecies;
+
+    //TODO I don't think nutrientLevels belongs here.
+
+    //public NutrientSolution nutrientLevels;
+
+    public VisiablePlantStateSnapshot(PlantStateData plantState) {
+        surfaceMass = plantState.surfaceMass;
+        health = plantState.healthHistory[(plantState.currentHealthIndex - 1 + plantState.healthHistory.Length) % plantState.healthHistory.Length];
+        age = plantState.age;
+        currentStage = plantState.currentStage;
+        plantSpecies = plantState.config.speciesName;
+        //nutrientLevels = plantState.nutrientLevels;
+    }
 }

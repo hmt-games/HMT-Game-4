@@ -4,34 +4,38 @@ using UnityEngine;
 
 public struct SoilSample {
     
-
     public readonly NutrientSolution nutrientSolution;
-    public readonly float gameTime;
     public readonly ulong gameTick;
-    public readonly int floorIndex;
-    public readonly int tileX;
-    public readonly int tileY;
+    public readonly Vector3Int tileAddress;
     public readonly string samplerName;
 
+    // We need the HMT Stated Visible data for each plant
+    // need an internal version of PlantStateData that doesn't ahve the full health history, and reduced config to an index
+    public readonly List<VisiablePlantStateSnapshot> plantData;
 
-    public SoilSample(NutrientSolution nutrientSolution, float gameTime, ulong gameTick, int floorIndex, int tileX, int tileY, string samplerName) {
+
+
+
+    public SoilSample(NutrientSolution nutrientSolution, List<PlantBehavior> plants, ulong gameTick, int floorIndex, int tileX, int tileY, string samplerName) {
         this.nutrientSolution = nutrientSolution;
-        this.gameTime = gameTime;
         this.gameTick = gameTick;
-        this.floorIndex = floorIndex;
-        this.tileX = tileX;
-        this.tileY = tileY;
+        this.tileAddress = new Vector3Int(tileX, tileY, floorIndex);
         this.samplerName = samplerName;
+        plantData = new List<VisiablePlantStateSnapshot>();
+        foreach (var plant in plants) {
+            plantData.Add(plant.GetPlantState().ToVisibleSnapshot());
+        }
     }
 
 
-    public SoilSample(NutrientSolution nutrientSolution, float gameTime, ulong gameTick, int floorIndex, Vector2Int tileAddress, string samplerName) {
+    public SoilSample(NutrientSolution nutrientSolution, List<PlantBehavior> plants, ulong gameTick, int floorIndex, Vector2Int tileAddress, string samplerName) {
         this.nutrientSolution = nutrientSolution;
-        this.gameTime = gameTime;
         this.gameTick = gameTick;
-        this.floorIndex = floorIndex;
-        this.tileX = tileAddress.x;
-        this.tileY = tileAddress.y;
+        this.tileAddress = new Vector3Int(tileAddress.x, tileAddress.y, floorIndex);
         this.samplerName = samplerName;
+        plantData = new List<VisiablePlantStateSnapshot>();
+        foreach (var plant in plants) {
+            plantData.Add(plant.GetPlantState().ToVisibleSnapshot());
+        }
     }
 }

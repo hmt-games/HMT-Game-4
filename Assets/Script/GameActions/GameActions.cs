@@ -358,7 +358,7 @@ public class GameActions : MonoBehaviour
     */
     public void Sample(FarmBot bot, SoilCellBehavior tile, float sampleVolume) {
         SampleStore.Instance.AddSample(new SoilSample(
-            tile.NutrientLevels.DrawOff(sampleVolume), Time.time, GameManager.Instance.currentTick,
+            tile.NutrientLevels.DrawOff(sampleVolume), tile.plants, GameManager.Instance.currentTick,
             tile.parentFloor.floorNumber, tile.gridX, tile.gridZ, bot.PuppetID));
     }
 
