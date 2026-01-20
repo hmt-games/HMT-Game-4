@@ -1,0 +1,283 @@
+﻿{
+  "levelName" : "test_level",
+  
+  "width" : 5,
+  "depth" : 5,
+  "height" : 1,
+  
+  "floors" : [
+    [
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "BotMode_Sample",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : {
+          "plant0" : {
+            "plantConfig" : "Plant_Default_1",
+            "rootMass" : 1.0,
+            "surfaceMass" : 1.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 1,
+            "currentStage" : 1,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          },
+          "plant1" : {
+            "plantConfig" : "Plant_Default_1",
+            "rootMass" : 1.0,
+            "surfaceMass" : 1.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 1,
+            "currentStage" : 1,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          },
+          "plant2" : {
+            "plantConfig" : "Plant_Default_1",
+            "rootMass" : 1.0,
+            "surfaceMass" : 1.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 1,
+            "currentStage" : 1,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          }
+        }
+      },
+      {
+        "gridType" : "station",
+        "gridConfig" : "HarvestStationConfig",
+        "botOnGrid" : "none"
+      },
+
+
+
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : {
+          "plant0" : {
+            "plantConfig" : "Plant_Default",
+            "rootMass" : 10.0,
+            "surfaceMass" : 100.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 10,
+            "currentStage" : 3,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          }
+        }
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "station",
+        "gridConfig" : "ReservoirStationConfig",
+        "botOnGrid" : "none"
+      },
+
+
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "station",
+        "gridConfig" : "ScoreStationConfig",
+        "botOnGrid" : "BotMode_Omni"
+      },
+
+
+
+
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : {
+          "plant0" : {
+            "plantConfig" : "Plant_Default_1",
+            "rootMass" : 10.0,
+            "surfaceMass" : 100.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 10,
+            "currentStage" : 3,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          },
+          "plant1" : {
+            "plantConfig" : "Plant_Default_2",
+            "rootMass" : 10.0,
+            "surfaceMass" : 100.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 10,
+            "currentStage" : 3,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          },
+          "plant2" : {
+            "plantConfig" : "Plant_Default_2",
+            "rootMass" : 10.0,
+            "surfaceMass" : 100.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 10,
+            "currentStage" : 3,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          }
+        }
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : {
+          "plant0" : {
+            "plantConfig" : "Plant_Default",
+            "rootMass" : 10.0,
+            "surfaceMass" : 100.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 10,
+            "currentStage" : 3,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          },
+          "plant1" : {
+            "plantConfig" : "Plant_Default",
+            "rootMass" : 10.0,
+            "surfaceMass" : 100.0,
+            "nutrientSolution" : [10.0, 10.0, 10.0, 10.0, 10.0],
+            "energyLevel" : 10.0,
+            "age" : 10,
+            "currentStage" : 3,
+            "healthHistory" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+          }
+        }
+      },
+      {
+        "gridType" : "station",
+        "gridConfig" : "TrashStationConfig",
+        "botOnGrid" : "none"
+      },
+
+
+
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "BotMode_Harvest",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "soil",
+        "gridConfig" : "SoilConfig0",
+        "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
+        "botOnGrid" : "none",
+        "plants" : []
+      },
+      {
+        "gridType" : "station",
+        "gridConfig" : "HarvestPickStationConfig",
+        "botOnGrid" : "none"
+      }
+    ]
+  ]
+}

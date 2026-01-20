@@ -137,7 +137,8 @@ public class SoilCellBehavior : GridCellBehavior
         }
         
         plants.Add(plant);
-        plant.transform.parent = plantChildContainer.GetChild(transform.childCount-1);
+        //TODO this will break the game if we delete plants in prior plant slots
+        plant.transform.parent = plantChildContainer.GetChild(plants.Count);
         plant.transform.localPosition = Vector3.zero;
         plant.parentCell = this;
     }

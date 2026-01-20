@@ -11,7 +11,7 @@
         "gridType" : "soil",
         "gridConfig" : "SoilConfig0",
         "nutrientLevels" : [10.0, 10.0, 10.0, 10.0, 10.0],
-        "botOnGrid" : "BotMode_Default",
+        "botOnGrid" : "none",
         "plants" : []
       },
       {

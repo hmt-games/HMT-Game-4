@@ -7396,7 +7396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ed5994db751b4ff1ba8d1cd22d37118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelConfig: {fileID: 4900000, guid: 32c5ff3723cdf824a97dbafe86018135, type: 3}
+  levelConfig: {fileID: 4900000, guid: c1eb1d7ad56e39a4b963d1595e696c78, type: 3}
   soilPrefab: {fileID: 2505949527415372711, guid: b0d9a3063d2cf4f0c9d81c821a9dfac1,
     type: 3}
   stationPrefab: {fileID: 7067961951478491138, guid: 92ff340a23978ba46bedddfe7b14ff0f,

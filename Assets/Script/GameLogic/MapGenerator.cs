@@ -162,6 +162,7 @@ public class MapGenerator : MonoBehaviour
             case "station":
                 gridObj = Instantiate(stationPrefab, gridWorldPosition, Quaternion.identity);
                 gridObj.name = $"Station {x},{z}";
+                gridObj.GetComponent<SpriteRenderer>().color = (x + z + parentFloor.floorNumber) % 2 == 0 ? grid2DTheme.lightColor : grid2DTheme.darkColor;
 
                 StationCellBehavior nStationCell = gridObj.GetComponent<StationCellBehavior>();
                 gridCellBehavior = nStationCell;
