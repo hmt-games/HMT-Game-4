@@ -1,0 +1,84 @@
+﻿{
+  "PlantConfig0": {
+    "capacities": 100,
+    "uptakeRate": 15,
+    "metabolismWaterNeeds": 1.5,
+    "metabolismNeeds": [
+      1.138613,
+      1.10801589,
+      1.018799,
+      0.8527068
+    ],
+    "metabolismFactor": [
+      0.22831285,
+      0.425946534,
+      0.980270863,
+      0.08317566
+    ],
+    "growthConsumptionRateLimit": [
+      1.96110082,
+      2.50534534,
+      1.11736536,
+      1.88369966
+    ],
+    "growthFactor": [
+      4.27219057,
+      5.71958351,
+      7.06372643,
+      5.431388
+    ],
+    "rootHeightTransition": 4.0581007,
+    "growthToleranceThreshold": 0.9,
+    "leachingEnergyThreshold": 10,
+    "leachingFactor": [
+      0.25,
+      0.25,
+      0.5,
+      0.0
+    ],
+    "onWaterCallbackBypass": 0
+  },
+  "PlantConfig1": {
+    "capacities": 75,
+    "uptakeRate": 12,
+    "metabolismWaterNeeds": 1.2,
+    "metabolismNeeds": [
+      0,
+      0.7,
+      2.0,
+      1.8
+    ],
+    "metabolismFactor": [
+      0.22831285,
+      0.425946534,
+      0.980270863,
+      0.08317566
+    ],
+    "growthConsumptionRateLimit": [
+      1.96110082,
+      2.50534534,
+      1.11736536,
+      1.88369966
+    ],
+    "growthFactor": [
+      4.27219057,
+      5.71958351,
+      7.06372643,
+      5.431388
+    ],
+    "rootHeightTransition": 4.0581007,
+    "growthToleranceThreshold": 0.75,
+    "leachingEnergyThreshold": 10,
+    "leachingFactor": [
+      0.25,
+      0.25,
+      0.5,
+      0.0
+    ],
+    "onWaterCallbackBypass": 0
+  },
+  "SoilConfig0": {
+    "capacities": 10000,
+    "drainTime": 10
+  }
+}

@@ -1,0 +1,23 @@
+using Newtonsoft.Json.Linq;
+using UnityEngine;
+using UnityEngine.Serialization;
+
+[CreateAssetMenu(fileName = "Soil_", menuName = "Config/Soil")]
+public class SoilConfigSO: ScriptableObject {
+
+    /// <summary>
+    /// The maximum amount of water and each compound the soil can hold
+    /// 
+    /// TODO we need to make a custom property drawer for NutrientSolutions
+    /// </summary>
+    [FormerlySerializedAs("capacities")] public float waterCapacity;
+
+    [FormerlySerializedAs("drainTime")] public float drainRate;
+
+    public JObject ToFlatJSON() {
+        return new JObject {
+            {"water_capacity", waterCapacity},
+            {"drain_rate", drainRate}
+        };
+    }
+}

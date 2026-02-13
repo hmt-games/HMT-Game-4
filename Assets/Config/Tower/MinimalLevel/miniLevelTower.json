@@ -1,0 +1,199 @@
+{
+	"Tower" :
+	{
+		"width" : 2,
+		"depth" : 2,
+		"height" : 2
+	},
+
+	"Floor0" :
+	[
+		{
+			"soilConfig" : "SoilConfig0",
+			"NutrientLevels" :
+			{
+				"water" : 5.0,
+				"nutrients" : [5.0, 5.0, 5.0, 5.0]
+			},
+			"rootedPlants" : {},
+			"surfacePlants" :
+			{
+				"Plant0":
+				{
+					"config" : "PlantConfig1",
+					"rootMass" : 3.0,
+					"height" : 1.5,
+					"energyLevel" : 10.0,
+					"health" : 2.0,
+					"age" : 3.0,
+					"nutrient" : [1.0, 1.0, 1.0, 1.0],
+					"water" : 2.0
+				}
+			}
+		},
+		{
+			"soilConfig" : "SoilConfig0",
+			"NutrientLevels" :
+			{
+				"water" : 5.0,
+				"nutrients" : [5.0, 5.0, 5.0, 5.0]
+			},
+			"rootedPlants" : {},
+			"surfacePlants" :
+			{
+				"Plant0":
+				{
+					"config" : "PlantConfig1",
+					"rootMass" : 3.0,
+					"height" : 1.5,
+					"energyLevel" : 10.0,
+					"health" : 2.0,
+					"age" : 3.0,
+					"nutrient" : [1.0, 1.0, 1.0, 1.0],
+					"water" : 2.0
+				}
+			}
+		},
+		{
+			"soilConfig" : "SoilConfig0",
+			"NutrientLevels" :
+			{
+				"water" : 5.0,
+				"nutrients" : [5.0, 5.0, 5.0, 5.0]
+			},
+			"rootedPlants" : {},
+			"surfacePlants" :
+			{
+				"Plant0":
+				{
+					"config" : "PlantConfig0",
+					"rootMass" : 6.0,
+					"height" : 2.5,
+					"energyLevel" : 10.0,
+					"health" : 4.0,
+					"age" : 7.0,
+					"nutrient" : [2.0, 2.0, 2.0, 2.0],
+					"water" : 2.0
+				}
+			}
+		},
+		{
+			"soilConfig" : "SoilConfig0",
+			"NutrientLevels" :
+			{
+				"water" : 5.0,
+				"nutrients" : [5.0, 5.0, 5.0, 5.0]
+			},
+			"rootedPlants" : {},
+			"surfacePlants" :
+			{
+				"Plant0":
+				{
+					"config" : "PlantConfig1",
+					"rootMass" : 3.0,
+					"height" : 1.5,
+					"energyLevel" : 10.0,
+					"health" : 2.0,
+					"age" : 3.0,
+					"nutrient" : [1.0, 1.0, 1.0, 1.0],
+					"water" : 2.0
+				}
+			}
+		}
+	],
+	"Floor1" :
+	[
+		{
+			"soilConfig" : "SoilConfig0",
+			"NutrientLevels" :
+			{
+				"water" : 5.0,
+				"nutrients" : [5.0, 5.0, 5.0, 5.0]
+			},
+			"rootedPlants" : {},
+			"surfacePlants" :
+			{
+				"Plant0":
+				{
+					"config" : "PlantConfig1",
+					"rootMass" : 3.0,
+					"height" : 1.5,
+					"energyLevel" : 10.0,
+					"health" : 2.0,
+					"age" : 3.0,
+					"nutrient" : [1.0, 1.0, 1.0, 1.0],
+					"water" : 2.0
+				}
+			}
+		},
+		{
+			"soilConfig" : "SoilConfig0",
+			"NutrientLevels" :
+			{
+				"water" : 5.0,
+				"nutrients" : [5.0, 5.0, 5.0, 5.0]
+			},
+			"rootedPlants" : {},
+			"surfacePlants" :
+			{
+				"Plant0":
+				{
+					"config" : "PlantConfig1",
+					"rootMass" : 3.0,
+					"height" : 1.5,
+					"energyLevel" : 10.0,
+					"health" : 2.0,
+					"age" : 3.0,
+					"nutrient" : [1.0, 1.0, 1.0, 1.0],
+					"water" : 2.0
+				}
+			}
+		},
+		{
+			"soilConfig" : "SoilConfig0",
+			"NutrientLevels" :
+			{
+				"water" : 5.0,
+				"nutrients" : [5.0, 5.0, 5.0, 5.0]
+			},
+			"rootedPlants" : {},
+			"surfacePlants" :
+			{
+				"Plant0":
+				{
+					"config" : "PlantConfig0",
+					"rootMass" : 6.0,
+					"height" : 2.5,
+					"energyLevel" : 10.0,
+					"health" : 4.0,
+					"age" : 7.0,
+					"nutrient" : [2.0, 2.0, 2.0, 2.0],
+					"water" : 2.0
+				}
+			}
+		},
+		{
+			"soilConfig" : "SoilConfig0",
+			"NutrientLevels" :
+			{
+				"water" : 5.0,
+				"nutrients" : [5.0, 5.0, 5.0, 5.0]
+			},
+			"rootedPlants" : {},
+			"surfacePlants" :
+			{
+				"Plant0":
+				{
+					"config" : "PlantConfig1",
+					"rootMass" : 3.0,
+					"height" : 1.5,
+					"energyLevel" : 10.0,
+					"health" : 2.0,
+					"age" : 3.0,
+					"nutrient" : [1.0, 1.0, 1.0, 1.0],
+					"water" : 2.0
+				}
+			}
+		}
+	]
+}

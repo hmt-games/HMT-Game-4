@@ -1,0 +1,34 @@
+{
+	"PlantConfig0" : 
+	{
+		"capacities" : [10.0,10.0,10.0,10.0],
+		"uptakeRate" : [0.5, 0.5, 0.5, 0.5],
+		"metabolismNeeds" : [1.0, 0.0, 0.0, 1.0],
+		"metabolismFactor" : [1.0, 1.0, 1.0, 1.0],
+		"growthConsumptionRateLimit" : [1.0, 1.0, 2.0, 1.0],
+		"growthFactor" : [1.0, -10.0, 2.0, 1.0],
+		"rootHeightTransition" : 3,
+		"growthToleranceThreshold" : 1.0
+	},
+	"PlantConfig1" : 
+	{
+		"capacities" : [10.0,10.0,10.0,10.0],
+		"uptakeRate" : [0.5, 0.5, 0.5, 0.5],
+		"metabolismNeeds" : [0.0, 1.0, 1.0, 0.0],
+		"metabolismFactor" : [1.0, 1.0, 1.0, 1.0],
+		"growthConsumptionRateLimit" : [1.0, 2.0, 1.0, 1.0],
+		"growthFactor" : [1.0, 1.0, 1.0, 1.0],
+		"rootHeightTransition" : 2,
+		"growthToleranceThreshold" : 3.0
+	},
+	
+	"SoilConfig0" : 
+	{
+		"capacities" :
+		{
+			"water" : 10.0,
+			"nutrients" : [8.0, 8.0, 8.0, 8.0]
+		},
+		"drainTime" : 3.0
+	}
+}

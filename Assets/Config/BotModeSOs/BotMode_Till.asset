@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21d767a987404b24b48bae90164df985, type: 3}
+  m_Name: BotMode_Till
+  m_EditorClassIdentifier: 
+  botMode: 3
+  botModeName: Roomba-Till
+  reservoirCapacity: 0
+  plantInventoryCapacity: 0
+  supportedActions:
+  - move
+  - moveto
+  - pickUp
+  - putDown
+  - till
+  - useStation
+  - pick_up
+  - put_down
+  movementSpeed: 1
+  sensingRange: {x: 3, y: 3}
+  actionTimeData:
+  - action: useStation
+    time: 0
+  - action: move
+    time: 1
+  - action: moveto
+    time: 1
+  - action: pickUp
+    time: 1
+  - action: putDown
+    time: 1
+  - action: till
+    time: 1
+  - action: pick_up
+    time: 1
+  - action: put_down
+    time: 1

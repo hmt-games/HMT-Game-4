@@ -1,0 +1,27 @@
+﻿{
+  "PlantConfig0": {
+    "capacities": 100,
+    "uptakeRate": 15,
+    "metabolismRate": 1.5,
+    "metabolismFactor": [
+      0.22831285,
+      0.425946534,
+      0.980270863,
+      0.08317566
+    ],
+    "rootHeightTransition": 4.0581007,
+    "growthToleranceThreshold": 0.8,
+    "leachingEnergyThreshold": 10,
+    "leachingFactor": [
+      0.25,
+      0.25,
+      0.5,
+      0.0
+    ],
+    "onWaterCallbackBypass": 0
+  },
+  "SoilConfig0": {
+    "capacities": 10000,
+    "drainTime": 10
+  }
+}

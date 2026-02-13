@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b19c071f9be96ae4eb6570b7be69327d, type: 3}
+  m_Name: Game_Default
+  m_EditorClassIdentifier: 
+  secondPerTick: 1
+  configJSON: {fileID: 4900000, guid: 2874a7f83d514353b7f25dcfa7fb36ef, type: 3}
+  towerJSON: {fileID: 4900000, guid: 216d1c12db89477aaa41eefc090e77bf, type: 3}
+  gameGoalEntries:
+  - goalName: PlantConfig0
+    goalValue: 125
+  harvest: {fileID: 11400000, guid: d2212005799e142fbb2a6437a1aa93c4, type: 2}
+  spray: {fileID: 11400000, guid: ca376b38b7a114d50995a050e4d47bf0, type: 2}
+  pick: {fileID: 11400000, guid: 06254ed14356d49f7bd2ce77c6de9155, type: 2}
+  plant: {fileID: 11400000, guid: 777b17bd05b1ca0418768dad382daf92, type: 2}
+  till: {fileID: 11400000, guid: 2091cbc84f48e47528888ffd9d4bd1ce, type: 2}
+  sample: {fileID: 11400000, guid: 7bc644a3342034d4f9a155ceb1501a5e, type: 2}

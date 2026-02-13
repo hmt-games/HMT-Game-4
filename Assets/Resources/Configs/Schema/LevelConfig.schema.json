@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Game State",
+  "type": "object",
+  "required": ["levelName", "width", "depth", "height", "configs", "seed", "floors"],
+  "properties": {
+    "levelName": {
+      "type": "string"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "configs": {
+      "type": "string"
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "floors": {
+      "type": "array",
+      "minItems": { "$data": "/height" },
+      "maxItems": { "$data": "/height" },
+      "items": {
+        "type": "array",
+        "minItems": { "$data": "/width" },
+        "maxItems": { "$data": "/width" },
+        "items": {
+          "type": "object",
+          "required": ["gridType", "gridConfig", "nutrientLevels", "botOnGrid", "plants"],
+          "properties": {
+            "gridType": {
+              "type": "string",
+              "enum": ["soil", "station"]
+            },
+            "gridConfig": {
+              "type": "string"
+            },
+            "nutrientLevels": {
+              "type": "array",
+              "items": { "type": "number" },
+              "minItems": 5,
+              "maxItems": 5
+            },
+            "botOnGrid": {
+              "type": "string"
+            },
+            "plants": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

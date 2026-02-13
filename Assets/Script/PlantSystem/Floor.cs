@@ -1,0 +1,64 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using HMT.Puppetry;
+
+public class Floor : MonoBehaviour
+{
+
+    /// <summary>
+    /// The Cells on the floor
+    /// </summary>
+    public GridCellBehavior[,] Cells;
+    /// <summary>
+    /// The tower this floor is in
+    /// </summary>
+    public Tower parentTower;
+    /// <summary>
+    /// What floor in the tower this is (0 is the ground)
+    /// </summary>
+    public int floorNumber { get; set; }
+
+
+    //Do we need these two variables?
+    //[Networked]
+    public int SizeX { get { return Cells.GetLength(0); } }
+    //[Networked]
+    public int SizeY { get { return Cells.GetLength(1); } }
+
+    BasicPuppetGroup _puppetGroup;
+
+    public NutrientSolution[,] OnWater(NutrientSolution[,] volumes) {
+        for (int x = 0; x < Cells.GetLength(0); x++) {
+            for (int y = 0; y < Cells.GetLength(1); y++) {
+                volumes[x,y] = Cells[x, y].OnWater(volumes[x, y]);
+            }
+        }
+        return volumes;
+    }
+
+    public void OnTick() {
+        for (int x = 0; x < Cells.GetLength(0); x++) {
+            for (int y = 0; y < Cells.GetLength(1); y++) {
+                Cells[x, y].OnTick();
+            }
+        }
+    }
+
+    /* TODO: I commented these out for now
+     * instead of Awake, BasicPuppetGroup should be set in NetworkBehaviour's Spawned() event function
+     * but to hook up the bots, I need to first convert the bot to also use NetworkBehaviour
+     */
+    /*private void Awake() {
+        BasicPuppetGroup _puppetGroup = new BasicPuppetGroup($"floor{floorNumber}", PuppetGroupMembershipType.Custom, PuppetGroupStateRepresentation.Union);
+    }
+
+    public void AddBotToFloor(FarmPuppetBot bot) {
+        _puppetGroup.AddSubPuppet(bot);
+    }
+
+    public void RemoveBotFromFloor(FarmPuppetBot bot) {
+        _puppetGroup.RemoveSubPuppet(bot);
+    }*/
+
+}

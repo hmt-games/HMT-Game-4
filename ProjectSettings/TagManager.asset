@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Bot
+  - Soil
+  - Station
   layers:
   - Default
   - TransparentFX
@@ -11,8 +14,8 @@ TagManager:
   - Grid
   - Water
   - UI
-  - 
-  - 
+  - Plant
+  - Bot
   - 
   - 
   - 
@@ -40,4 +43,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: bot
+    uniqueID: 3453627001
+    locked: 0
+  - name: station
+    uniqueID: 3293471507
     locked: 0
