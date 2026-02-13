@@ -10,7 +10,7 @@ Follow the steps below for a quick setup. For more in-depth description of each 
 
 1. Clone the git repository
 
-   ```git clone https://github.com/STRONG-TACT/HMT-Game-4.git```
+   ```git clone https://github.com/hmt-games/HMT-Game-4.git```
 
    It should have the following file structure:
 
