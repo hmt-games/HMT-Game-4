@@ -2,7 +2,7 @@
 
 ### Overview
 
-*Vertical Farm* is a cooperative farming simulator designed to address three core challenges in human-agent teaming (HAT) testbed design: expressiveness (supporting diverse research agendas), unification (enabling standardized benchmarks), and rich team dynamics (capturing the complexity of real-world collaboration). Central to the platform is the **Hierarchical Puppetry Interface (HPI)**, which enables dynamic, runtime reconfiguration of control, authority, and team hierarchy by allowing humans and agents to flexibly assume, share, delegate, or relinquish control over task-executing entities. Complementing HPI, Vertical Farm is built around **modular components and standardized abstractions** that balance expressiveness with unification, supporting diverse experimental designs while enabling replicable evaluation and cross-study comparison. By embedding complementary human and agent capabilities directly into both task structure and control hierarchy, *Vertical Farm* serves as a general-purpose testbed for probing when, how, and why hybrid teams succeed (or fail).
+*Vertical Farm* is a cooperative farming simulator designed to address three core challenges in human-agent teaming (HAT) testbed design: expressiveness (supporting diverse research agendas), unification (enabling standardized benchmarks), and rich team dynamics (capturing the complexity of real-world collaboration). Central to the platform is the **Hierarchical Puppetry Interface (HPI)**, which enables dynamic, runtime reconfiguration of control, authority, and team hierarchy by allowing humans and agents to flexibly assume, share, delegate, or relinquish control over task-executing entities. Complementing HPI, *Vertical Farm* is built around ***modular components and standardized abstractions*** that balance expressiveness with unification, supporting diverse experimental designs while enabling replicable evaluation and cross-study comparison. By embedding complementary human and agent capabilities directly into both task structure and control hierarchy, *Vertical Farm* serves as a general-purpose testbed for probing when, how, and why hybrid teams succeed (or fail).
 
 ### Getting Started
 
@@ -16,19 +16,21 @@ Follow the steps below for a quick setup. For more in-depth description of each 
 
    ```
    Vertical Farm
-   |--Assets
-   |--Packages
-   |--ProjectSettings
-   |--Networking
+   ├── Assets
+   ├── Nakama
+   ├── Packages
+   └── ProjectSettings
    ```
 
-   The ```Networking``` folder contains the Nakama server files, and the rest are Unity project files.
+   The ```Nakama``` folder contains the Nakama server files, and the rest are Unity project files.
 
 2. Setup Nakama networking
 
    *Vertical Farm* uses Nakama to implement its netwokring features, including online multiplayer and custom matchmaking. The Nakama server lives in a docker container, which can be ran locally or deployed on a remote server.
 
-3. Run the game
+   To run the server locally, first make sure ```docker-compose``` is installed, then change the terminal directory to ```Nakama``` and run ```docker-compose up```. The ```.yml``` file inside the folder is used to configure the server automatically.
+
+3. Run the game.
 
 ### Core Gameplay Loop
 
