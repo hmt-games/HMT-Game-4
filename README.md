@@ -16,17 +16,19 @@ Follow the steps below for a quick setup. For more in-depth description of each 
 
    ```
    Vertical Farm
-   |--Assets
-   |--Packages
-   |--ProjectSettings
-   |--Networking
+   ├── Assets
+   ├── Nakama
+   ├── Packages
+   └── ProjectSettings
    ```
 
-   The ```Networking``` folder contains the Nakama server files, and the rest are Unity project files.
+   The ```Nakama``` folder contains the Nakama server files, and the rest are Unity project files.
 
 2. Setup Nakama networking
 
    *Vertical Farm* uses Nakama to implement its netwokring features, including online multiplayer and custom matchmaking. The Nakama server lives in a docker container, which can be ran locally or deployed on a remote server.
+
+   To run the server locally, first make sure ```docker-compose``` is installed, then change the terminal directory to ```Nakama``` and run ```docker-compose up```. The ```.yml``` file inside the folder is used to configure the server automatically.
 
 3. Run the game
 
